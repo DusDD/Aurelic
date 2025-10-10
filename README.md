@@ -1,6 +1,6 @@
 # NB-DD-Studienarbeit
 
-==unter Trello: https://trello.com/b/OKz8xrqB/my-trello-board==
+**unter Trello: https://trello.com/b/OKz8xrqB/my-trello-board**
 
 
 ## Libraries 
