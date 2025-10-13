@@ -4,3 +4,4 @@ __pycache__/
 .env
 .idea/*
 !*.iml
+stockapp/notes_temp.txt
