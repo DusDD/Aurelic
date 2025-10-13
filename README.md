@@ -30,3 +30,61 @@ use this to login without psql, not recommended, just trouble shooting: docker e
 - document every commit (summarise)
 - implement Unittests??
 - how to use KanBan, V-Modell and Github in parallel? some workstream ideas?
+
+
+# Workflow vor dem Coden
+✅ Dein Workflow (leicht erweitert)
+
+1️⃣ Terminal starten / Projekt öffnen
+Wechsel in dein Projektverzeichnis
+`cd ~/stockapp`
+
+2️⃣ Virtuelle Umgebung aktivieren
+`source venv/bin/activate` Linux / macOS
+`venv\Scripts\activate`    Windows PowerShell
+
+
+✅ Wichtig: Jedes Mal, wenn du eine neue Terminal-Session startest.
+Optional: PyCharm nutzt venv automatisch, wenn korrekt konfiguriert.
+
+3️⃣ Requirements prüfen
+Vor dem Start schauen, ob jemand neue Libraries hinzugefügt hat:
+
+`pip install -r requirements.txt`
+
+Das stellt sicher, dass dein venv aktuell ist, z. B. nach Pull vom Repo.
+
+4️⃣ Arbeiten & neue Libraries installieren
+Neue Library installieren:
+
+`pip install <library_name>`
+
+Wichtig: Danach immer requirements.txt aktualisieren:
+
+`pip freeze > requirements.txt`
+
+Am besten sofort nach Installation, nicht erst am Ende des Tages. So gehen Änderungen nicht verloren.
+
+5️⃣ Git-Workflow parallel
+Vor der Arbeit:
+
+`git pull`
+
+Am Ende des Tages / nach Features:
+
+```
+git add .
+git commit -m "Beschreibung der Änderungen"
+git push
+```
+
+6️⃣ Optional: venv deaktivieren
+Terminal schließen oder explizit:
+
+`deactivate`
+
+🔹 Kleine zusätzliche Tipps
+requirements.txt versionieren: Immer updaten, sobald du Libraries installierst.
+.gitignore prüfen: venv darf nicht hochgeladen werden.
+Environment-Consistency: Für Cross-System-Arbeit (Linux + Windows) immer pip install -r requirements.txt nach Pull auf jedem System.
+Optional: Commit-Signierung mit GPG, falls du es schon eingerichtet hast.
