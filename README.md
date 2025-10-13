@@ -2,6 +2,19 @@
 
 **unter Trello: https://trello.com/b/OKz8xrqB/my-trello-board**
 
+## Some git
+always use this workstream:
+
+`git pull` when start working
+
+`git add [files or just "."] ` add what you want to commit and push
+
+`git commit -m "[your message]"` commit to document what happens
+
+`git push` sync changes to Github for someone else to pull
+
+always work on dedicated branch, never push on main
+
 ## PostgreSQL
 Version 18.0
 Now working with docker on windows 11
