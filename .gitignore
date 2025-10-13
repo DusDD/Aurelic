@@ -3,4 +3,4 @@ __pycache__/
 *.pyc
 .env
 .idea/*
-stockapp/notes_temp.txt
+notes_temp.txt
