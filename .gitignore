@@ -3,5 +3,3 @@ __pycache__/
 *.pyc
 .env
 .idea/*
-!*.iml
-stockapp/notes_temp.txt
