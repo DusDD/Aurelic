@@ -1,0 +1,12 @@
+Nates work:
+- created idea
+- created mindmap
+- first GUI py-scripts
+...
+
+Dustins work:
+- mail coms
+- created workspace and github-space
+- first sql scripts
+- documentation and workflows
+- kanban documentation
