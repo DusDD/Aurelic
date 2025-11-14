@@ -1,0 +1,319 @@
+\documentclass{article}
+\usepackage{xcolor}
+\usepackage{graphicx} % Required for inserting images
+
+\title{Studienarbeit\_Notizen}
+\author{Nathan Becker and Dustin Döhring}
+\date{October 2025}
+
+\makeatletter
+\newcommand{\definecolorhex}[2]{%
+  \expandafter\definecolor\expandafter{#1}{HTML}{\expandafter\@gobble\string#2}%
+}
+\makeatother
+
+% Deine Farbdefinitionen (aus dem Bild)
+\definecolorhex{colDFE5F3}{#DFE5F3}
+\definecolorhex{colB0B0B0}{#B0B0B0}
+\definecolorhex{col557373}{#557373}
+\definecolorhex{col272401}{#272401}
+\definecolorhex{colF2EFEA}{#F2EFEA}
+\definecolorhex{col0D0D0D}{#0D0D0D}
+
+\newcommand{\showhex}[2]{% #1 = Farbname, #2 = \#RRGGBB
+  \noindent
+  \colorbox{#1}{\rule{0pt}{9mm}\hspace{36mm}}% 0pt-breite Rule = keine schwarze Fläche
+  \hspace{1em}\texttt{#2}\\[6pt]
+}
+
+\begin{document}
+
+
+
+\title{Konzeption, Entwicklung und Implementierung eines datengetriebenen Neo-Brokers im Rahmen agiler Softwareentwicklung}
+\maketitle
+\newpage
+\section{Inhaltsverzeichnis}
+\begin{enumerate}
+    \item Einleitung
+    \begin{itemize}
+      \item Relevanz
+            \begin{itemize}
+        \item Darstellung der fortschreitenden Digitalisierung der Finanzmärkte
+        \item Aufstieg von Neobrokern
+        \item Bedeutung für Privatanleger und die private Altersvorsorge
+        \end{itemize}
+        \item Motivation 
+        \begin{itemize}
+        \item Lücke zwischen einfachem Handel und komplexer Marktanalyse
+        \item Entwicklung einer Plattform, die Benutzerfreundlichkeit und analytische Tiefe vereint
+        \end{itemize}
+            \item Problemraumbeschreibung
+        \begin{itemize}
+        \item Um was geht es?
+        \item Was löst es für ein Problem?
+        \item  Was soll zum Schluss rauskommen?
+        \end{itemize}
+      \item Umgebung/Schnittstellen 
+      \begin{itemize}
+        \item Überblick über die technische und organisatorische Umgebung des Projekts.
+        \begin{itemize}
+        \item verwendete Technologien
+        \item  API-Schnittstellen
+        \begin{itemize}
+        \item Marktdaten
+        \item Nachrichtendienste
+        \item Broker-APIs
+        \end{itemize}
+        \end{itemize}
+        \end{itemize}
+    \end{itemize}
+    \item Strukturierte Aufgabenstellung
+    \begin{itemize}
+        \item Konkretisierung der Projektziele in überprüfbare Arbeitsschritte:
+        \begin{itemize}
+        \item Von der Analyse bestehender Lösungen über die Konzeption bis hin zur technischen Umsetzung.
+        \end{itemize}
+        \item  Strukturierung des Projektablaufs in Phasen 
+               \begin{itemize}
+        \item Analyse, Entwurf, Implementierung, Test, Evaluation
+        \end{itemize}
+        \item Beschreibung der Abhängigkeiten und Prioritäten.
+        \item Definition von Bewertungskriterien  zur Überprüfung der Zielerreichung.  
+                \begin{itemize}
+        \item (z. B. Usability, Funktionalität, Performanz)
+        \end{itemize}
+    \end{itemize}
+    \newpage
+    \item Methoden und Verfahren
+       \begin{itemize}
+        \item Beschreibung der eingesetzten Frameworks, Programmiersprachen, APIs und Datenquellen. 
+        \begin{itemize}
+        \item  z. B. Python für Analysen, REST-APIs, React/Laravel-Frontend, Docker-Containerisierung etc.
+        \end{itemize}
+        \item Einsatz von Git-basiertem Versionsmanagement. Versionsnummern und Änderungsverfolgung als Bestandteil der Qualitätssicherung
+         \item   Auswahl und Begründung des gewählten agilen Vorgehensmodells (z. B. Scrum oder Kanban). Erläuterung der Rollen, Iterationen und Kommunikationswege.
+        \item SEHR WICHTIG ÜBERALL DATUM UND VERRSIONIERUNG NOTIEREN!
+         \item Beschreibung der eingesetzten Frameworks, Programmiersprachen, APIs und Datenquellen.
+    \end{itemize}
+    \item Theoretische und Technische Grundlagen
+    \begin{itemize}
+        \item Grundlagen des Aktienmarktes und Handelsmechanismen
+        \item Neobroker und klassische Broker im Vergleich
+        \item Vergleich ausgewählter Plattformen (z. B. Trade Republic, Scalable Capital, eToro, Interactive Brokers, JustTrade)
+        \item Algorithmen welche zur Umsetzung genutzt wurden
+        \item Grundlagen welche zur  Entwicklung genutzt wurden
+        \item was gibt es auf dem Markt, was ist State of the Art?
+        \item Sekundär literarur empfehlungen gerne gesehen!!
+    \end{itemize}
+    \item Bearbeitung der strukturierten Aufgabenstellung
+     \begin{itemize}
+        \item  Detaillierte Beschreibung der einzelnen Entwicklungsschritte gemäß des in Kapitel 2 definierten Plans.
+    \end{itemize}
+    \item Objektivierter Ergebnisteil
+         \begin{itemize}
+        \item Tabellarische Gegenüberstellung: geplante vs. erreichte Funktionen, technische und funktionale Erfolgsbewertung.
+        \item   Bewertung nach festgelegten Maßstäben (Usability, Stabilität, Datenaktualität, Performanz).  
+  \item Vergleich mit bestehenden Lösungen
+    \end{itemize}
+    \newpage
+    \item Diskussion (manchmal auch Fazit oder kritische Reflexion)
+    \begin{itemize}
+        \item Subjektivierung der Arbeitsergebnisse
+        \item Was lief gut und was lief schlecht?
+    \end{itemize}
+    \item Ausblick
+    \begin{itemize}
+        \item Perspektiven für zukünftige Versionen des Systems
+        \item Was könnte man sich sonst noch so anschauen?
+    \end{itemize}
+    \item Literaturverzeichnis
+    \item Glossar
+    \item Anhang
+\end{enumerate}
+\newpage
+\section{Überarbeitete Motivation 
+(Reinschrift)}
+Die fortschreitende Digitalisierung und der Aufstieg von Neobrokern haben den Zugang zum Aktienmarkt revolutioniert. Investieren ist heute so einfach, kostengünstig und zugänglich wie nie zuvor. Mit wenigen Klicks können Menschen weltweit an der Entwicklung der Finanzmärkte teilhaben und ihre persönliche Vermögensbildung aktiv gestalten. Besonders im Kontext der privaten Altersvorsorge gewinnt dieses Thema zunehmend an Bedeutung, da traditionelle Anlageformen aufgrund niedriger Zinsen und wirtschaftlicher Unsicherheiten an Attraktivität verloren haben.
+\\\\
+Trotz dieser positiven Entwicklung bleibt jedoch eine entscheidende Lücke bestehen: Während der Handel selbst inzwischen weitgehend vereinfacht und automatisiert ist, mangelt es an integrierten, benutzerfreundlichen Lösungen für eine fundierte Marktanalyse. Bestehende Anwendungen beschränken sich häufig auf Basisfunktionen oder liefern Informationen nur in Fragmenten – beispielsweise über Kursentwicklungen, Unternehmensdaten oder Nachrichtenfeeds. Eine tiefgehende, ganzheitliche Analyse des Marktes, die verschiedene Informationsquellen zusammenführt und verständlich aufbereitet, ist für Privatanleger nach wie vor schwer zugänglich.
+\\\\
+Hinzu kommt, dass viele Privatanleger erst dann von relevanten Marktbewegungen oder wirtschaftlichen Trends erfahren, wenn die entscheidenden Gewinne bereits realisiert wurden. Die Informationsflut ist groß, aber verstreut und oft nur mit erheblichem Zeitaufwand zu durchdringen. Dies erschwert es insbesondere Einsteigern, aber auch erfahrenen Anlegern, informierte und strategisch durchdachte Entscheidungen zu treffen.
+\\\\
+Aus dieser Beobachtung entstand die Motivation für das vorliegende Projekt: das Ziel, eine Plattform zu entwickeln, die den Aktienhandel mit tiefgehender Marktanalyse und verständlicher Informationsaufbereitung vereint. Sie soll eine Brücke zwischen einfacher Bedienbarkeit und professioneller Analysetiefe schlagen – und damit für Nutzerinnen und Nutzer aller Erfahrungsstufen geeignet sein, vom Einsteiger bis zum professionellen Trader.
+\\\\
+Langfristig soll die entwickelte Lösung nicht nur den Handel effizienter gestalten, sondern auch einen Beitrag zur finanziellen Bildung leisten. Durch eine klare Strukturierung, interaktive Darstellungen und nachvollziehbare Analysen wird Wissen über Märkte, Trends und Anlageentscheidungen vermittelt. So kann die Plattform helfen, finanzielle Zusammenhänge besser zu verstehen, Risiken bewusster einzugehen und die eigene Altersvorsorge selbstbestimmt zu gestalten.
+
+\section{Motivation und Einleitung}
+\begin{center} 
+Durch die fortschreitende Digitalisierung und den Aufstieg von Neobrokern wurde der Zugang zum Aktienmarkt so einfach und kostengünstig wie nie zuvor. Immer mehr Menschen können heute mit wenigen Klicks investieren und an der Entwicklung der Finanzmärkte teilhaben.
+\\
+Trotz dieser Entwicklung besteht jedoch weiterhin eine Lücke: Während der Handel selbst inzwischen für die breite Masse zugänglich ist, fehlt es an ebenso benutzerfreundlichen und integrierten Werkzeugen zur fundierten Analyse des Aktienmarktes. Viele Plattformen bieten entweder einfache Handelsfunktionen ohne tiefgehende Analysemöglichkeiten oder komplexe Analyse-Tools, die für Privatanleger schwer zugänglich und teuer sind.
+\\
+Genau hier setzen wir an. Unser Ziel ist es, diese Lücke durch die Entwicklung einer integrierten Lösung, die umfassende Marktanalyse und effizientes Handeln in einer einzigen, intuitiven Plattform vereint, zu schließen. Damit möchten wir Anlegenden, unabhängig von ihrer Erfahrung, die Möglichkeit geben, fundierte Entscheidungen zu treffen und ihr Investmentverhalten fundierter und so zielführender zu gestalten.
+\end{center}
+\section{Problemraumbeschreibung (Prosa)}
+\begin{center}
+In den letzten Jahren haben sogenannte Neobroker den Zugang zu Finanzmärkten stark vereinfacht. Über moderne Web- oder Smartphone-Applikationen ermöglichen Anbieter wie Trade Republic, Scalable Capital oder eToro ihren Nutzern, mit nur wenigen Klicks in eine Vielzahl von Anlageklassen zu investieren. Darunter zählen Aktien, ETFs, Derivate und zunehmend auch Kryptowährungen. Die einfache Benutzeroberfläche, geringe Einstiegshürden und kostenlose Nutzung machen diese Plattformen besonders attraktiv, insbesondere für junge und unerfahrene Anlegerinnen und Anleger.
+
+Trotz dieser Demokratisierung des Börsenzugangs bleibt eine entscheidende Lücke bestehen: fehlendes Finanzwissen und unzureichende Analysewerkzeuge. Viele Nutzer treffen Investitionsentscheidungen aufgrund von Trends, Emotionen oder unvollständigen Informationen. Dies führt nicht selten zu impulsiven Käufen und Verkäufen, sogenannten Panikkäufen oder -verkäufen, die zu erheblichen Verlusten führen können. Gleichzeitig profitieren die Plattformbetreiber indirekt von dieser Aktivität, etwa durch Handelsgebühren, Spreads oder Provisionen von Market Makern, die bei jedem Kauf oder Verkauf anfallen.
+
+Das zentrale Problem liegt somit nicht im Zugang selbst, sondern im fehlenden Verständnis der Marktmechanismen und der unzureichenden Befähigung zu fundierten Entscheidungen. Viele Neobroker bieten kaum edukative Inhalte oder datengetriebene Entscheidungshilfen, obwohl gerade Einsteiger diese am dringendsten benötigen.
+
+Diese Arbeit setzt genau hier an:
+Ziel ist es, eine Anwendung zu entwickeln, die neben den bekannten Funktionen eines Neobrokers auch integrierte Analysewerkzeuge, Informationsmaterial und Hilfsmittel zur Risikoeinschätzung bereitstellt. Anlegende sollen dadurch befähigt werden, die Chancen und Gefahren des Börsenhandels besser zu verstehen und auf Basis von Wissen, statt Intuition oder Herdentrieb, zu handeln.
+
+Langfristig soll so ein aufklärendes, nutzerzentriertes System entstehen, das sowohl bestehende Konzepte erfolgreicher Broker-Apps aufgreift als auch die identifizierten Defizite in Bildung, Transparenz und Entscheidungsunterstützung adressiert.
+\end{center}
+\newpage
+\section{Color-Palette}
+\begin{center}
+
+\showhex{colDFE5F3}{\#DFE5F3}
+\showhex{colB0B0B0}{\#B0B0B0}
+\showhex{col557373}{\#557373}
+\showhex{col272401}{\#272401}
+\showhex{colF2EFEA}{\#F2EFEA}
+\showhex{col0D0D0D}{\#0D0D0D}
+\end{center}
+\section{Name und Logo}
+\begin{center}
+\includegraphics[width=20em]{Aurelic Logo mit Clar Leitmotiv.png}
+\end{center}
+\newpage
+\section{Color-Palette}
+\section{Gedankenprotokoll zum Labortagebuch}
+\begin{enumerate}
+    \item Ersten beide Termine 06.10. und 15.10.
+    \begin{itemize}
+        \item Erstellung einer Mindmap über zu erreichende Implementierungen
+        \item Treffen zur Erstellung einer ersten GUI, Colorscheme
+        \item Start zum Verfassen von Titel und Motivation
+        \item bau eines externen Kanban
+        \item Aufbau env: pycharm, github, pip, docker, postgresql
+        \item erste bsp daten 
+    \end{itemize}
+    \item Zweiter Termin am 27.10.
+    \begin{itemize}
+        \item Absprache des env
+        \item merge des GUI codes + erklärung des env + workflow
+        \item start problemraumbeschreibung und sturktur der Arbeit
+    \end{itemize}
+    \item Dritter Termin am 10.11.
+\end{enumerate}
+\newpage
+\section{Hauptmodule \& Aufgaben}
+
+\subsection{Datenquellen \& Schnittstellen}
+\textbf{Aufgabe:} Anbindung und Verwaltung mehrerer APIs zur Datenbeschaffung.
+\begin{itemize}
+  \item Integration von Börsen-APIs: \emph{Yahoo Finance}, \emph{Alpha Vantage}, \emph{Polygon.io}, \emph{Quandl}, \emph{Twelve Data}
+  \item Einbindung von News-APIs: \emph{Bloomberg}, \emph{Reuters}, \emph{Finnhub}, \emph{Seeking Alpha}
+  \item Social/Sentiment: \emph{Twitter (X) API}, \emph{Reddit API}
+  \item Verwaltung von API-Schlüsseln, Rate-Limits, Fallback-Strategien
+  \item Vereinheitlichte Datenstruktur und Zwischenspeicherung (z.\,B. TimescaleDB)
+\end{itemize}
+
+\subsection{Datenhaltung \& Datenmodell}
+\textbf{Aufgabe:} Entwurf eines skalierbaren relationalen Datenmodells (PostgreSQL).
+\begin{itemize}
+  \item Kern-Tabellen: \texttt{users}, \texttt{auth\_providers}, \texttt{accounts}, \texttt{instruments}, \texttt{prices\_intraday}, \texttt{prices\_eod}, \texttt{orders}, \texttt{trades}, \texttt{positions}, \texttt{corporate\_actions}, \texttt{alerts}, \texttt{audit\_logs}, \texttt{fx\_rates}, \texttt{watchlists}, \texttt{risk\_limits}, \texttt{compliance\_rules}
+  \item Historisierung von Zeitreihen (OHLCV), Partitionierung/Hypertables
+  \item Transaktionssicherheit und Revisionsfähigkeit (unveränderliche Audit-Logs)
+\end{itemize}
+
+\subsection{Analysefunktionen}
+\subsubsection*{Fundamentalanalyse}
+\begin{itemize}
+  \item Bilanzanalyse: Umsatz, Gewinn, Cashflow, Verschuldung
+  \item Kennzahlen: KGV, KBV, KUV, PEG, Dividendenrendite
+  \item Branchen- und Wettbewerbsvergleich
+\end{itemize}
+
+\subsubsection*{Technische Analyse}
+\begin{itemize}
+  \item Interaktive Charts (Candlestick, Linie, Balken)
+  \item Indikatoren: RSI, MACD, SMA/EMA, Bollinger-Bänder
+  \item Chartmuster: Trendlinien, Unterstützung/Widerstand, Formationen
+\end{itemize}
+
+\subsubsection*{Quantitative Analyse \& Screening}
+\begin{itemize}
+  \item Screener nach Kennzahlen (z.\,B. \enquote{KGV < 15, Dividendenrendite > 3\%})
+  \item Filter nach Wachstum, Sektoren, Regionen
+  \item Kombination mit historischen Kursen und Backtesting
+\end{itemize}
+
+\subsubsection*{Makro \& Marktumfeld}
+\begin{itemize}
+  \item Makroindikatoren: Zinsen, Inflation, Arbeitslosigkeit, BIP-Wachstum
+  \item Sektorenrotation, Heatmaps, Sektorenvergleich
+  \item ESG: Nachhaltigkeits-Scores, Governance-Ratings
+\end{itemize}
+
+\subsection{Portfoliomanagement}
+\textbf{Aufgabe:} Verwaltung und Analyse individueller Depots.
+\begin{itemize}
+  \item Import von Portfolios (CSV, Broker-API)
+  \item Performance-Tracking, Rendite (absolut/relativ/annualisiert)
+  \item Risiko: Sharpe Ratio, Volatilität, Drawdown
+  \item Backtesting von Strategien
+\end{itemize}
+
+\subsection{Alerts \& Benachrichtigungen}
+\textbf{Aufgabe:} Echtzeit-Benachrichtigung bei Bedingungen.
+\begin{itemize}
+  \item Preis- und Volatilitätsalarme
+  \item Nachrichten-Alerts
+  \item Konfigurierbare Schwellen, Versand via Push/E-Mail
+\end{itemize}
+
+\subsection{Benutzeroberfläche (UI/UX)}
+\textbf{Aufgabe:} Intuitive, performante, barrierefreie Oberfläche.
+\begin{itemize}
+  \item Klare Trennung: \emph{Handeln} vs. \emph{Analysieren}; persistente Navigation; anpassbare Dashboards/Tabs
+  \item Echtzeit-Feedback, Tastatur-Shortcuts, Inline-Validierung
+  \item Responsives Design (Desktop-first, sinnvoller Mobile-Fallback)
+  \item Dark/Light Mode, hoher Kontrast, skalierbare Schrift, ARIA-Labels
+  \item Onboarding, Tooltips, Inline-Erklärungen (z.\,B. im Orderticket)
+  \item Mehrsprachigkeit, Zeitzonen- und Währungsunterstützung
+\end{itemize}
+
+\subsection{Sicherheit \& Compliance}
+\textbf{Aufgabe:} Schutz sensibler Daten und regulatorische Konformität.
+\begin{itemize}
+  \item Authentifizierung: OIDC/OAuth2, MFA (WebAuthn/Passkeys), TOTP/SMS-Fallback
+  \item Rollen \& Rechte: RBAC/ABAC (Trader, Read-Only, Support, Admin)
+  \item DSGVO: Datenminimierung, Aufbewahrungsfristen, DPIA, Verarbeitungsverzeichnis
+  \item Auditierbarkeit: exportierbare Logs (CSV/PDF), Signaturen
+  \item Betrug/Abuse: Velocity-Limits, Geofencing/Sanktionslisten, Device-Fingerprinting (privacy-aware), Anomalieerkennung
+  \item Session-Management: kurze Tokens, Rotation, Idle/Absolute Timeout, Device-Revoke
+\end{itemize}
+
+\subsection{Fehlerbehandlung \& Logging}
+\textbf{Aufgabe:} Einheitliche Fehlererfassung und -kommunikation.
+\begin{itemize}
+  \item Zentrales Logging (API-Fehler, Nutzeraktionen, Systemstatus)
+  \item Verständliche Fehlermeldungen und visuelle Hinweise
+  \item Monitoring von Rate-Limits, Datenintegrität, Wiederholpolitik
+\end{itemize}
+
+\section{Technische Rahmenbedingungen}
+\begin{itemize}
+  \item Backend: Python (z.\,B. FastAPI/Flask)
+  \item Frontend: React/Vue (alternativ Flutter Web)
+  \item Datenbank: PostgreSQL + TimescaleDB
+  \item Architektur: Modular/Microservices mit API-Gateway
+  \item Skalierbarkeit: Containerisierung (Docker, Kubernetes)
+  \item CI/CD: Versionierung, Build-/Test-Pipeline, automatisierte Deployments
+\end{itemize}
+
+\section{Erweiterungsmöglichkeiten (Nice-to-Have)}
+\begin{itemize}
+  \item Benutzerdefinierte Indikatoren/Skripting
+  \item Multi-Chart-Ansicht im Grid
+  \item Guided UX (Demo-/Sandbox-Modus)
+  \item Report-Exporte (CSV/PDF)
+  \item Soziale Funktionen (z.\,B. Portfolio-Sharing)
+\end{itemize}
+\end{document}
