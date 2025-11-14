@@ -1,5 +1,10 @@
 # NB-DD-Studienarbeit
 
+## workflow KanBan and Issues
+always add to KanBan for every task
+add as draft if not coding specific
+add as issue if coding specific
+
 ## Some git
 always use this workstream:
 
