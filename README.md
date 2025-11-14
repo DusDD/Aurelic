@@ -1,7 +1,5 @@
 # NB-DD-Studienarbeit
 
-**unter Trello: https://trello.com/b/OKz8xrqB/my-trello-board**
-
 ## Some git
 always use this workstream:
 
