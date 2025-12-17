@@ -1,6 +1,11 @@
 # NB-DD-Studienarbeit
 
-**unter Trello: https://trello.com/b/OKz8xrqB/my-trello-board**
+## work with postgres
+
+git clone <repo>
+cd project
+cp .env.example .env
+docker compose up -d
 
 ## Some git
 always use this workstream:
