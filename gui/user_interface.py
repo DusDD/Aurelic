@@ -208,13 +208,10 @@ class App(QStackedWidget):
     def logout(self):
         self.setCurrentIndex(0)
 
-def main():
+def main_window():
     app = QApplication(sys.argv)
     w = App()
     w.setWindowTitle("Login Demo")
     w.resize(500, 420)  # etwas höher: wegen Logo
     w.show()
     sys.exit(app.exec())
-
-if __name__ == "__main__":
-    main()

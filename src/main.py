@@ -1,4 +1,4 @@
-# imports
+from gui.user_interface import main_window
 
 if __name__ == '__main__':
-    print('Hello World')
+    main_window()
