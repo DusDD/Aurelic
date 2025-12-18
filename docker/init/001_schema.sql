@@ -6,6 +6,6 @@ CREATE TABLE IF NOT EXISTS stock_prices (
     low NUMERIC,
     close NUMERIC,
     volume BIGINT,
-    source TEXT NOT NULL,
-    PRIMARY KEY (symbol, date, source)
+    source TEXT,
+    PRIMARY KEY (symbol, date)
 );
