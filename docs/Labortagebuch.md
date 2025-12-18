@@ -2,8 +2,9 @@ Labortagebuch:
 
 17.12.2025: Aufholen verteilter/fehlender Dokumentation über die Umsetzung des Projekts an einem Ort
 Initial wird die Projektstruktur angelegt, die sich in folgende Ordner aufteilt: "src" für den Quellcode, "db" für Skripte für zur Manipulation der Datenbank genutzte Skripte, "gui" für die Nutzeroberfläche und "images" zum Speichern von Bilddateien.
-Außerdem werden weitere Ordner zur lokalen Organisation der Anwendung genutzt. ".idea" ist PyCharm-spezifisch und "venv" ermöglicht die Nutzung einer virtuellen Umgebung für Python3.
-Beide werden durch die Datei ".gitignore" von der Synchronisierung über GitHub abgehalten. Darunter zählt zusätzlich die Datei ".env", die zur Speicherung von Login-Informationen der Datenbank genutzt wird und nicht geteilt werden sollte.
+Der Ordner "docs" wird genutzt, um Dokumente an einem Ort zu sammeln, Skripte für die Docker-Umgebung im Ordner "docker" und Skripte zur Automatisierung ausgehend vom Betriebssystem in "scripts".
+Außerdem werden weitere Ordner zur lokalen Organisation der Anwendung genutzt. Darunter zählt ".idea", der PyCharm-spezifisch ist und "venv" ermöglicht die Nutzung einer virtuellen Umgebung für Python3.
+Beide werden durch die Datei ".gitignore" von der Synchronisierung über GitHub abgehalten. Gleiches gilt für die Datei ".env", die zur Speicherung von Login-Informationen der Datenbank genutzt wird und nicht geteilt werden sollte.
 
 heutiger Fortschritt:
 Zur Erarbeitung der im Projekt definierten Ziele, muss die zugrunde liegende Infrastruktur sowie Abhängigkeiten klar definiert sein. 
@@ -32,4 +33,19 @@ Grundlegend wird folgender Stack zum Einpflegen der Daten genutzt:
    täglicher Scheduler
   (cron / Task Scheduler)
 
-Für die Historie-Daten wird yahoo finance genutzt. 
+Für die Historie-Daten wird "yahoo finance" genutzt. 
+Für die täglichen Daten wird "Alpha Vantage" genutzt.
+
+Damit auf allen Geräten dieselbe Datenbankumgebung besteht, werden in einem Ordner "docker"
+Initialisierungskripte hinterlegt, die das Grundschema der Datenbank bereits zum Start erstellt.
+
+Die jetzige Implementierung ermöglicht somit folgende Standards:
+- Komplettstruktur der Projektordner
+- Synchronisierung der Docker und Datenbankumgebung über .env und der docker-compose.yml
+- Skripten zur Automatisierung der data pulls und Einspeisung der Historie in die Datenbank
+- Dokumentation zur Nachstellung des Vorgehens by design
+- eine industry-standard main, von welcher nun Branches erstellt werden können
+
+Das weitere Vorgehen sollte den kompletten SSDLC und Anforderungsmanagement angehen und den IST-Zustand vergleichen.
+Die jetzige Implementierung dient als Fundament zur effektiven Kollaboration und ersten Datenpunkten.
+
