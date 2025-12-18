@@ -53,11 +53,11 @@ def fetch_daily(symbol):
             rows.append((
                 symbol,
                 date,
-                float(values["1. open"]),
-                float(values["2. high"]),
-                float(values["3. low"]),
-                float(values["4. close"]),
-                int(values["6. volume"]),
+                float(values["1. open"].iloc[0]),
+                float(values["2. high"].iloc[0]),
+                float(values["3. low"].iloc[0]),
+                float(values["4. close"].iloc[0]),
+                int(values["6. volume"].iloc[0]),
                 "alphavantage"
             ))
 

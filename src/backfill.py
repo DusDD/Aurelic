@@ -11,11 +11,11 @@ def backfill_symbol(symbol):
         rows.append((
             symbol,
             date.date(),
-            float(row["Open"]),
-            float(row["High"]),
-            float(row["Low"]),
-            float(row["Close"]),
-            int(row["Volume"]),
+            float(row["Open"].iloc[0]),
+            float(row["High"].iloc[0]),
+            float(row["Low"].iloc[0]),
+            float(row["Close"].iloc[0]),
+            int(row["Volume"].iloc[0]),
             "yahoo",
         ))
 
