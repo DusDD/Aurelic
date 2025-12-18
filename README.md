@@ -1,11 +1,30 @@
 # NB-DD-Studienarbeit
+- never leak .env
+- always reference on .env
+- use .env.example for setting up own .env
+- it is used as login credentials reference for the local database and its initializing scripts
 
 ## work with postgres
-
+```
 git clone <repo>
 cd project
 cp .env.example .env
 docker compose up -d
+```
+
+connect directly to it via
+`psql -h localhost -U [USERNAME] -d [DATABASE_NAME]`
+
+## work with docker
+initial wie oben: docker compose up -d
+`docker ps` -> zeigt laufende Container
+`docker ps -a` -> zeigt alle Container
+`docker start <container_name>` -> startet gestoppten Container
+`docker stop <container_name>` -> stoppt laufenden Container
+`docker rm <container_name>` -> entfernt den Container
+`docker logs -f <container_name>` -> zeigt Echtzeitlogs
+`docker volume ls` -> listet alle Docker Volumes (virtuelle Datenträger)
+`docker exec -it <container_name>` -> führt Befehle im Container aus
 
 ## workflow KanBan and Issues
 always add to KanBan for every task
@@ -28,6 +47,15 @@ always work on dedicated branch, never push on main
 ## PostgreSQL
 Version 18.0
 Now working with docker on windows 11
+inside the DB when manually connected with
+`psql -h localhost -U [USERNAME] -d [DATABASE_NAME]`
+
+use commands:
+`\q` quits
+`\d [table]` displays table
+
+normal SQL works as well:
+`SELECT current_database();` shows current DB
 
 ## Libraries 
 postgreSQL extensions:

@@ -1,56 +1,28 @@
 import yfinance as yf
-from db import get_connection
+from db import insert_stock_prices
+from config import SYMBOLS
 
-SYMBOLS = [
-    "AAPL",
-    "MSFT",
-    "GOOGL",
-]
-
-START_DATE = "2005-01-01"
-SOURCE = "yahoo"
 
 def backfill_symbol(symbol):
-    df = yf.download(
-        symbol,
-        start=START_DATE,
-        auto_adjust=False,
-        progress=False
-    )
+    df = yf.download(symbol, period="max", auto_adjust=False)
 
-    if df.empty:
-        print(f"⚠️ Keine Daten für {symbol}")
-        return
-
-    df.reset_index(inplace=True)
-
-    conn = get_connection()
-    cur = conn.cursor()
-
-    for _, row in df.iterrows():
-        cur.execute("""
-            INSERT INTO stock_prices
-            (symbol, date, open, high, low, close, adj_close, volume, source)
-            VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s)
-            ON CONFLICT DO NOTHING
-        """, (
+    rows = []
+    for date, row in df.iterrows():
+        rows.append((
             symbol,
-            row["Date"].date(),
-            row["Open"],
-            row["High"],
-            row["Low"],
-            row["Close"],
-            row["Adj Close"],
+            date.date(),
+            float(row["Open"]),
+            float(row["High"]),
+            float(row["Low"]),
+            float(row["Close"]),
             int(row["Volume"]),
-            SOURCE
+            "yahoo",
         ))
 
-    conn.commit()
-    cur.close()
-    conn.close()
+    insert_stock_prices(rows)
+    print(f"Backfilled {symbol}: {len(rows)} rows")
 
-    print(f"✅ Backfill abgeschlossen für {symbol}")
 
 if __name__ == "__main__":
-    for sym in SYMBOLS:
-        backfill_symbol(sym)
+    for symbol in SYMBOLS:
+        backfill_symbol(symbol)
