@@ -10,14 +10,23 @@ DB_NAME = os.getenv("POSTGRES_DB")
 DB_USER = os.getenv("POSTGRES_USER")
 DB_PASSWORD = os.getenv("POSTGRES_PASSWORD")
 
-# APIs
-ALPHA_VANTAGE_KEY = os.getenv("ALPHA_VANTAGE_KEY")
+# --------------------------
+# API Keys
+# --------------------------
+POLYGON_API_KEY = os.getenv("POLYGON_API_KEY")
 
-# Symbols you track
+if not POLYGON_API_KEY:
+    raise RuntimeError(
+        "POLYGON_API_KEY not set. "
+        "Please export POLYGON_API_KEY before running the app."
+    )
+
+# --------------------------
+# Symbols
+# --------------------------
 SYMBOLS = [
     "AAPL",
     "MSFT",
     "GOOGL",
     "AMZN",
-    "TSLA",
 ]

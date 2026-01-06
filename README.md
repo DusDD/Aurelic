@@ -4,6 +4,17 @@
 - use .env.example for setting up own .env
 - it is used as login credentials reference for the local database and its initializing scripts
 
+## collaborators rough task mapping (up to 06.01.)
+- Becker: overleaf-owner+design, finishing overleaf-sections, design/plan paper, hard paperwork, communication, frontend
+- Doehring: paper-assistance, documentation-meetings/labortagebuch/sprints, github/kanban/zotero-owner, programming-architecture, backend
+
+## work with zotero and overleaf
+- user DD edits single point of truth references.bib locally
+- file is pushed on github by default programming workflow
+- file is manually replaced on overleaf (as automation proves as tedious to set up)
+- both collaborators cite with keys from .bib
+- zotero **can't** be edited via overleaf, only locally at single point of truth
+
 ## work with postgres
 ```
 git clone <repo>
