@@ -14,6 +14,7 @@ DB_PASSWORD = os.getenv("POSTGRES_PASSWORD")
 # API Keys
 # --------------------------
 POLYGON_API_KEY = os.getenv("POLYGON_API_KEY")
+ALPHAVANTAGE_API_KEY = os.getenv("ALPHAVANTAGE_API_KEY")
 
 if not POLYGON_API_KEY:
     raise RuntimeError(
