@@ -5,7 +5,7 @@ from datetime import datetime
 import time
 import logging
 import pandas_market_calendars as mcal
-from db import insert_stock_prices
+from data import insert_stock_prices
 from config import SYMBOLS, ALPHAVANTAGE_API_KEY
 
 # --------------------------

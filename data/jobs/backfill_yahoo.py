@@ -1,5 +1,5 @@
 import yfinance as yf
-from db import insert_stock_prices
+from data import insert_stock_prices
 from config import SYMBOLS
 
 
