@@ -122,14 +122,82 @@ Zur sicheren Speicherung von Authentifizierungsdaten wird die bestehende Postgre
 
 Im Rahmen der Implementierung wurden folgende Komponenten realisiert:
 
-Registrierung neuer Benutzer mit kryptografisch sicherem Passwort-Hashing (bcrypt)
+- Registrierung neuer Benutzer mit kryptografisch sicherem Passwort-Hashing (bcrypt)
 
-Login-Mechanismus mit Passwortverifikation
+- Login-Mechanismus mit Passwortverifikation
 
-Zählung fehlgeschlagener Login-Versuche
+- Zählung fehlgeschlagener Login-Versuche
 
-Temporäre Kontosperre nach einer definierten Anzahl fehlerhafter Anmeldeversuche
+- Temporäre Kontosperre nach einer definierten Anzahl fehlerhafter Anmeldeversuche
 
-Protokollierung sicherheitsrelevanter Ereignisse (Registrierung, erfolgreicher Login, fehlgeschlagener Login, Kontosperre) in einer separaten Event-Tabelle
+- Protokollierung sicherheitsrelevanter Ereignisse (Registrierung, erfolgreicher Login, fehlgeschlagener Login, Kontosperre) in einer separaten Event-Tabelle
 
 Die gesamte Authentifizierungslogik ist strikt von der grafischen Benutzeroberfläche getrennt. Die GUI fungiert ausschließlich als Eingabe- und Ausgabeschicht, während sicherheitskritische Entscheidungen ausschließlich innerhalb der Authentifizierungsmodule getroffen werden. Dieses Design ermöglicht eine klare Trennung von Zuständigkeiten, verbessert die Testbarkeit und stellt sicher, dass die Implementierung später ohne größere Anpassungen in eine serverbasierte Architektur überführt werden kann.
+
+Nach der grundlegenden Implementierung der Registrierungs- und Login-Funktionalität wurde die Authentisierungslogik schrittweise erweitert, um sicherheitsrelevante Anforderungen eines produktionsnahen Systems abzubilden. Ziel war es, trotz lokaler Ausführung eine Architektur zu entwerfen, die später ohne grundlegende Änderungen in eine serverbasierte Client-Server-Kommunikation überführt werden kann.
+
+Zentraler Bestandteil dieser Erweiterung war die klare Trennung von fachlichen Daten (Aktiendaten) und sicherheitskritischen Informationen (Authentifizierungs- und Nutzerdaten). Zu diesem Zweck wurde die PostgreSQL-Datenbank um ein separates Schema auth ergänzt. Dieses Schema enthält ausschließlich Tabellen zur Benutzerverwaltung, Authentisierung sowie sicherheitsrelevante Ereignisse. Die bereits bestehenden Aktiendaten verbleiben isoliert im Schema stocks. Dadurch wird eine logische und organisatorische Trennung sensibler Daten erreicht, was sowohl der Wartbarkeit als auch den Prinzipien des Least-Privilege-Ansatzes entspricht.
+
+### Passwortsicherheit und Validierung
+Die Registrierung eines neuen Nutzers erfolgt ausschließlich nach erfolgreicher Validierung des gewählten Passworts. Dabei werden sowohl funktionale als auch sicherheitsrelevante Kriterien geprüft. Die Passwortvalidierung ist bewusst im Backend implementiert, obwohl im Frontend bereits eine dynamische Rückmeldung erfolgt. Dies verhindert das Umgehen von Sicherheitsregeln durch manipulierte Clients.
+
+Die Validierungslogik umfasst folgende Kriterien:
+
+- Mindestlänge des Passworts
+
+- Vorhandensein von Groß- und Kleinbuchstaben
+
+- Verwendung numerischer Zeichen
+
+- Verwendung von Sonderzeichen
+
+- Ausschluss bekannter, leicht erratbarer Passwörter
+
+Erst nach erfolgreicher Prüfung wird das Passwort mithilfe des kryptografischen Hash-Verfahrens bcrypt verarbeitet. Das Klartextpasswort wird zu keinem Zeitpunkt persistent gespeichert. Die Verwendung von passlib abstrahiert dabei die Hash-Funktion und erlaubt eine spätere Migration auf alternative Verfahren (z. B. Argon2), ohne die restliche Logik anzupassen.
+
+### Login-Absicherung und Account-Schutzmechanismen
+Zur Absicherung gegen automatisierte Login-Angriffe und Brute-Force-Versuche wurden mehrere Schutzmechanismen implementiert, die unterschiedliche Zeithorizonte abdecken.
+
+#### Rate Limiting (kurzfristig)
+
+Ein speicherbasierter Rate Limiter verhindert, dass ein Nutzer innerhalb eines kurzen Zeitfensters zu viele Login-Versuche durchführen kann. Hierbei werden Zeitstempel fehlgeschlagener Login-Versuche temporär im Arbeitsspeicher gehalten. Wird das definierte Limit überschritten, wird der Login-Versuch unmittelbar abgelehnt.
+
+Diese Implementierung ist bewusst lokal gehalten, jedoch so gestaltet, dass sie später problemlos durch eine serverseitige Lösung (z. B. Redis) ersetzt werden kann.
+
+#### Account Lock (persistente Sperre)
+
+Zusätzlich zum Rate Limiting wird bei wiederholten fehlgeschlagenen Login-Versuchen eine kontobasierte Sperre aktiviert. Die Anzahl fehlgeschlagener Versuche sowie ein möglicher Sperrzeitpunkt (locked_until) werden persistent in der Datenbank gespeichert.
+
+Erreicht ein Nutzer eine definierte Anzahl fehlgeschlagener Login-Versuche, wird sein Konto für einen festgelegten Zeitraum gesperrt. Während dieser Zeit sind Login-Versuche unabhängig vom Passwort nicht möglich. Nach erfolgreichem Login werden sowohl der Zähler für fehlgeschlagene Versuche als auch eine bestehende Sperre zurückgesetzt.
+Diese Trennung zwischen kurzfristigem Rate Limiting und persistentem Account Lock stellt sicher, dass sowohl automatisierte Angriffe als auch manuelle Fehlbedienungen angemessen behandelt werden.
+
+### Token-basierte Authentisierung und Zugriffsschutz
+Nach erfolgreichem Login wird ein kryptografisch zufälliger Token erzeugt, der den authentifizierten Nutzer eindeutig identifiziert. Dieser Token fungiert als Session-Äquivalent in der lokalen Umgebung und ist bewusst unabhängig von der grafischen Benutzeroberfläche implementiert.
+
+Der Zugriff auf geschützte Ressourcen, insbesondere auf Aktiendaten, erfolgt ausschließlich über einen Auth-Guard. Dieser überprüft bei jedem Datenzugriff:
+
+- ob ein Token vorhanden ist,
+
+- ob der Token gültig ist,
+
+- welchem Nutzer der Token zugeordnet ist.
+
+Erst nach erfolgreicher Prüfung wird der Zugriff auf die entsprechenden Datenbankabfragen erlaubt. Dadurch ist sichergestellt, dass fachliche Daten ausschließlich authentifizierten Nutzern zur Verfügung stehen. Die Implementierung orientiert sich konzeptionell an serverseitigen Middleware-Mechanismen und kann später durch JWT oder andere tokenbasierte Verfahren ersetzt werden.
+
+### Logging von sicherheitsrelevanten Ereignissen
+Zur Nachvollziehbarkeit und späteren Analyse sicherheitsrelevanter Vorgänge werden Login- und Registrierungsereignisse protokolliert. Diese Ereignisse werden getrennt von den eigentlichen Nutzerdaten gespeichert und enthalten unter anderem:
+
+- Benutzer-ID
+
+- Ereignistyp (z. B. Login, fehlgeschlagener Login, Registrierung)
+
+- Zeitstempel
+
+Diese Logs bilden die Grundlage für Monitoring, Auditing sowie forensische Analysen und entsprechen gängigen Anforderungen an sicherheitskritische Anwendungen.
+
+### Architekturentscheidung und Ausblick
+Obwohl die aktuelle Implementierung lokal ausgeführt wird, orientiert sich die gesamte Authentisierungsarchitektur an produktionsnahen Standards. Die klare Modularisierung der Komponenten (Registrierung, Login, Security, Guard, Logging) ermöglicht eine spätere Erweiterung um serverseitige Kommunikation, HTTPS-Absicherung (TLS) sowie Zwei-Faktor-Authentifizierung, ohne bestehende Logik grundlegend verändern zu müssen.
+
+Die aktuelle Implementierung stellt somit einen stabilen, sicheren und erweiterbaren Authentifizierungs-Kern dar, der als Grundlage für weitere Entwicklungsphasen im Sinne eines vollständigen Secure Software Development Life Cycle (SSDLC) dient.
+
+

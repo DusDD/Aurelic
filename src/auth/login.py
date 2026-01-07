@@ -1,86 +1,52 @@
 from data.db_connection import get_connection
 from .security import (
     verify_password,
-    is_account_locked,
-    register_failed_attempt,
-    reset_failed_attempts
+    is_account_locked
 )
 from .logger import log_event
+from .token import create_token
+from .security import register_failed_login
 
 
-def login_user(username: str, password: str) -> dict:
-    """
-    Rückgabe:
-    {
-        "success": bool,
-        "user_id": int | None,
-        "error": str | None
-    }
-    """
-
+def login_user(username: str, password: str):
     conn = get_connection()
     cursor = conn.cursor()
 
-    cursor.execute(
-        """
-        SELECT id, password_hash, failed_attempts, locked_until
+    cursor.execute("""
+        SELECT id, password_hash, deleted_at, locked_until
         FROM auth.users
         WHERE username = %s
-        """,
-        (username,)
-    )
-
+    """, (username,))
     row = cursor.fetchone()
 
-    if row is None:
-        log_event(conn, None, "login_failed")
-        conn.close()
-        return {"success": False, "user_id": None, "error": "invalid_credentials"}
+    if not row:
+        return {"success": False, "error": "invalid_credentials"}
 
+    user_id, pw_hash, deleted_at, locked_until = row
     user = {
-        "id": row[0],
-        "password_hash": row[1],
-        "failed_attempts": row[2],
-        "locked_until": row[3]
+        "id": user_id,
+        "password_hash": pw_hash,
+        "deleted_at": deleted_at,
+        "locked_until": locked_until
     }
 
-    # Account gesperrt?
+    if deleted_at is not None:
+        return {"success": False, "error": "account_deleted"}
+
     if is_account_locked(user):
-        log_event(conn, user["id"], "account_locked")
-        conn.close()
-        return {"success": False, "user_id": None, "error": "account_locked"}
+        return {"success": False, "error": "account_locked"}
 
-    # Passwort prüfen
-    if not verify_password(password, user["password_hash"]):
-        user = register_failed_attempt(user)
+    if not verify_password(password, pw_hash):
+        register_failed_login(user_id, conn)
+        return {"success": False, "error": "invalid_credentials"}
 
-        cursor.execute(
-            """
-            UPDATE auth.users
-            SET failed_attempts = %s, locked_until = %s
-            WHERE id = %s
-            """,
-            (user["failed_attempts"], user["locked_until"], user["id"])
-        )
-        conn.commit()
-
-        log_event(conn, user["id"], "login_failed")
-        conn.close()
-        return {"success": False, "user_id": None, "error": "invalid_credentials"}
-
-    # Login erfolgreich
-    user = reset_failed_attempts(user)
-    cursor.execute(
-        """
+    # Erfolg → Reset
+    cursor.execute("""
         UPDATE auth.users
-        SET failed_attempts = 0, locked_until = NULL
+        SET failed_login_attempts = 0, locked_until = NULL
         WHERE id = %s
-        """,
-        (user["id"],)
-    )
+    """, (user_id,))
     conn.commit()
 
-    log_event(conn, user["id"], "login_success")
-    conn.close()
-
-    return {"success": True, "user_id": user["id"], "error": None}
+    token = create_token(user_id)
+    return {"success": True, "token": token}

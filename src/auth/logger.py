@@ -1,4 +1,4 @@
-def log_event(conn, user_id: int | None, event_type: str, info: str = None):
+def log_event(conn, user_id: int | None, event_type: str):
     cursor = conn.cursor()
     cursor.execute(
         """
