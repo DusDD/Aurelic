@@ -8,3 +8,14 @@ LIMIT 10;
 SELECT id, username
 FROM auth.users
 ORDER BY username;
+
+-- auth.users Soft-Delete Spalte hinzufügen
+ALTER TABLE auth.users
+ADD COLUMN deleted_at TIMESTAMP DEFAULT NULL;
+
+ALTER TABLE auth.users
+ADD COLUMN IF NOT EXISTS deleted_at TIMESTAMP;
+
+ALTER TABLE auth.users
+ADD COLUMN IF NOT EXISTS failed_login_attempts INT DEFAULT 0,
+ADD COLUMN IF NOT EXISTS locked_until TIMESTAMP;
