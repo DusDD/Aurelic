@@ -1,12 +1,11 @@
 Labortagebuch:
-
-17.12.2025: Aufholen verteilter/fehlender Dokumentation über die Umsetzung des Projekts an einem Ort
+Aufholen verteilter/fehlender Dokumentation über die Umsetzung des Projekts an einem Ort
 Initial wird die Projektstruktur angelegt, die sich in folgende Ordner aufteilt: "src" für den Quellcode, "db" für Skripte für zur Manipulation der Datenbank genutzte Skripte, "gui" für die Nutzeroberfläche und "images" zum Speichern von Bilddateien.
 Der Ordner "docs" wird genutzt, um Dokumente an einem Ort zu sammeln, Skripte für die Docker-Umgebung im Ordner "docker" und Skripte zur Automatisierung ausgehend vom Betriebssystem in "scripts".
 Außerdem werden weitere Ordner zur lokalen Organisation der Anwendung genutzt. Darunter zählt ".idea", der PyCharm-spezifisch ist und "venv" ermöglicht die Nutzung einer virtuellen Umgebung für Python3.
 Beide werden durch die Datei ".gitignore" von der Synchronisierung über GitHub abgehalten. Gleiches gilt für die Datei ".env", die zur Speicherung von Login-Informationen der Datenbank genutzt wird und nicht geteilt werden sollte.
 
-heutiger Fortschritt:
+## 17.12.2025:
 Zur Erarbeitung der im Projekt definierten Ziele, muss die zugrunde liegende Infrastruktur sowie Abhängigkeiten klar definiert sein. 
 Darunter zählen die genutzten Geräte, Anwendungen und organisationstechnischen Maßnahmen. 
 Zur Programmierung wird PyCharm zur Verwendung der Programmiersprache Python3 genutzt. Um die IDE mit einer funktionsfähigen Datenbankumgebung zu nutzen, wird Docker verwendet.
@@ -49,3 +48,8 @@ Die jetzige Implementierung ermöglicht somit folgende Standards:
 Das weitere Vorgehen sollte den kompletten SSDLC und Anforderungsmanagement angehen und den IST-Zustand vergleichen.
 Die jetzige Implementierung dient als Fundament zur effektiven Kollaboration und ersten Datenpunkten.
 
+## 07.01.2026: 
+Zum täglichen Befüllen der Datenbank wird statt AlphaVantage nun Polygon genutzt.
+Zur sicheren Speicherung von Authentisierungsdaten, werden in der Datenbank zwei Schemata angelegt,
+um diese logisch von Aktiendaten zu trennen. Für die Registrierungs- und Loginprozesse werden kryptografisch 
+sicher Authentisierungsdaten getrennt von Eventdaten gespeichert.
