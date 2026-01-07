@@ -1,4 +1,4 @@
-from data.db_get_connection import get_connection
+from data.db_connection import get_connection
 from .security import hash_password
 from .logger import log_event
 

@@ -56,3 +56,80 @@ Deshalb wird die Logik voerst lokal beschrieben, jedoch modularisiert für spät
 Zur sicheren Speicherung von Authentisierungsdaten, werden in der Datenbank zwei Schemata angelegt,
 um diese logisch von Aktiendaten zu trennen. Für die Registrierungs- und Loginprozesse werden kryptografisch 
 sicher Authentisierungsdaten getrennt von Eventdaten gespeichert.
+
+
+## 17.12.2025:
+### Projektinfrastruktur und Entwicklungsumgebung
+
+Zur Erarbeitung der im Projekt definierten Ziele ist es erforderlich, die zugrunde liegende technische Infrastruktur sowie alle relevanten Abhängigkeiten klar und reproduzierbar zu definieren. Dazu zählen sowohl die genutzten Endgeräte als auch die eingesetzten Anwendungen und organisatorischen Maßnahmen zur Zusammenarbeit.
+
+Die Entwicklung der Anwendung erfolgt unter Verwendung der integrierten Entwicklungsumgebung PyCharm mit der Programmiersprache Python 3. Um eine konsistente und unabhängig vom Host-System funktionierende Datenbankumgebung bereitzustellen, wird Docker eingesetzt. Hierbei wird ein Container mit einer PostgreSQL-Datenbank genutzt, welcher das strukturierte Erstellen, Verwalten und Abfragen von Datensätzen ermöglicht. Der Zugriff auf die Daten erfolgt über SQL-Abfragen direkt aus der Entwicklungsumgebung heraus.
+
+Zum Austausch und zur Synchronisierung externer Abhängigkeiten innerhalb des Entwicklungsteams wird die Datei requirements.txt verwendet. Diese erlaubt es, mit einem einzelnen Befehl sämtliche benötigten Python-Bibliotheken zu installieren und stellt somit sicher, dass alle Projektbeteiligten mit einer identischen Programmierumgebung arbeiten.
+
+Da innerhalb des Projektteams unterschiedliche Betriebssysteme (Windows, macOS, Linux Mint) verwendet werden, wird zusätzlich eine docker-compose.yml bereitgestellt. Diese ermöglicht das initiale sowie fortlaufende Teilen einer einheitlichen Docker-Umgebung und abstrahiert systemabhängige Unterschiede. In der begleitenden Dokumentation wird beschrieben, wie eine ursprünglich auf einem Windows-System erstellte Datenbankumgebung über GitHub auf Unix-basierte Systeme übertragen werden kann. Die Zusammenhänge zwischen Projektstruktur, Docker-Setup und Datenbankinitialisierung werden zentral in der Datei README.md dokumentiert.
+
+### Datenbeschaffung und -persistenz
+
+Zur Entwicklung und zum Test der Anwendung werden realitätsnahe Aktiendaten benötigt. Diese werden über externe APIs bezogen und mithilfe eines Python-Skripts in der PostgreSQL-Datenbank gespeichert. Das Skript besteht aus zwei logisch getrennten Methoden:
+Zum einen wird ein größerer Datenauszug genutzt, welcher die historische Entwicklung von Aktienkursen abbildet. Zum anderen wird eine regelmäßige, tägliche Datenabfrage implementiert, die feinere zeitliche Auflösungen bereitstellt. Eine noch granularere Kursdarstellung (z. B. Tick-Daten) ist grundsätzlich auch retrospektiv verfügbar, jedoch ausschließlich über proprietäre und kostenpflichtige Schnittstellen.
+
+Der grundlegende technische Ablauf zur Datenintegration lässt sich wie folgt darstellen:
+
+[Kostenlose Aktien-API]
+          ↓ (HTTP / JSON)
+     Python-Skript
+   (Daten abrufen & validieren)
+          ↓
+   Datenaufbereitung
+ (Datumsformate, Datentypen)
+          ↓
+     PostgreSQL-Datenbank
+          ↑
+   Täglicher Scheduler
+  (cron / Task Scheduler)
+
+
+Für den Import historischer Kursdaten wird die API von Yahoo Finance verwendet. Für die initial geplante tägliche Aktualisierung wurde zunächst Alpha Vantage genutzt.
+
+Um sicherzustellen, dass auf allen Entwicklungsrechnern dieselbe Datenbankstruktur vorhanden ist, werden im Ordner docker Initialisierungsskripte hinterlegt. Diese erzeugen beim Start des Containers automatisch das erforderliche Grundschema der Datenbank, einschließlich der Tabellen zur Speicherung von Aktienkursen.
+
+### Aktueller Stand der Implementierung
+
+Die bisherige Implementierung stellt folgende Standards und Funktionalitäten bereit:
+
+- Vollständige und nachvollziehbare Projektordnerstruktur
+- Synchronisierung der Docker- und Datenbankumgebung über .env-Dateien und docker-compose.yml
+
+- Skripte zur Automatisierung des Datenimports (historische und tägliche Daten)
+
+- Dokumentation zur reproduzierbaren Nachstellung des Entwicklungsprozesses
+
+- Eine konsistente und industrieübliche Hauptentwicklungslinie (main), von welcher Feature-Branches abgeleitet werden können
+
+Diese Implementierung bildet das Fundament für eine strukturierte Weiterentwicklung des Projekts, eine effektive Kollaboration im Team sowie erste belastbare Datenpunkte. Das weitere Vorgehen orientiert sich am vollständigen Secure Software Development Life Cycle (SSDLC) sowie an einem systematischen Anforderungsmanagement, wobei der aktuelle Ist-Zustand als Referenz dient.
+
+## 07.01.2026
+### Erweiterung um Authentifizierungslogik
+
+Im Zuge der Weiterentwicklung wurde für die tägliche Befüllung der Datenbank die bisher verwendete API Alpha Vantage durch Polygon ersetzt, um stabilere und zeitnähere Marktdaten zu erhalten.
+
+Ein weiterer zentraler Schwerpunkt dieser Projektphase liegt auf der Implementierung einer Authentifizierungslogik. In produktiven Umgebungen, wie sie beispielsweise bei Neo-Brokern eingesetzt werden, erfolgt die Authentifizierung üblicherweise über eine serverseitige Client-Server-Kommunikation. Da sich das Projekt jedoch aktuell in einer Implementierungs- und Architekturphase befindet, liegt der Fokus nicht auf der finalen Infrastruktur, sondern auf einer sauberen, modularen Logik.
+
+Aus diesem Grund wird die Authentifizierungslogik zunächst lokal implementiert, jedoch von Beginn an so modular aufgebaut, dass eine spätere serverseitige Erweiterung (z. B. über REST-APIs) ohne grundlegende Änderungen möglich ist.
+
+Zur sicheren Speicherung von Authentifizierungsdaten wird die bestehende PostgreSQL-Datenbank um ein separates Schema erweitert. Dieses Authentifizierungs-Schema ist logisch vollständig von den Aktiendaten getrennt. Während das bestehende Schema ausschließlich Finanz- und Marktdaten enthält, werden im Authentifizierungs-Schema ausschließlich benutzerbezogene Daten gespeichert. Diese Trennung reduziert die Angriffsfläche und folgt dem Prinzip der geringsten Berechtigung.
+
+Im Rahmen der Implementierung wurden folgende Komponenten realisiert:
+
+Registrierung neuer Benutzer mit kryptografisch sicherem Passwort-Hashing (bcrypt)
+
+Login-Mechanismus mit Passwortverifikation
+
+Zählung fehlgeschlagener Login-Versuche
+
+Temporäre Kontosperre nach einer definierten Anzahl fehlerhafter Anmeldeversuche
+
+Protokollierung sicherheitsrelevanter Ereignisse (Registrierung, erfolgreicher Login, fehlgeschlagener Login, Kontosperre) in einer separaten Event-Tabelle
+
+Die gesamte Authentifizierungslogik ist strikt von der grafischen Benutzeroberfläche getrennt. Die GUI fungiert ausschließlich als Eingabe- und Ausgabeschicht, während sicherheitskritische Entscheidungen ausschließlich innerhalb der Authentifizierungsmodule getroffen werden. Dieses Design ermöglicht eine klare Trennung von Zuständigkeiten, verbessert die Testbarkeit und stellt sicher, dass die Implementierung später ohne größere Anpassungen in eine serverbasierte Architektur überführt werden kann.

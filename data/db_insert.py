@@ -1,5 +1,5 @@
 from psycopg2.extras import execute_batch
-from data.db_get_connection import get_connection
+from data.db_connection import get_connection
 
 def insert_stock_prices(rows):
     sql = """

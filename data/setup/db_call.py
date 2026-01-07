@@ -1,6 +1,6 @@
 import psycopg2
 from psycopg2.extras import RealDictCursor
-from data.db_get_connection import get_connection
+from data.db_connection import get_connection
 
 get_connection()
 
