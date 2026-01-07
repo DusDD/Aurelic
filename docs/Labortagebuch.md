@@ -50,6 +50,9 @@ Die jetzige Implementierung dient als Fundament zur effektiven Kollaboration und
 
 ## 07.01.2026: 
 Zum täglichen Befüllen der Datenbank wird statt AlphaVantage nun Polygon genutzt.
+Authentifizierung wird in produktiven Umgebungen eines Neo-Brokers durch Server-Client Kommunikation umgesetzt. 
+Allerdings liegt der Fokus in der Implementierungsphase des Projekts auf der Architektur und nicht auf der Infrastruktur.
+Deshalb wird die Logik voerst lokal beschrieben, jedoch modularisiert für spätere serverseitige Kommunikation ergestellt.
 Zur sicheren Speicherung von Authentisierungsdaten, werden in der Datenbank zwei Schemata angelegt,
 um diese logisch von Aktiendaten zu trennen. Für die Registrierungs- und Loginprozesse werden kryptografisch 
 sicher Authentisierungsdaten getrennt von Eventdaten gespeichert.
