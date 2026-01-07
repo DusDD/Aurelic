@@ -1,12 +1,12 @@
-# src/daily_pull.py
+# src/daily_pull_alphavantage.py
 
 import requests
 from datetime import datetime
 import time
 import logging
 import pandas_market_calendars as mcal
-from db import insert_stock_prices
-from config import SYMBOLS, ALPHA_VANTAGE_KEY
+from data import insert_stock_prices
+from config import SYMBOLS, ALPHAVANTAGE_API_KEY
 
 # --------------------------
 # Setup logging
@@ -34,7 +34,7 @@ def fetch_daily(symbol):
     params = {
         "function": "TIME_SERIES_DAILY_ADJUSTED",
         "symbol": symbol,
-        "apikey": ALPHA_VANTAGE_KEY,
+        "apikey": ALPHAVANTAGE_API_KEY,
         "outputsize": "compact",  # only recent data
     }
 

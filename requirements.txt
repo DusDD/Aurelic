@@ -1,4 +1,4 @@
-bcrypt==5.0.0
+bcrypt==4.3.0
 beautifulsoup4==4.14.2
 certifi==2025.10.5
 cffi==2.0.0
@@ -26,6 +26,7 @@ platformdirs==4.5.0
 protobuf==6.32.1
 psycopg2-binary==2.9.11
 pycparser==2.23
+PyJWT==2.10.1
 pyluach==2.3.0
 pyparsing==3.2.5
 PyQt6==6.9.1

@@ -1,4 +1,0 @@
-what to code:
-- GUI
-- db-structures
-- operation-logic for each feature
