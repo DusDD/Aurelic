@@ -682,7 +682,7 @@ class MainPage(QWidget):
 
         v.addStretch(1)
 
-        footer = QLabel("Aktualisiert alle 3 Minuten (Finnhub + GDELT).")
+        footer = QLabel("Aktualisiert alle 3 Minuten.")
         footer.setObjectName("FinePrint")
         footer.setWordWrap(True)
         v.addWidget(footer)
