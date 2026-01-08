@@ -391,16 +391,24 @@ class StartPage(QWidget):
             return
         label.setText("Caps Lock is ON." if caps_on else "")
 
-    def eventFilter(self, obj, event) -> bool:
-        if event.type() in (QEvent.KeyPress, QEvent.KeyRelease, QEvent.FocusIn):
-            if obj in (self._login_pw, self._reg_pw1, self._reg_pw2, self._reset_new_pw, self._reset_new_pw2):
+    def event_filter(self, obj, event) -> bool:
+        if event.type() in (QEvent.KeyPress, QEvent.KeyRelease):
+            if obj in (
+                    self._login_pw,
+                    self._reg_pw1,
+                    self._reg_pw2,
+                    self._reset_new_pw,
+                    self._reset_new_pw2
+            ):
                 caps = self._caps_on(event.modifiers())
+
                 if obj == self._login_pw:
                     self._set_caps_label(self._login_caps_hint, caps)
                 elif obj in (self._reg_pw1, self._reg_pw2):
                     self._set_caps_label(self._reg_caps_hint, caps)
                 elif obj in (self._reset_new_pw, self._reset_new_pw2):
                     self._set_caps_label(self._reset_caps_hint, caps)
+
         return super().eventFilter(obj, event)
 
     # -----------------------------

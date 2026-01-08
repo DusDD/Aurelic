@@ -1,4 +1,3 @@
-# auth/guard.py
 from .token import verify_token
 
 
