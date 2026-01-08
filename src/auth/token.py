@@ -1,4 +1,3 @@
-# auth/token.py
 import jwt
 from datetime import datetime, timedelta
 
