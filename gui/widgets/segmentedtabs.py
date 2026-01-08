@@ -1,7 +1,9 @@
 # gui/widgets/segmentedtabs.py
 from __future__ import annotations
 
-from PySide6.QtCore import Qt, Signal, QPropertyAnimation, QRect, QEasingCurve, QTimer
+from PySide6.QtCore import (
+    Qt, Signal, QPropertyAnimation, QRect, QEasingCurve, QTimer, QEvent
+)
 from PySide6.QtWidgets import QWidget, QPushButton, QFrame, QHBoxLayout
 
 
@@ -20,15 +22,13 @@ class SegmentedTabs(QWidget):
 
         self._active = "brokerage"
 
-        # Indicator (the sliding pill)
+        # Indicator (sliding pill)
         self._indicator = QFrame(self)
         self._indicator.setObjectName("SegmentedIndicator")
         self._indicator.setAttribute(Qt.WA_StyledBackground, True)
 
-        # IMPORTANT FIX: indicator must NOT steal clicks (otherwise sometimes 2 clicks)
+        # IMPORTANT: indicator must NOT steal clicks
         self._indicator.setAttribute(Qt.WA_TransparentForMouseEvents, True)
-
-        # Keep it behind the buttons (still visible, because it's drawn as background)
         self._indicator.lower()
 
         # Buttons
@@ -52,38 +52,34 @@ class SegmentedTabs(QWidget):
 
         # Animation
         self._anim = QPropertyAnimation(self._indicator, b"geometry", self)
-        self._anim.setDuration(240)
+        self._anim.setDuration(220)
         self._anim.setEasingCurve(QEasingCurve.InOutCubic)
 
-        # Ensure indicator is positioned after first layout pass
-        QTimer.singleShot(0, lambda: self.set_active(self._active, animate=False, emit=False))
+        # Reposition management (prevents "needs 2 clicks" due to late geometry)
+        self._queued_reposition = False
 
+        # Ensure indicator is positioned after first layout pass
+        QTimer.singleShot(0, self._reposition_indicator)
+
+    # --------------------------
+    # Public API
+    # --------------------------
     def set_active(self, which: str, animate: bool = True, emit: bool = False) -> None:
         which = "analyse" if which == "analyse" else "brokerage"
-
-        # FIX: don't early-return when same tab is set (keeps indicator in sync)
-        # Only skip if we're already active AND no animation required.
-        if which == self._active and not animate:
-            return
 
         self._active = which
         self._apply_text_state()
 
-        target = self._target_rect(which)
-
-        if animate:
-            self._anim.stop()
-            self._anim.setStartValue(self._indicator.geometry())
-            self._anim.setEndValue(target)
-            self._anim.start()
-        else:
-            self._indicator.setGeometry(target)
+        # Geometry may not be ready yet; ensure reposition happens robustly.
+        self._reposition_indicator(animate=animate)
 
         if emit:
             self.changed.emit(which)
 
+    # --------------------------
+    # Internal helpers
+    # --------------------------
     def _apply_text_state(self) -> None:
-        # Toggle dynamic properties -> QSS can color active/inactive text.
         self._btn_analyse.setProperty("active", self._active == "analyse")
         self._btn_brokerage.setProperty("active", self._active == "brokerage")
 
@@ -96,12 +92,54 @@ class SegmentedTabs(QWidget):
         btn = self._btn_analyse if which == "analyse" else self._btn_brokerage
         g = btn.geometry()
 
-        # Slight expansion for a nicer pill look
+        # When widget is not yet laid out, geometry can be empty.
+        if g.width() <= 0 or g.height() <= 0:
+            return QRect(0, 0, 0, 0)
+
         pad_x = 4
         pad_y = 2
         return QRect(g.x() - pad_x, g.y() - pad_y, g.width() + 2 * pad_x, g.height() + 2 * pad_y)
 
+    def _reposition_indicator(self, animate: bool = False) -> None:
+        # If geometry isn't ready yet, queue a retry.
+        target = self._target_rect(self._active)
+        if target.width() <= 0 or target.height() <= 0:
+            self._queue_reposition()
+            return
+
+        if animate and self._indicator.geometry().isValid() and self._indicator.geometry().width() > 0:
+            self._anim.stop()
+            self._anim.setStartValue(self._indicator.geometry())
+            self._anim.setEndValue(target)
+            self._anim.start()
+        else:
+            self._anim.stop()
+            self._indicator.setGeometry(target)
+
+    def _queue_reposition(self) -> None:
+        if self._queued_reposition:
+            return
+        self._queued_reposition = True
+
+        def _do():
+            self._queued_reposition = False
+            self._reposition_indicator(animate=False)
+
+        QTimer.singleShot(0, _do)
+
+    # --------------------------
+    # Qt events (ensure correct first render)
+    # --------------------------
+    def showEvent(self, event) -> None:
+        super().showEvent(event)
+        self._reposition_indicator(animate=False)
+
     def resizeEvent(self, event) -> None:
         super().resizeEvent(event)
-        # Keep indicator aligned on resize
-        self._indicator.setGeometry(self._target_rect(self._active))
+        self._reposition_indicator(animate=False)
+
+    def event(self, e) -> bool:
+        # Catch layout/style changes that can affect geometry
+        if e.type() in (QEvent.LayoutRequest, QEvent.Polish, QEvent.StyleChange):
+            self._queue_reposition()
+        return super().event(e)
