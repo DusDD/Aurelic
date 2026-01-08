@@ -1,4 +1,4 @@
-# gui/startpage.py
+# gui/loginandregisterpage.py
 from __future__ import annotations
 
 import re
@@ -31,19 +31,26 @@ class Palette:
     accent2: str = "#6D929B"
 
 
-def build_qss(p: Palette) -> str:
+def _qss_url(path: str) -> str:
+    # QSS expects forward slashes; also tolerate relative paths.
+    p = (path or "").replace("\\", "/")
+    return f'url("{p}")' if p else ""
+
+
+def build_qss(p: Palette, background_image_path: str = "images/Backgroundimage.png") -> str:
+    bg_url = _qss_url(background_image_path)
+
     return f"""
     QWidget {{
-        background: {p.bg0};
         color: {p.text0};
         font-family: "Segoe UI", "Inter", "Helvetica", "Arial";
+        background-color: {p.bg0};
     }}
 
+    /* App background image (Root widget) */
     #Root {{
-        background: qradialgradient(cx:0.15, cy:0.10, radius:1.1,
-                                   fx:0.15, fy:0.10,
-                                   stop:0 rgba(109,146,155,30),
-                                   stop:1 rgba(11,13,16,255));
+        background-color: {p.bg0};
+        border-image: {bg_url} 0 0 0 0 stretch stretch;
     }}
 
     #Card {{
@@ -190,13 +197,18 @@ class StartPage(QWidget):
     def __init__(
         self,
         logo_path: str = "images/Aurelic Logo mit Clar Leitmotiv.png",
+        background_path: str = "images/Backgroundimage.png",
         parent: QWidget | None = None
     ):
         super().__init__(parent)
 
+        # IMPORTANT: ensure the widget paints the styled background (prevents white showing through)
+        self.setAttribute(Qt.WA_StyledBackground, True)
+        self.setAutoFillBackground(True)
+
         self.setObjectName("Root")
         self._palette = Palette()
-        self.setStyleSheet(build_qss(self._palette))
+        self.setStyleSheet(build_qss(self._palette, background_path))
 
         self._tabs_login: QPushButton | None = None
         self._tabs_register: QPushButton | None = None
