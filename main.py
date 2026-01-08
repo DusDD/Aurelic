@@ -26,6 +26,16 @@ if __name__ == "__main__":
     # --- StartPage ---
     start = StartPage(logo_path="images/Aurelic Logo mit Clar Leitmotiv.png")
 
+    start.login_requested.connect(auth_ctrl.on_login)
+
+    auth_ctrl.login_successful.connect(
+        lambda: stack.setCurrentWidget(main)
+    )
+
+    auth_ctrl.login_failed.connect(
+        lambda msg: start.show_error(msg)
+    )
+
     # Login
     start.login_requested.connect(auth_ctrl.on_login)
     auth_ctrl.login_successful.connect(lambda: stack.setCurrentWidget(main))

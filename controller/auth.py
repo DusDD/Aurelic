@@ -2,6 +2,7 @@ from PySide6.QtCore import QObject, Signal, QTimer
 from src.auth.register import register_user
 from src.auth.login import login_user
 from src.auth.security import check_rate_limit
+from src.auth.token import blacklist_token
 
 class AuthController(QObject):
     login_successful = Signal(str)          # email
@@ -15,17 +16,24 @@ class AuthController(QObject):
     def __init__(self, db_conn, parent=None):
         super().__init__(parent)
         self.db_conn = db_conn
+        self.current_token = None
 
     # -----------------------------
     # LOGIN
     # -----------------------------
     def on_login(self, email: str, password: str):
-        # Rate limiting
+
         if not check_rate_limit(email):
-            self.login_failed.emit("Too many login attempts. Try again later.")
+            self.login_failed.emit("Too many login attempts.")
             return
 
         result = login_user(email, password)
+
+        if result.get("success"):
+            self.current_token = result["token"]
+            self.login_successful.emit(email)
+        else:
+            self.login_failed.emit(result.get("error"))
 
         if result.get("success"):
             self.login_successful.emit(email)
@@ -35,11 +43,31 @@ class AuthController(QObject):
     # -----------------------------
     # REGISTER
     # -----------------------------
-    def on_register(self, first_name, last_name, email, password, street="", postal_code="", city="", country=""):
+    def on_register(
+            self,
+            first_name,
+            last_name,
+            email,
+            pw1,
+            pw2,
+            street="",
+            postal_code="",
+            city="",
+            country=""
+    ):
+        # Passwort-Match prüfen
+        if pw1 != pw2:
+            self.register_failed.emit("passwords_do_not_match")
+            return
+
         result = register_user(
-            first_name, last_name, email, password,
-            street=street, postal=postal_code, city=city, country=country
+            first_name, last_name, email, pw1,
+            street=street,
+            postal=postal_code,
+            city=city,
+            country=country
         )
+
         if result.get("success"):
             full_name = f"{first_name} {last_name}".strip()
             self.register_successful.emit(full_name)
@@ -70,3 +98,8 @@ class AuthController(QObject):
             self.password_reset_done.emit(email)
         else:
             self.password_reset_failed.emit(result.get("error", "Password reset failed"))
+
+    def logout(self):
+        if self.current_token:
+            blacklist_token(self.current_token)
+            self.current_token = None

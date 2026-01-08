@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS auth.users (
     last_name TEXT,
 
     street TEXT,
-    postal TEXT,
+    postal_code TEXT,
     city TEXT,
     country TEXT,
 
@@ -22,11 +22,16 @@ CREATE TABLE IF NOT EXISTS auth.users (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE auth.login_events (
+CREATE TABLE IF NOT EXISTS auth.login_events (
     id SERIAL PRIMARY KEY,
     user_id INT REFERENCES auth.users(id) ON DELETE CASCADE,
     event_type TEXT NOT NULL, -- login_success, login_failed, register, lock
     timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS auth.revoked_tokens (
+    token TEXT PRIMARY KEY,
+    revoked_at TIMESTAMP DEFAULT NOW()
 );
 
 CREATE INDEX idx_users_email ON auth.users(email);
