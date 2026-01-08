@@ -4,8 +4,8 @@ import pandas_market_calendars as mcal
 import logging
 import time
 
-from data import insert_stock_prices
-from config import SYMBOLS, POLYGON_API_KEY
+from data.db_insert import insert_stock_prices
+from data.config import SYMBOLS, POLYGON_API_KEY
 
 # --------------------------
 # Logging
@@ -64,7 +64,7 @@ def fetch_polygon_daily(symbol, trading_day):
 # Main Backfill Routine
 # --------------------------
 def main():
-    trading_days = get_last_trading_days(n=30)  # z.B. letzte 30 Handelstage
+    trading_days = get_last_trading_days(n=2)  # z.B. letzte 30 Handelstage
     all_rows = []
 
     for symbol in SYMBOLS:

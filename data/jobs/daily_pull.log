@@ -1,0 +1,6 @@
+2026-01-08 23:10:24,314 [INFO] Starting Polygon daily pull for 2026-01-08
+2026-01-08 23:10:24,796 [ERROR] Polygon error for AAPL: 403 Client Error: Forbidden for url: https://api.polygon.io/v2/aggs/ticker/AAPL/range/1/day/2026-01-08/2026-01-08?adjusted=true&sort=asc&limit=1&apiKey=stgV8Q3O1AJpYvGSULHfhLr3pttCL2SM
+2026-01-08 23:10:26,250 [ERROR] Polygon error for MSFT: 403 Client Error: Forbidden for url: https://api.polygon.io/v2/aggs/ticker/MSFT/range/1/day/2026-01-08/2026-01-08?adjusted=true&sort=asc&limit=1&apiKey=stgV8Q3O1AJpYvGSULHfhLr3pttCL2SM
+2026-01-08 23:10:27,712 [ERROR] Polygon error for GOOGL: 403 Client Error: Forbidden for url: https://api.polygon.io/v2/aggs/ticker/GOOGL/range/1/day/2026-01-08/2026-01-08?adjusted=true&sort=asc&limit=1&apiKey=stgV8Q3O1AJpYvGSULHfhLr3pttCL2SM
+2026-01-08 23:10:29,148 [ERROR] Polygon error for AMZN: 403 Client Error: Forbidden for url: https://api.polygon.io/v2/aggs/ticker/AMZN/range/1/day/2026-01-08/2026-01-08?adjusted=true&sort=asc&limit=1&apiKey=stgV8Q3O1AJpYvGSULHfhLr3pttCL2SM
+2026-01-08 23:10:30,152 [INFO] Polygon daily pull completed

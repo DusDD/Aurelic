@@ -7,3 +7,8 @@ ORDER BY source;
 SELECT DISTINCT symbol
 FROM stocks.stock_prices
 ORDER BY symbol;
+
+SELECT DISTINCT date, symbol
+FROM stocks.stock_prices
+ORDER BY date DESC
+LIMIT 10;

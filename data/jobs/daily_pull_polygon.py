@@ -4,8 +4,8 @@ import logging
 from datetime import datetime, timedelta
 import pandas_market_calendars as mcal
 
-from data import insert_stock_prices
-from config import SYMBOLS, POLYGON_API_KEY
+from data.db_insert import insert_stock_prices
+from data.config import SYMBOLS, POLYGON_API_KEY
 
 # --------------------------
 # Setup logging
