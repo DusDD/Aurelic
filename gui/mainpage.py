@@ -1,4 +1,4 @@
-# gui/mainpage.py
+# gui/brokerage.py
 from __future__ import annotations
 
 import os
@@ -37,19 +37,26 @@ class Palette:
     accent2: str = "#6D929B"
 
 
-def build_qss(p: Palette) -> str:
+def _qss_url(path: str) -> str:
+    # QSS expects forward slashes; also tolerate relative paths.
+    p = (path or "").replace("\\", "/")
+    return f'url("{p}")' if p else ""
+
+
+def build_qss(p: Palette, background_image_path: str = "images/Backgroundimage.png") -> str:
+    bg_url = _qss_url(background_image_path)
+
     return f"""
     QWidget {{
-        background: {p.bg0};
         color: {p.text0};
         font-family: "Segoe UI", "Inter", "Helvetica", "Arial";
+        background-color: {p.bg0};
     }}
 
+    /* App background image */
     #Root {{
-        background: qradialgradient(cx:0.15, cy:0.10, radius:1.1,
-                                   fx:0.15, fy:0.10,
-                                   stop:0 rgba(109,146,155,30),
-                                   stop:1 rgba(11,13,16,255));
+        background-color: {p.bg0};
+        border-image: {bg_url} 0 0 0 0 stretch stretch;
     }}
 
     #Card {{
@@ -223,17 +230,26 @@ def _fmt_time(ts: int) -> str:
 # External link confirmation dialog
 # --------------------------
 class ExternalLinkDialog(QDialog):
-    def __init__(self, url: str, palette: Palette, parent: QWidget | None = None):
+    def __init__(
+        self,
+        url: str,
+        palette: Palette,
+        background_path: str = "images/Backgroundimage.png",
+        parent: QWidget | None = None
+    ):
         super().__init__(parent)
 
         self._url = (url or "").strip()
 
         self.setWindowTitle("Externe Ressource öffnen")
         self.setModal(True)
+
+        # IMPORTANT: ensure the dialog paints the styled background
         self.setObjectName("Root")
         self.setAttribute(Qt.WA_StyledBackground, True)
+        self.setAutoFillBackground(True)
 
-        self.setStyleSheet(build_qss(palette))
+        self.setStyleSheet(build_qss(palette, background_path))
         self.setFixedSize(560, 240)
 
         root = QVBoxLayout(self)
@@ -456,13 +472,17 @@ class MainPage(QWidget):
     tab_changed = Signal(str)   # "brokerage" | "analyse"
     avatar_clicked = Signal()
 
-    def __init__(self, parent: QWidget | None = None):
+    def __init__(self, background_path: str = "images/Backgroundimage.png", parent: QWidget | None = None):
         super().__init__(parent)
 
+        # IMPORTANT: ensure the widget paints the styled background (prevents white showing through)
         self.setObjectName("Root")
-        self._palette = Palette()
-        self.setStyleSheet(build_qss(self._palette))
         self.setAttribute(Qt.WA_StyledBackground, True)
+        self.setAutoFillBackground(True)
+
+        self._palette = Palette()
+        self._background_path = background_path
+        self.setStyleSheet(build_qss(self._palette, self._background_path))
 
         self._news_items: list[NewsItem] = []
         self._news_page: int = 0
@@ -605,8 +625,9 @@ class MainPage(QWidget):
         h.addWidget(right, 0)
         return w
 
-    # ... Rest bleibt identisch bei dir (News Panel / Refresh / Render / Investments / Panel Helper)
-
+    # --------------------------
+    # News Panel
+    # --------------------------
     def _build_news_panel(self, min_w: int = 360) -> QFrame:
         panel = QFrame()
         panel.setObjectName("Panel")
@@ -676,7 +697,12 @@ class MainPage(QWidget):
         if not url:
             return
 
-        dlg = ExternalLinkDialog(url=url, palette=self._palette, parent=self)
+        dlg = ExternalLinkDialog(
+            url=url,
+            palette=self._palette,
+            background_path=self._background_path,
+            parent=self
+        )
         if dlg.exec() == QDialog.Accepted:
             QDesktopServices.openUrl(QUrl(dlg.url))
 
