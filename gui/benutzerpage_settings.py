@@ -5,7 +5,7 @@ from dataclasses import dataclass
 
 from PySide6.QtCore import Qt, Signal
 from PySide6.QtWidgets import (
-    QWidget, QFrame, QLabel, QPushButton, QLineEdit, QTextEdit,
+    QWidget, QFrame, QLabel, QPushButton, QLineEdit,
     QHBoxLayout, QVBoxLayout, QSizePolicy
 )
 
@@ -27,19 +27,25 @@ class Palette:
     accent2: str = "#6D929B"
 
 
-def build_qss(p: Palette) -> str:
+def _qss_url(path: str) -> str:
+    p = (path or "").replace("\\", "/")
+    return f'url("{p}")' if p else ""
+
+
+def build_qss(p: Palette, background_image_path: str = "images/Backgroundimage.png") -> str:
+    bg_url = _qss_url(background_image_path)
+
     return f"""
     QWidget {{
-        background: {p.bg0};
         color: {p.text0};
         font-family: "Segoe UI", "Inter", "Helvetica", "Arial";
+        background-color: {p.bg0};
     }}
 
+    /* App background image (Root widget) */
     #Root {{
-        background: qradialgradient(cx:0.15, cy:0.10, radius:1.1,
-                                   fx:0.15, fy:0.10,
-                                   stop:0 rgba(109,146,155,30),
-                                   stop:1 rgba(11,13,16,255));
+        background-color: {p.bg0};
+        border-image: {bg_url} 0 0 0 0 stretch stretch;
     }}
 
     #Shell {{
@@ -86,7 +92,7 @@ def build_qss(p: Palette) -> str:
         margin-bottom: 4px;
     }}
 
-    QLineEdit, QTextEdit {{
+    QLineEdit {{
         background: rgba(255,255,255,6);
         border: 1px solid rgba(39,48,59,170);
         border-radius: 14px;
@@ -96,13 +102,16 @@ def build_qss(p: Palette) -> str:
         selection-background-color: rgba(109,146,155,70);
     }}
 
-    QLineEdit:focus, QTextEdit:focus {{
+    QLineEdit:focus {{
         border: 1px solid rgba(109,146,155,120);
         background: rgba(255,255,255,8);
     }}
 
-    QTextEdit {{
-        min-height: 92px;
+    /* Read-only fields: subtle lock look, still consistent */
+    QLineEdit[readOnly="true"] {{
+        background: rgba(255,255,255,4);
+        color: rgba(230,234,240,190);
+        border: 1px solid rgba(39,48,59,150);
     }}
 
     QPushButton#Ghost {{
@@ -147,16 +156,23 @@ def build_qss(p: Palette) -> str:
 
 
 class UserPage(QWidget):
-    back_requested = Signal()      # optional, wenn du "Zurück" einbauen willst
-    save_requested = Signal(dict)  # optional: emit form data
+    back_requested = Signal()
+    save_requested = Signal(dict)
 
-    def __init__(self, parent: QWidget | None = None):
+    def __init__(
+        self,
+        background_path: str = "images/Backgroundimage.png",
+        parent: QWidget | None = None
+    ):
         super().__init__(parent)
+
+        # IMPORTANT: ensure the widget paints the styled background (prevents white showing through)
+        self.setAttribute(Qt.WA_StyledBackground, True)
+        self.setAutoFillBackground(True)
 
         self.setObjectName("Root")
         self._palette = Palette()
-        self.setStyleSheet(build_qss(self._palette))
-        self.setAttribute(Qt.WA_StyledBackground, True)
+        self.setStyleSheet(build_qss(self._palette, background_path))
 
         # ---- Root layout (zentriert, wie eure Shell) ----
         root = QVBoxLayout(self)
@@ -180,15 +196,28 @@ class UserPage(QWidget):
     def resizeEvent(self, event) -> None:
         super().resizeEvent(event)
 
-        # gleiche "tablet/shell"-Logik wie MainPage, aber etwas kompakter
         m = 40
         avail_w = max(300, self.width() - 2 * m)
         avail_h = max(300, self.height() - 2 * m)
 
-        ratio = 1.35  # etwas "profiliger" als MainPage
+        ratio = 1.35
         w = min(avail_w, int(avail_h * ratio))
         h = min(avail_h, int(w / ratio))
         self._shell.setFixedSize(w, h)
+
+    # --------------------------
+    # Public setter helpers (optional)
+    # --------------------------
+    def set_profile(self, first_name: str, last_name: str, email: str) -> None:
+        self.first_name.setText((first_name or "").strip())
+        self.last_name.setText((last_name or "").strip())
+        self.email.setText((email or "").strip())
+
+    def set_address(self, street: str, postal_code: str, city: str, country: str) -> None:
+        self.street.setText((street or "").strip())
+        self.postal_code.setText((postal_code or "").strip())
+        self.city.setText((city or "").strip())
+        self.country.setText((country or "").strip())
 
     # --------------------------
     # Topbar
@@ -261,31 +290,59 @@ class UserPage(QWidget):
         gh.setContentsMargins(0, 0, 0, 0)
         gh.setSpacing(12)
 
-        # Vorname
+        # Vorname (read-only)
         self.first_name = QLineEdit()
-        self.first_name.setPlaceholderText("Vorname")
+        self.first_name.setPlaceholderText("Max")
+        self.first_name.setReadOnly(True)
         fn = self._field("Vorname", self.first_name)
 
-        # Nachname
+        # Nachname (read-only)
         self.last_name = QLineEdit()
-        self.last_name.setPlaceholderText("Nachname")
+        self.last_name.setPlaceholderText("Gewinnhoff")
+        self.last_name.setReadOnly(True)
         ln = self._field("Nachname", self.last_name)
 
         gh.addWidget(fn, 1)
         gh.addWidget(ln, 1)
 
-        # E-Mail (optional read-only)
+        # E-Mail (read-only)
         self.email = QLineEdit()
         self.email.setPlaceholderText("E-Mail")
-        self.email.setReadOnly(True)  # falls du später vom Login übernimmst
+        self.email.setReadOnly(True)
         em = self._field("E-Mail", self.email)
 
-        # Adresse
-        self.address = QTextEdit()
-        self.address.setPlaceholderText("Straße, Hausnummer\nPLZ Ort\nLand")
-        ad = self._field("Adresse", self.address)
+        # Adresse: feste Felder (read-only)
+        self.street = QLineEdit()
+        self.street.setPlaceholderText("Straße, Hausnummer")
+        self.street.setReadOnly(True)
 
-        # Save button row
+        self.postal_code = QLineEdit()
+        self.postal_code.setPlaceholderText("PLZ")
+        self.postal_code.setReadOnly(True)
+
+        self.city = QLineEdit()
+        self.city.setPlaceholderText("Ort")
+        self.city.setReadOnly(True)
+
+        self.country = QLineEdit()
+        self.country.setPlaceholderText("Land")
+        self.country.setReadOnly(True)
+
+        addr_row1 = QWidget()
+        ar1 = QHBoxLayout(addr_row1)
+        ar1.setContentsMargins(0, 0, 0, 0)
+        ar1.setSpacing(12)
+        ar1.addWidget(self._field("Straße", self.street), 2)
+        ar1.addWidget(self._field("PLZ", self.postal_code), 1)
+
+        addr_row2 = QWidget()
+        ar2 = QHBoxLayout(addr_row2)
+        ar2.setContentsMargins(0, 0, 0, 0)
+        ar2.setSpacing(12)
+        ar2.addWidget(self._field("Ort", self.city), 1)
+        ar2.addWidget(self._field("Land", self.country), 1)
+
+        # Save button row (für später; aktuell read-only)
         btn_row = QWidget()
         bh = QHBoxLayout(btn_row)
         bh.setContentsMargins(0, 0, 0, 0)
@@ -293,6 +350,7 @@ class UserPage(QWidget):
 
         self.save_profile_btn = QPushButton("Speichern")
         self.save_profile_btn.setObjectName("Primary")
+        self.save_profile_btn.setEnabled(False)  # alles read-only => kein Speichern nötig
         self.save_profile_btn.clicked.connect(self._emit_save)
 
         bh.addStretch(1)
@@ -302,7 +360,8 @@ class UserPage(QWidget):
         v.addWidget(hint)
         v.addWidget(grid)
         v.addWidget(em)
-        v.addWidget(ad)
+        v.addWidget(addr_row1)
+        v.addWidget(addr_row2)
         v.addStretch(1)
         v.addWidget(btn_row)
 
@@ -388,7 +447,12 @@ class UserPage(QWidget):
             "first_name": self.first_name.text().strip(),
             "last_name": self.last_name.text().strip(),
             "email": self.email.text().strip(),
-            "address": self.address.toPlainText().strip(),
+
+            "street": self.street.text().strip(),
+            "postal_code": self.postal_code.text().strip(),
+            "city": self.city.text().strip(),
+            "country": self.country.text().strip(),
+
             "current_pw": self.current_pw.text(),
             "new_pw": self.new_pw.text(),
             "new_pw2": self.new_pw2.text(),

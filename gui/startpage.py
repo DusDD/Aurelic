@@ -4,11 +4,12 @@ from __future__ import annotations
 import re
 import os
 import json
+import random
 from dataclasses import dataclass
 from urllib.request import Request, urlopen
 from urllib.error import URLError, HTTPError
 
-from PySide6.QtCore import Qt, Signal, QEvent
+from PySide6.QtCore import Qt, Signal, QEvent, QTimer
 from PySide6.QtGui import QPixmap
 from PySide6.QtWidgets import (
     QWidget, QFrame, QLabel, QPushButton, QLineEdit,
@@ -262,6 +263,55 @@ class StartPage(QWidget):
         self._reset_match_label: QLabel | None = None
         self._btn_reset: QPushButton | None = None
 
+        # Quote UI (login page)
+        self._quote_label: QLabel | None = None
+        self._quotes = [
+  "Trading ist der einzige Beruf, bei dem man vor dem Bildschirm sitzt und trotzdem Herzrasen bekommt.",
+  "Ich trade nicht aus Gier – ich sammle nur sehr ambitioniert Verluste.",
+  "Buy the dip – und dann noch einen – und noch einen. Irgendwann passt es.",
+  "Mein Risikomanagement besteht aus Hoffnung und Kaffee.",
+  "Daytrading: Heute Millionär, morgen realistischer Mensch.",
+  "Der Markt ist irrational – und ich bin es manchmal auch.",
+  "Stop-Loss ist das, was immer genau dort liegt, wo der Markt kurz hinläuft.",
+  "Ich liebe Volatilität. Sie liebt mich leider nicht.",
+  "Chartanalyse: Linien zeichnen, bis es logisch aussieht.",
+  "Trading lehrt Demut – meistens sehr schnell.",
+  "Der Markt hat immer recht. Leider.",
+  "Ich wollte investieren. Jetzt habe ich eine Lebenserfahrung.",
+  "Emotionen haben an der Börse nichts verloren – außer Panik.",
+  "Mein Portfolio ist gut diversifiziert: Verluste in allen Sektoren.",
+  "Trading ist einfach. Gewinne machen ist der schwierige Teil.",
+  "Hebelprodukte: Kleine Entscheidung, große Gefühle.",
+  "Ich trade langfristig – bis morgen.",
+  "Der Markt schuldet dir nichts. Nicht mal eine Erklärung.",
+  "Wenn es einfach wäre, würden es alle können. Oh, Moment …",
+  "Börse ist wie Schach – nur ohne Regeln und mit weniger Kontrolle.",
+  "Ich trade datenbasiert – meine Daten sagen mir, dass es weh tut.",
+  "Der Markt macht keine Fehler. Meine Orders schon.",
+  "Trading ist Geduld haben, bis man sie verliert.",
+  "Gewinne sind temporär, Screenshots sind für immer.",
+  "Backtesting: In der Vergangenheit war ich extrem erfolgreich.",
+  "Der Markt öffnet – meine Disziplin schließt.",
+  "Ich habe einen Plan. Der Markt hat einen besseren.",
+  "Trading ist 10 % Strategie und 90 % Selbstbeherrschung. Ungefähr.",
+  "Der Chart sah eindeutig aus – bis er es nicht mehr war.",
+  "Ich folge dem Trend. Meistens dem falschen.",
+  "Meine größte Position ist Hoffnung.",
+  "Trading ist Stress, aber mit Kerzen.",
+  "Ich handle nicht gegen den Markt. Ich werde nur regelmäßig belehrt.",
+  "Gewinnmitnahmen sind schwierig. Verluste laufen lassen geht erstaunlich leicht.",
+  "Wenn alle euphorisch sind, werde ich nervös. Wenn alle panisch sind, auch.",
+  "Trading ist wie Wettervorhersage – nur mit echtem Geld.",
+  "Der Markt testet nicht nur Levels, sondern auch Charakter.",
+  "Ich bin nicht schlecht im Trading. Der Markt ist nur sehr konsequent.",
+  "Trading hat mir beigebracht, dass ‚sicher‘ ein sehr flexibler Begriff ist.",
+  "Man lernt nie aus – vor allem nicht aus dem letzten Trade."
+]
+
+        self._quote_timer = QTimer(self)
+        self._quote_timer.setInterval(10_000)
+        self._quote_timer.timeout.connect(self._rotate_quote)
+
         # Page refs
         self._page_login: QWidget | None = None
         self._page_register: QWidget | None = None
@@ -403,14 +453,14 @@ class StartPage(QWidget):
             return
         label.setText("Caps Lock is ON." if caps_on else "")
 
-    def event_filter(self, obj, event) -> bool:
+    def eventFilter(self, obj, event) -> bool:
         if event.type() in (QEvent.KeyPress, QEvent.KeyRelease):
             if obj in (
-                    self._login_pw,
-                    self._reg_pw1,
-                    self._reg_pw2,
-                    self._reset_new_pw,
-                    self._reset_new_pw2
+                self._login_pw,
+                self._reg_pw1,
+                self._reg_pw2,
+                self._reset_new_pw,
+                self._reset_new_pw2
             ):
                 caps = self._caps_on(event.modifiers())
 
@@ -445,7 +495,7 @@ class StartPage(QWidget):
         s = (s or "").strip()
         if not (min_len <= len(s) <= max_len):
             return False
-        return bool(re.match(r"^[A-Za-zÀ-ÖØ-öø-ÿ0-9 .,'’\-/#]+$", s))
+        return bool(re.match(r"^[A-Za-zÀ-ÖØ-öø-ÿ0-9 .,'’\\-/#]+$", s))
 
     def _is_valid_postal_code(self, postal: str, country: str) -> bool:
         """
@@ -530,14 +580,18 @@ class StartPage(QWidget):
 
         has_lower = bool(re.search(r"[a-z]", pw))
         has_upper = bool(re.search(r"[A-Z]", pw))
-        has_digit = bool(re.search(r"\d", pw))
+        has_digit = bool(re.search(r"\\d", pw))
         has_special = bool(re.search(r"[^A-Za-z0-9]", pw))
 
         missing = []
-        if not has_lower: missing.append("lowercase")
-        if not has_upper: missing.append("uppercase")
-        if not has_digit: missing.append("number")
-        if not has_special: missing.append("special character")
+        if not has_lower:
+            missing.append("lowercase")
+        if not has_upper:
+            missing.append("uppercase")
+        if not has_digit:
+            missing.append("number")
+        if not has_special:
+            missing.append("special character")
 
         if missing:
             return (f"Add: {', '.join(missing)}.", False)
@@ -550,7 +604,7 @@ class StartPage(QWidget):
         if re.search(r"(0123|1234|2345|3456|4567|5678|6789|abcd|bcde|cdef|qwer)", lowered):
             return ("Avoid simple sequences (e.g., 1234, abcd).", False)
 
-        if re.search(r"(.)\1\1\1", pw):
+        if re.search(r"(.)\\1\\1\\1", pw):
             return ("Avoid repeated characters (e.g., aaaa).", False)
 
         return ("Strong password.", True)
@@ -657,7 +711,9 @@ class StartPage(QWidget):
 
         self._btn_login_eye = QPushButton("Show")
         self._btn_login_eye.setObjectName("Eye")
-        self._btn_login_eye.clicked.connect(lambda: self._toggle_password_visibility(self._login_pw, self._btn_login_eye))
+        self._btn_login_eye.clicked.connect(
+            lambda: self._toggle_password_visibility(self._login_pw, self._btn_login_eye)
+        )
 
         self._login_caps_hint = QLabel("")
         self._login_caps_hint.setObjectName("FinePrint")
@@ -687,10 +743,22 @@ class StartPage(QWidget):
         v.addWidget(btn_forgot, 0, Qt.AlignLeft)
         v.addStretch(1)
 
+        # Rotating quote (above fine print)
+        self._quote_label = QLabel("")
+        self._quote_label.setObjectName("BrandSub")
+        self._quote_label.setWordWrap(True)
+        self._quote_label.setAlignment(Qt.AlignLeft)
+        v.addWidget(self._quote_label)
+
         fine = QLabel("By signing in, you agree to the Terms of Service.")
         fine.setObjectName("FinePrint")
         fine.setWordWrap(True)
         v.addWidget(fine)
+
+        # start rotating quotes
+        self._rotate_quote()
+        if not self._quote_timer.isActive():
+            self._quote_timer.start()
 
         return page
 
@@ -727,7 +795,9 @@ class StartPage(QWidget):
 
         self._btn_reg_eye1 = QPushButton("Show")
         self._btn_reg_eye1.setObjectName("Eye")
-        self._btn_reg_eye1.clicked.connect(lambda: self._toggle_password_visibility(self._reg_pw1, self._btn_reg_eye1))
+        self._btn_reg_eye1.clicked.connect(
+            lambda: self._toggle_password_visibility(self._reg_pw1, self._btn_reg_eye1)
+        )
 
         self._reg_pw2 = QLineEdit()
         self._reg_pw2.setPlaceholderText("Confirm password")
@@ -736,7 +806,9 @@ class StartPage(QWidget):
 
         self._btn_reg_eye2 = QPushButton("Show")
         self._btn_reg_eye2.setObjectName("Eye")
-        self._btn_reg_eye2.clicked.connect(lambda: self._toggle_password_visibility(self._reg_pw2, self._btn_reg_eye2))
+        self._btn_reg_eye2.clicked.connect(
+            lambda: self._toggle_password_visibility(self._reg_pw2, self._btn_reg_eye2)
+        )
 
         self._reg_caps_hint = QLabel("")
         self._reg_caps_hint.setObjectName("FinePrint")
@@ -885,7 +957,9 @@ class StartPage(QWidget):
 
         self._btn_reset_eye1 = QPushButton("Show")
         self._btn_reset_eye1.setObjectName("Eye")
-        self._btn_reset_eye1.clicked.connect(lambda: self._toggle_password_visibility(self._reset_new_pw, self._btn_reset_eye1))
+        self._btn_reset_eye1.clicked.connect(
+            lambda: self._toggle_password_visibility(self._reset_new_pw, self._btn_reset_eye1)
+        )
 
         self._reset_new_pw2 = QLineEdit()
         self._reset_new_pw2.setPlaceholderText("Repeat new password")
@@ -894,7 +968,9 @@ class StartPage(QWidget):
 
         self._btn_reset_eye2 = QPushButton("Show")
         self._btn_reset_eye2.setObjectName("Eye")
-        self._btn_reset_eye2.clicked.connect(lambda: self._toggle_password_visibility(self._reset_new_pw2, self._btn_reset_eye2))
+        self._btn_reset_eye2.clicked.connect(
+            lambda: self._toggle_password_visibility(self._reset_new_pw2, self._btn_reset_eye2)
+        )
 
         self._reset_caps_hint = QLabel("")
         self._reset_caps_hint.setObjectName("FinePrint")
@@ -955,6 +1031,17 @@ class StartPage(QWidget):
         v.addWidget(fine)
 
         return page
+
+    # -----------------------------
+    # Quote rotation
+    # -----------------------------
+    def _rotate_quote(self) -> None:
+        if self._quote_label is None or not self._quotes:
+            return
+
+        current = self._quote_label.text()
+        candidates = [q for q in self._quotes if q != current]
+        self._quote_label.setText(random.choice(candidates) if candidates else random.choice(self._quotes))
 
     # -----------------------------
     # Navigation / actions
