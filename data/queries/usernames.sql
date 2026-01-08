@@ -5,7 +5,7 @@ ORDER BY timestamp DESC
 LIMIT 10;
 
 -- Alle Usernames aus auth.users
-SELECT id, last_name
+SELECT *
 FROM auth.users
 ORDER BY last_name;
 
