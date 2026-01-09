@@ -18,6 +18,10 @@ from PySide6.QtWidgets import (
 from gui.mainpage import Palette, build_qss
 
 
+# -----------------------------
+# Data Models
+# -----------------------------
+
 @dataclass(frozen=True)
 class DividendEvent:
     symbol: str
@@ -28,6 +32,19 @@ class DividendEvent:
     amount: str
     currency: str
 
+
+@dataclass(frozen=True)
+class GlobalEvent:
+    date: str            # YYYY-MM-DD
+    title: str           # e.g. "New Year's Day" / "German federal election"
+    country: str         # ISO-2 (DE, US, ...)
+    category: str        # "HOLIDAY" | "ELECTION"
+    source: str          # "NAGER" | "WIKIDATA"
+
+
+# -----------------------------
+# Dividend Calendar Worker
+# -----------------------------
 
 class NasdaqCalendarWorker(QObject):
     finished = Signal(list, str)  # (list[DividendEvent], source_label)
@@ -43,10 +60,13 @@ class NasdaqCalendarWorker(QObject):
         Strategy:
         1) Try NASDAQ (no key) -> if returns events: use it
         2) Else fallback to FMP dividends-calendar (requires FMP_API_KEY)
+        Additionally:
+        - Enrich missing company names via FMP profile endpoint + local cache
         """
         try:
             events = self._fetch_from_nasdaq_month()
             if events:
+                events = self._enrich_company_names(events)
                 self.finished.emit(events, "NASDAQ")
                 return
         except Exception:
@@ -56,6 +76,7 @@ class NasdaqCalendarWorker(QObject):
         try:
             events = self._fetch_from_fmp_month()
             if events:
+                events = self._enrich_company_names(events)
                 self.finished.emit(events, "FMP")
                 return
             # If FMP returns empty, treat it as a real "no events" case
@@ -97,6 +118,124 @@ class NasdaqCalendarWorker(QObject):
             return json.loads(raw)
         except Exception as e:
             raise RuntimeError(f"JSON parse error: {e}. Body head: {raw[:200]}")
+
+    # ---------- Company name enrichment (FMP profile + cache) ----------
+
+    def _company_cache_path(self) -> str:
+        p = os.getenv("AURELIC_COMPANY_CACHE", "cache/company_names.json").strip()
+        return p or "cache/company_names.json"
+
+    def _load_company_cache(self) -> dict:
+        path = self._company_cache_path()
+        try:
+            if os.path.exists(path):
+                with open(path, "r", encoding="utf-8") as f:
+                    j = json.load(f)
+                    return j if isinstance(j, dict) else {}
+        except Exception:
+            pass
+        return {}
+
+    def _save_company_cache(self, cache: dict) -> None:
+        path = self._company_cache_path()
+        try:
+            os.makedirs(os.path.dirname(path) or ".", exist_ok=True)
+            tmp = path + ".tmp"
+            with open(tmp, "w", encoding="utf-8") as f:
+                json.dump(cache, f, ensure_ascii=False, indent=2)
+            os.replace(tmp, path)
+        except Exception:
+            # Cache ist best-effort – UI soll nicht scheitern, nur weil Speichern nicht geht
+            pass
+
+    def _needs_company_name(self, e: DividendEvent) -> bool:
+        c = (e.company or "").strip()
+        s = (e.symbol or "").strip()
+        if not s:
+            return False
+        return (not c) or (c.upper() == s.upper())
+
+    def _fetch_company_names_fmp_profile(self, symbols: list[str]) -> dict[str, str]:
+        """
+        Holt firmennamen via FMP stable profile endpoint:
+          https://financialmodelingprep.com/stable/profile?symbol=AAPL&apikey=KEY
+        Rückgabe: { "AAPL": "Apple Inc.", ... }
+        """
+        fmp_key = os.getenv("FMP_API_KEY", "").strip()
+        if not fmp_key:
+            return {}
+
+        base = "https://financialmodelingprep.com/stable/profile"
+        headers = {
+            "User-Agent": "Aurelic/1.0 (Desktop App)",
+            "Accept": "application/json, text/plain, */*",
+        }
+
+        out: dict[str, str] = {}
+        for sym in symbols:
+            sym = sym.strip().upper()
+            if not sym:
+                continue
+            url = f"{base}?{urllib.parse.urlencode({'symbol': sym, 'apikey': fmp_key})}"
+            j = self._read_json(url, headers=headers, timeout=12)
+
+            if isinstance(j, list) and j:
+                first = j[0]
+                if isinstance(first, dict):
+                    name = str(first.get("companyName") or first.get("name") or "").strip()
+                    if name:
+                        out[sym] = name
+
+        return out
+
+    def _enrich_company_names(self, events: list[DividendEvent]) -> list[DividendEvent]:
+        """
+        Ergänzt fehlende Klarnamen. Nutzt Cache und FMP Profile.
+        """
+        if not events:
+            return events
+
+        cache = self._load_company_cache()
+
+        needed_syms = []
+        for e in events:
+            if self._needs_company_name(e):
+                sym = (e.symbol or "").strip().upper()
+                if sym and sym not in cache:
+                    needed_syms.append(sym)
+
+        needed_syms = sorted(set(needed_syms))
+
+        fetched = {}
+        try:
+            if needed_syms:
+                fetched = self._fetch_company_names_fmp_profile(needed_syms)
+        except Exception:
+            fetched = {}
+
+        if fetched:
+            cache.update(fetched)
+            self._save_company_cache(cache)
+
+        enriched: list[DividendEvent] = []
+        for e in events:
+            sym = (e.symbol or "").strip().upper()
+            if self._needs_company_name(e) and sym in cache:
+                enriched.append(
+                    DividendEvent(
+                        symbol=e.symbol,
+                        company=cache[sym],
+                        ex_date=e.ex_date,
+                        pay_date=e.pay_date,
+                        record_date=e.record_date,
+                        amount=e.amount,
+                        currency=e.currency,
+                    )
+                )
+            else:
+                enriched.append(e)
+
+        return enriched
 
     # ---------- NASDAQ (best-effort) ----------
 
@@ -185,7 +324,6 @@ class NasdaqCalendarWorker(QObject):
         """
         FMP stable Dividends Calendar API:
           https://financialmodelingprep.com/stable/dividends-calendar?from=YYYY-MM-DD&to=YYYY-MM-DD&apikey=KEY
-        Docs: stable/dividends-calendar :contentReference[oaicite:2]{index=2}
         """
         import calendar as _cal
 
@@ -216,15 +354,12 @@ class NasdaqCalendarWorker(QObject):
                 continue
 
             sym = str(r.get("symbol") or "").strip()
-            # FMP liefert oft keine Company-Name im Calendar; wir setzen symbol als fallback
             company = str(r.get("companyName") or r.get("name") or sym).strip() or sym
 
-            # In FMP calendar ist "date" typischerweise Ex-Dividend-Date
             ex_date = str(r.get("date") or "").strip()
             record_date = str(r.get("recordDate") or "").strip()
             pay_date = str(r.get("paymentDate") or "").strip()
 
-            # dividend / adjDividend können floats sein
             div_val = r.get("dividend")
             adj_val = r.get("adjDividend")
             amount = ""
@@ -239,7 +374,6 @@ class NasdaqCalendarWorker(QObject):
                 except Exception:
                     amount = str(adj_val)
 
-            # Currency ist im FMP Calendar oft nicht enthalten; default USD
             currency = str(r.get("currency") or "USD").strip() or "USD"
 
             if sym and ex_date:
@@ -259,6 +393,322 @@ class NasdaqCalendarWorker(QObject):
         return out
 
 
+# -----------------------------
+# Global Events Worker (G20 + EU)
+# -----------------------------
+
+class GlobalEventsWorker(QObject):
+    finished = Signal(list, str)  # (list[GlobalEvent], source_label)
+    failed = Signal(str)
+
+    def __init__(self, year: int, month: int, parent: QObject | None = None):
+        super().__init__(parent)
+        self._year = int(year)
+        self._month = int(month)
+
+        self._countries = self._build_g20_eu_country_codes()
+
+    def run(self) -> None:
+        """
+        Loads global events (G20 + EU) for a given month:
+        - Public holidays via Nager.Date (no key) -> only current month
+        - Elections via Wikidata SPARQL (best-effort) -> whole year
+        Uses JSON cache (best-effort) to reduce calls.
+        """
+        try:
+            events: list[GlobalEvent] = []
+            srcs: list[str] = []
+
+            # Holidays (month)
+            try:
+                hol = self._fetch_holidays_month()
+                events.extend(hol)
+                if hol:
+                    srcs.append("NAGER")
+                else:
+                    srcs.append("NAGER(0)")
+            except Exception as e:
+                err = str(e)[:120].replace("\n", " ")
+                srcs.append(f"NAGER(ERR:{err})")
+
+            # Elections (year)
+            try:
+                elec = self._fetch_elections_year()
+                events.extend(elec)
+                if elec:
+                    srcs.append("WIKIDATA")
+                else:
+                    srcs.append("WIKIDATA(0)")
+            except Exception as e:
+                err = str(e)[:120].replace("\n", " ")
+                srcs.append(f"WIKIDATA(ERR:{err})")
+
+            # Deduplicate
+            seen = set()
+            uniq: list[GlobalEvent] = []
+            for e in events:
+                key = (e.date, e.title, e.country, e.category, e.source)
+                if key in seen:
+                    continue
+                seen.add(key)
+                uniq.append(e)
+
+            uniq.sort(key=lambda x: (x.date, x.category, x.country, x.title))
+            label = "+".join(srcs) if srcs else "NAGER+WIKIDATA"
+            self.finished.emit(uniq, label)
+
+        except Exception as e:
+            self.failed.emit(str(e)[:500])
+
+    # ---------- Countries ----------
+
+    def _build_g20_eu_country_codes(self) -> list[str]:
+        g20 = [
+            "AR", "AU", "BR", "CA", "CN", "FR", "DE", "IN", "ID", "IT",
+            "JP", "MX", "RU", "SA", "ZA", "KR", "TR", "UK", "US"
+        ]
+        eu27 = [
+            "AT", "BE", "BG", "HR", "CY", "CZ", "DK", "EE", "FI", "FR", "DE",
+            "GR", "HU", "IE", "IT", "LV", "LT", "LU", "MT", "NL", "PL", "PT",
+            "RO", "SK", "SI", "ES", "SE"
+        ]
+        return sorted(set(g20 + eu27))
+
+    # ---------- Cache helpers ----------
+
+    def _cache_path(self) -> str:
+        p = os.getenv("AURELIC_GLOBALEVENTS_CACHE", "cache/global_events_cache.json").strip()
+        return p or "cache/global_events_cache.json"
+
+    def _load_cache(self) -> dict:
+        path = self._cache_path()
+        try:
+            if os.path.exists(path):
+                with open(path, "r", encoding="utf-8") as f:
+                    j = json.load(f)
+                    return j if isinstance(j, dict) else {}
+        except Exception:
+            pass
+        return {}
+
+    def _save_cache(self, cache: dict) -> None:
+        path = self._cache_path()
+        try:
+            os.makedirs(os.path.dirname(path) or ".", exist_ok=True)
+            tmp = path + ".tmp"
+            with open(tmp, "w", encoding="utf-8") as f:
+                json.dump(cache, f, ensure_ascii=False, indent=2)
+            os.replace(tmp, path)
+        except Exception:
+            pass
+
+    # ---------- HTTP helpers ----------
+
+    def _read_json(self, url: str, headers: Optional[dict] = None, timeout: int = 12):
+        import urllib.request
+        import urllib.error
+        import ssl
+        import certifi
+
+        req = urllib.request.Request(url, headers=headers or {}, method="GET")
+        ctx = ssl.create_default_context(cafile=certifi.where())
+
+        try:
+            with urllib.request.urlopen(req, timeout=timeout, context=ctx) as resp:
+                raw = resp.read().decode("utf-8", errors="replace").strip()
+        except urllib.error.HTTPError as e:
+            try:
+                raw = (e.read() or b"").decode("utf-8", errors="replace").strip()
+            except Exception:
+                raw = ""
+            raise RuntimeError(f"HTTP {e.code} — {raw[:200]}")
+        except urllib.error.URLError as e:
+            raise RuntimeError(f"Network error: {e}")
+
+        if not raw:
+            raise RuntimeError("Empty response")
+
+        if raw[0] not in "{[":
+            raise RuntimeError(f"Non-JSON response: {raw[:200]}")
+
+        try:
+            return json.loads(raw)
+        except Exception as e:
+            raise RuntimeError(f"JSON parse error: {e}. Body head: {raw[:200]}")
+
+    def _post_sparql_json(self, endpoint: str, query: str, timeout: int = 18) -> dict:
+        import urllib.request
+        import urllib.error
+        import ssl
+        import certifi
+
+        data = urllib.parse.urlencode({"query": query}).encode("utf-8")
+        headers = {
+            "User-Agent": "Aurelic/1.0 (Desktop App)",
+            "Accept": "application/sparql+json",
+            "Content-Type": "application/x-www-form-urlencoded; charset=utf-8",
+        }
+
+        req = urllib.request.Request(endpoint, data=data, headers=headers, method="POST")
+        ctx = ssl.create_default_context(cafile=certifi.where())
+
+        try:
+            with urllib.request.urlopen(req, timeout=timeout, context=ctx) as resp:
+                raw = resp.read().decode("utf-8", errors="replace").strip()
+        except urllib.error.HTTPError as e:
+            try:
+                raw = (e.read() or b"").decode("utf-8", errors="replace").strip()
+            except Exception:
+                raw = ""
+            raise RuntimeError(f"HTTP {e.code} — {raw[:200]}")
+        except urllib.error.URLError as e:
+            raise RuntimeError(f"Network error: {e}")
+
+        if not raw:
+            raise RuntimeError("Empty response")
+
+        if raw[0] != "{":
+            raise RuntimeError(f"Non-JSON response: {raw[:200]}")
+
+        try:
+            return json.loads(raw)
+        except Exception as e:
+            raise RuntimeError(f"JSON parse error: {e}. Body head: {raw[:200]}")
+
+    # ---------- Nager.Date holidays ----------
+
+    def _fetch_holidays_year_country(self, year: int, country: str) -> list[dict]:
+        """
+        Returns list of Nager.Date holiday dicts.
+        Cached per (year,country).
+        """
+        cache = self._load_cache()
+        key = f"nager:{year}:{country}"
+        if key in cache and isinstance(cache[key], list):
+            return cache[key]
+
+        url = f"https://date.nager.at/api/v3/PublicHolidays/{year}/{country}"
+        headers = {"User-Agent": "Aurelic/1.0 (Desktop App)", "Accept": "application/json, text/plain, */*"}
+        j = self._read_json(url, headers=headers, timeout=14)
+
+        if not isinstance(j, list):
+            j = []
+
+        cache[key] = j
+        self._save_cache(cache)
+        return j
+
+    def _fetch_holidays_month(self) -> list[GlobalEvent]:
+        out: list[GlobalEvent] = []
+        month_prefix = f"{self._year:04d}-{self._month:02d}-"
+
+        for cc in self._countries:
+            try:
+                rows = self._fetch_holidays_year_country(self._year, cc)
+            except Exception:
+                continue
+
+            for r in rows:
+                if not isinstance(r, dict):
+                    continue
+                date = str(r.get("date") or "").strip()
+                if not date.startswith(month_prefix):
+                    continue
+
+                name = str(r.get("name") or r.get("localName") or "").strip()
+                if not name:
+                    continue
+
+                out.append(
+                    GlobalEvent(
+                        date=date,
+                        title=name,
+                        country=cc,
+                        category="HOLIDAY",
+                        source="NAGER",
+                    )
+                )
+
+        return out
+
+    # ---------- Wikidata elections (whole year) ----------
+
+    def _fetch_elections_year(self) -> list[GlobalEvent]:
+        """
+        Best-effort Wikidata SPARQL query for elections with ISO2 country code (P297) and date (P585).
+        Robust version:
+        - Includes subclasses of election via wdt:P31/wdt:P279*
+        - Filters YEAR in SPARQL (reduces payload, fewer local filters)
+        - Caches per year (prevents "empty forever" due to old cache)
+        """
+        endpoint = "https://query.wikidata.org/sparql"
+        year = self._year
+
+        query = f"""
+SELECT ?countryCode ?electionLabel ?date WHERE {{
+  ?election wdt:P31/wdt:P279* wd:Q40231 ;
+            wdt:P17 ?country ;
+            wdt:P585 ?date .
+  ?country wdt:P297 ?countryCode .
+  FILTER(YEAR(?date) = {year})
+  SERVICE wikibase:label {{ bd:serviceParam wikibase:language "en". }}
+}}
+ORDER BY ?date
+""".strip()
+
+        cache = self._load_cache()
+        key = f"wikidata:elections:year:{year}"
+        data = None
+
+        if key in cache and isinstance(cache[key], dict):
+            data = cache[key]
+        else:
+            data = self._post_sparql_json(endpoint, query, timeout=25)
+            cache[key] = data
+            self._save_cache(cache)
+
+        out: list[GlobalEvent] = []
+        bindings = (
+            (((data or {}).get("results") or {}).get("bindings") or [])
+            if isinstance(data, dict) else []
+        )
+
+        allowed = set(self._countries)
+
+        for b in bindings:
+            if not isinstance(b, dict):
+                continue
+
+            cc = str(((b.get("countryCode") or {}).get("value")) or "").strip().upper()
+            if cc not in allowed:
+                continue
+
+            dt_raw = str(((b.get("date") or {}).get("value")) or "").strip()
+            date = dt_raw[:10] if len(dt_raw) >= 10 else ""
+            if not date.startswith(f"{year:04d}-"):
+                continue
+
+            title = str(((b.get("electionLabel") or {}).get("value")) or "").strip()
+            if not title:
+                title = "Election"
+
+            out.append(
+                GlobalEvent(
+                    date=date,
+                    title=title,
+                    country=cc,
+                    category="ELECTION",
+                    source="WIKIDATA",
+                )
+            )
+
+        return out
+
+
+# -----------------------------
+# UI Page
+# -----------------------------
+
 class CalendarPage(QWidget):
     back_clicked = Signal()
 
@@ -276,7 +726,10 @@ class CalendarPage(QWidget):
         today = datetime.now()
         self._year = today.year
         self._month = today.month
+
         self._events: list[DividendEvent] = []
+        self._global_events: list[GlobalEvent] = []
+        self._global_filter: str = "ALL"  # ALL | HOLIDAY | ELECTION
 
         root = QVBoxLayout(self)
         root.setContentsMargins(40, 40, 40, 40)
@@ -339,6 +792,7 @@ class CalendarPage(QWidget):
         h.setContentsMargins(0, 0, 0, 0)
         h.setSpacing(14)
 
+        # ---------------- Left (Dividends) ----------------
         left = QFrame()
         left.setObjectName("Panel")
         left.setAttribute(Qt.WA_StyledBackground, True)
@@ -396,20 +850,66 @@ class CalendarPage(QWidget):
         lv.addWidget(self._status)
         lv.addWidget(self._list_scroll, 1)
 
+        # ---------------- Right (Global Events: G20 + EU) ----------------
         right = QFrame()
         right.setObjectName("Panel")
         right.setAttribute(Qt.WA_StyledBackground, True)
+        right.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
+
         rv = QVBoxLayout(right)
         rv.setContentsMargins(16, 14, 16, 14)
+        rv.setSpacing(10)
 
-        ph = QLabel()
-        ph.setObjectName("Placeholder")
-        ph.setAlignment(Qt.AlignCenter)
-        ph.setWordWrap(True)
+        gheader = QWidget()
+        gh = QHBoxLayout(gheader)
+        gh.setContentsMargins(0, 0, 0, 0)
+        gh.setSpacing(8)
 
-        rv.addStretch(1)
-        rv.addWidget(ph, 0, Qt.AlignCenter)
-        rv.addStretch(1)
+        self._global_title = QLabel("Global Events — G20 + EU")
+        self._global_title.setObjectName("PanelTitle")
+        self._global_title.setWordWrap(True)
+
+        self._global_all_btn = QPushButton("All")
+        self._global_all_btn.setObjectName("Ghost")
+        self._global_all_btn.clicked.connect(lambda: self._set_global_filter("ALL"))
+
+        self._global_hol_btn = QPushButton("Holidays")
+        self._global_hol_btn.setObjectName("Ghost")
+        self._global_hol_btn.clicked.connect(lambda: self._set_global_filter("HOLIDAY"))
+
+        self._global_ele_btn = QPushButton("Elections")
+        self._global_ele_btn.setObjectName("Ghost")
+        self._global_ele_btn.clicked.connect(lambda: self._set_global_filter("ELECTION"))
+
+        self._global_refresh_btn = QPushButton("Refresh")
+        self._global_refresh_btn.setObjectName("Ghost")
+        self._global_refresh_btn.clicked.connect(self._refresh_global)
+
+        gh.addWidget(self._global_title, 1, Qt.AlignLeft)
+        gh.addWidget(self._global_all_btn, 0)
+        gh.addWidget(self._global_hol_btn, 0)
+        gh.addWidget(self._global_ele_btn, 0)
+        gh.addWidget(self._global_refresh_btn, 0)
+
+        self._global_status = QLabel("Lade globale Events …")
+        self._global_status.setObjectName("FinePrint")
+        self._global_status.setWordWrap(True)
+
+        self._global_scroll = QScrollArea()
+        self._global_scroll.setWidgetResizable(True)
+        self._global_scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        self._global_scroll.setVerticalScrollBarPolicy(Qt.ScrollBarAsNeeded)
+
+        self._global_content = QWidget()
+        self._global_content.setAttribute(Qt.WA_StyledBackground, True)
+        self._global_layout = QVBoxLayout(self._global_content)
+        self._global_layout.setContentsMargins(0, 0, 0, 0)
+        self._global_layout.setSpacing(6)
+        self._global_scroll.setWidget(self._global_content)
+
+        rv.addWidget(gheader)
+        rv.addWidget(self._global_status)
+        rv.addWidget(self._global_scroll, 1)
 
         h.addWidget(left, 0)
         h.addWidget(right, 1)
@@ -429,10 +929,15 @@ class CalendarPage(QWidget):
             self._year += 1
         self._refresh()
 
+    # -----------------------------
+    # Refresh (both panels)
+    # -----------------------------
+
     def _refresh(self) -> None:
         self._month_label.setText(f"{self._year:04d}-{self._month:02d}")
-        self._status.setText("Lade Kalender …")
 
+        # Refresh dividends
+        self._status.setText("Lade Kalender …")
         while self._list_layout.count():
             it = self._list_layout.takeAt(0)
             ww = it.widget()
@@ -453,6 +958,37 @@ class CalendarPage(QWidget):
         self._cal_thread.finished.connect(self._cal_thread.deleteLater)
 
         self._cal_thread.start()
+
+        # Refresh global events (right panel)
+        self._refresh_global()
+
+    def _refresh_global(self) -> None:
+        self._global_status.setText("Lade globale Events …")
+
+        while self._global_layout.count():
+            it = self._global_layout.takeAt(0)
+            ww = it.widget()
+            if ww is not None:
+                ww.deleteLater()
+
+        self._global_thread = QThread(self)
+        self._global_worker = GlobalEventsWorker(year=self._year, month=self._month)
+        self._global_worker.moveToThread(self._global_thread)
+
+        self._global_thread.started.connect(self._global_worker.run)
+        self._global_worker.finished.connect(self._on_global_loaded)
+        self._global_worker.failed.connect(self._on_global_failed)
+
+        self._global_worker.finished.connect(self._global_thread.quit)
+        self._global_worker.failed.connect(self._global_thread.quit)
+        self._global_thread.finished.connect(self._global_worker.deleteLater)
+        self._global_thread.finished.connect(self._global_thread.deleteLater)
+
+        self._global_thread.start()
+
+    # -----------------------------
+    # Dividends callbacks
+    # -----------------------------
 
     def _on_calendar_failed(self, msg: str) -> None:
         self._events = []
@@ -499,3 +1035,110 @@ class CalendarPage(QWidget):
             self._list_layout.addWidget(card)
 
         self._list_layout.addStretch(1)
+
+    # -----------------------------
+    # Global events (right panel)
+    # -----------------------------
+
+    def _set_global_filter(self, mode: str) -> None:
+        self._global_filter = (mode or "ALL").upper()
+        self._render_global_events()
+
+    def _on_global_failed(self, msg: str) -> None:
+        self._global_events = []
+        self._global_status.setText(f"Global Events konnten nicht geladen werden: {msg}")
+        self._global_layout.addStretch(1)
+
+    def _on_global_loaded(self, events: list, source: str) -> None:
+        self._global_events = [e for e in events if isinstance(e, GlobalEvent)]
+
+        if not self._global_events:
+            self._global_status.setText(f"Keine globalen Events gefunden. Quelle: {source}.")
+            self._global_layout.addStretch(1)
+            return
+
+        self._global_status.setText(f"{len(self._global_events)} globale Events geladen. Quelle: {source}.")
+        self._render_global_events()
+
+    def _render_global_events(self) -> None:
+        # Clear UI list
+        while self._global_layout.count():
+            it = self._global_layout.takeAt(0)
+            ww = it.widget()
+            if ww is not None:
+                ww.deleteLater()
+
+        if not self._global_events:
+            self._global_layout.addStretch(1)
+            return
+
+        mode = self._global_filter  # ALL | HOLIDAY | ELECTION
+        month_prefix = f"{self._year:04d}-{self._month:02d}-"
+
+        # ---- Aggregate duplicates: group by (date, title, category, source) -> set[countries] ----
+        grouped: dict[tuple[str, str, str, str], set[str]] = {}
+
+        for e in self._global_events:
+            if mode != "ALL" and e.category != mode:
+                continue
+
+            # Keep "ALL" clean: elections only for current month
+            if mode == "ALL" and e.category == "ELECTION" and not e.date.startswith(month_prefix):
+                continue
+
+            key = (e.date, e.title, e.category, e.source)
+            if key not in grouped:
+                grouped[key] = set()
+            grouped[key].add((e.country or "").strip().upper())
+
+        if not grouped:
+            empty = QLabel("Keine Events für diesen Filter.")
+            empty.setObjectName("FinePrint")
+            empty.setWordWrap(True)
+            self._global_layout.addWidget(empty)
+            self._global_layout.addStretch(1)
+            return
+
+        keys = sorted(grouped.keys(), key=lambda k: (k[0], k[2], k[1], k[3]))
+
+        shown = 0
+        for (date, title, category, source) in keys:
+            countries = sorted([c for c in grouped[(date, title, category, source)] if c])
+
+            N = 18
+            if len(countries) > N:
+                country_txt = ", ".join(countries[:N]) + f", +{len(countries) - N} more"
+            else:
+                country_txt = ", ".join(countries)
+
+            card = QFrame()
+            card.setObjectName("NewsCard")
+            card.setAttribute(Qt.WA_StyledBackground, True)
+
+            cv = QVBoxLayout(card)
+            cv.setContentsMargins(10, 10, 10, 10)
+            cv.setSpacing(4)
+
+            head = QLabel(title)
+            head.setObjectName("NewsTitle")
+            head.setWordWrap(True)
+
+            meta = QLabel(f"{date} · {category.title()} · {source}")
+            meta.setObjectName("NewsMeta")
+            meta.setWordWrap(True)
+
+            countries_lbl = QLabel(f"Countries: {country_txt}" if country_txt else "Countries: —")
+            countries_lbl.setObjectName("NewsMeta")
+            countries_lbl.setWordWrap(True)
+
+            cv.addWidget(head)
+            cv.addWidget(meta)
+            cv.addWidget(countries_lbl)
+
+            self._global_layout.addWidget(card)
+
+            shown += 1
+            if shown >= 250:
+                break
+
+        self._global_layout.addStretch(1)
