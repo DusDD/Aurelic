@@ -11,6 +11,7 @@ fonttools==4.60.1
 frozendict==2.4.6
 greenlet==3.2.4
 idna==3.11
+iniconfig==2.3.0
 kiwisolver==1.4.9
 korean-lunar-calendar==0.3.1
 matplotlib==3.10.7
@@ -23,9 +24,11 @@ passlib==1.7.4
 peewee==3.18.2
 pillow==11.3.0
 platformdirs==4.5.0
+pluggy==1.6.0
 protobuf==6.32.1
 psycopg2-binary==2.9.11
 pycparser==2.23
+Pygments==2.19.2
 PyJWT==2.10.1
 pyluach==2.3.0
 pyparsing==3.2.5
@@ -35,6 +38,7 @@ PyQt6_sip==13.10.2
 PySide6==6.10.1
 PySide6_Addons==6.10.1
 PySide6_Essentials==6.10.1
+pytest==9.0.2
 python-dateutil==2.9.0.post0
 python-dotenv==1.1.1
 pytz==2025.2
