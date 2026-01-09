@@ -16,8 +16,6 @@ from PySide6.QtWidgets import (
     QScrollArea
 )
 
-# FIX: richtiger Import + richtiger Dateiname
-# Deine Datei heißt gui/widgets/segmentedtabs.py
 from gui.widgets.segmentedtabs import SegmentedTabs
 
 
@@ -49,7 +47,7 @@ def build_qss(p: Palette, background_image_path: str = "images/Backgroundimage.p
     return f"""
     QWidget {{
         color: {p.text0};
-        font-family: "Segoe UI", "Inter", "Helvetica", "Arial";
+        font-family: -apple-system, "SF Pro Display", "SF Pro Text", "Inter", "Helvetica Neue", "Arial";
         background-color: {p.bg0};
     }}
 
@@ -90,14 +88,14 @@ def build_qss(p: Palette, background_image_path: str = "images/Backgroundimage.p
     }}
 
     /* ---- Segmented Tabs (Analyse/Brokerage) ---- */
-    #SegmentedTabs {{
+    QFrame#SegmentedTabs {{
         background: rgba(255,255,255,10);
         border: 1px solid rgba(39,48,59,170);
         border-radius: 999px;
-        padding: 0px;
+        padding: 2px; /* entspricht pad=2 im SegmentedTabs-Code */
     }}
 
-    #SegmentedIndicator {{
+    QFrame#SegmentedIndicator {{
         background: rgba(230,234,240,235);
         border: 1px solid rgba(39,48,59,110);
         border-radius: 999px;
@@ -466,7 +464,7 @@ class NewsFetcherWorker(QObject):
 
         j = self._read_json(url, headers={"User-Agent": "Aurelic/1.0 (Desktop App)"})
         if isinstance(j, list):
-            for n in j[:60]:  # mehr laden
+            for n in j[:60]:
                 title = (n.get("headline") or "").strip()
                 link = (n.get("url") or "").strip()
                 ts = _safe_int(n.get("datetime"), 0)
@@ -483,7 +481,7 @@ class NewsFetcherWorker(QObject):
             "query": self._gdelt_query,
             "mode": "ArtList",
             "format": "json",
-            "maxrecords": "80",  # mehr laden
+            "maxrecords": "80",
             "sort": "hybridrel",
             "formatdatetime": "0",
         }
@@ -599,6 +597,7 @@ class MainPage(QWidget):
     tab_changed = Signal(str)   # "brokerage" | "analyse"
     avatar_clicked = Signal()
     calendar_clicked = Signal()
+
     def __init__(self, background_path: str = "images/Backgroundimage.png", parent: QWidget | None = None):
         super().__init__(parent)
 
@@ -769,7 +768,6 @@ class MainPage(QWidget):
         if self._overall_movers_label is not None:
             self._overall_movers_label.setTextFormat(Qt.RichText)
             self._overall_movers_label.setTextInteractionFlags(Qt.NoTextInteraction)
-            # Zentriere horizontal + vertikal (im Panel_with_body wird Stretch oben/unten gesetzt)
             self._overall_movers_label.setAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
 
         right_bottom = self._panel(
@@ -813,7 +811,6 @@ class MainPage(QWidget):
         self._news_loading_label.setWordWrap(True)
         v.addWidget(self._news_loading_label, 0, Qt.AlignLeft)
 
-        # ScrollArea füllt den Rest
         self._news_scroll = QScrollArea()
         self._news_scroll.setWidgetResizable(True)
         self._news_scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
@@ -836,9 +833,7 @@ class MainPage(QWidget):
         self._news_footer_label.setWordWrap(True)
         v.addWidget(self._news_footer_label, 0, Qt.AlignLeft)
 
-        # Initial: erzeugt genug Karten, später wird es dynamisch angepasst
         self._ensure_news_cards(10)
-
         return panel
 
     def _ensure_news_cards(self, count: int) -> None:
@@ -886,11 +881,6 @@ class MainPage(QWidget):
         self._render_news()
 
     def _update_news_capacity(self) -> None:
-        """
-        Bleibt "sexy": wir berechnen anhand der Höhe, wie viele Cards wir initial
-        sichtbar rendern. ABER: wir laden deutlich mehr Items (siehe Worker) und
-        können dann scrollen, weil alle Cards befüllt werden.
-        """
         if self._news_panel is None or self._news_scroll is None:
             return
 
@@ -899,7 +889,9 @@ class MainPage(QWidget):
             return
 
         title_h = self._news_title_label.sizeHint().height() if self._news_title_label else 0
-        loading_h = self._news_loading_label.sizeHint().height() if (self._news_loading_label and self._news_loading_label.isVisible()) else 0
+        loading_h = self._news_loading_label.sizeHint().height() if (
+            self._news_loading_label and self._news_loading_label.isVisible()
+        ) else 0
         footer_h = self._news_footer_label.sizeHint().height() if self._news_footer_label else 0
 
         inner_h = panel_h - (14 * 2)
@@ -908,15 +900,10 @@ class MainPage(QWidget):
         est_card_h = 82
         visible_cards = max(6, min(14, int(usable_h // est_card_h)))
 
-        # Für Scroll: wir erzeugen ein Vielfaches davon, damit es sich "voll" anfühlt
         desired_total_cards = max(visible_cards, min(40, visible_cards * 3))
-
         if desired_total_cards != len(self._news_cards):
             self._ensure_news_cards(desired_total_cards)
 
-    # --------------------------
-    # External open confirm
-    # --------------------------
     def _open_news_url_confirmed(self, url: str) -> None:
         url = (url or "").strip()
         if not url:
@@ -931,9 +918,6 @@ class MainPage(QWidget):
         if dlg.exec() == QDialog.Accepted:
             QDesktopServices.openUrl(QUrl(dlg.url))
 
-    # --------------------------
-    # Investments area
-    # --------------------------
     def _build_investments_area(self) -> QFrame:
         card = QFrame()
         card.setObjectName("Card")
@@ -974,9 +958,6 @@ class MainPage(QWidget):
         v.addWidget(placeholder)
         return card
 
-    # --------------------------
-    # Generic panel helper
-    # --------------------------
     def _panel(self, title: str, placeholder: str, min_w: int = 260) -> QFrame:
         panel = QFrame()
         panel.setObjectName("Panel")
@@ -1026,16 +1007,12 @@ class MainPage(QWidget):
         body.setWordWrap(True)
         body.setTextFormat(Qt.RichText)
 
-        # für vertikales Zentrieren: Stretch oben und unten
         v.addStretch(1)
         v.addWidget(body, 0, Qt.AlignHCenter | Qt.AlignVCenter)
         v.addStretch(1)
 
         return panel, body
 
-    # --------------------------
-    # Movers: refresh + render
-    # --------------------------
     def _refresh_movers(self) -> None:
         today = datetime.now().strftime("%Y-%m-%d")
         if today != self._fmp_calls_date:
@@ -1116,7 +1093,6 @@ class MainPage(QWidget):
         g_block = "".join(item_html(it, True) for it in top_g) if top_g else "<div>—</div>"
         l_block = "".join(item_html(it, False) for it in top_l) if top_l else "<div>—</div>"
 
-        # größerer Abstand zwischen letztem positiven Item und "Negativ"
         return f"""
         <div style="font-size: 12px; line-height: 1.25; color: rgba(230,234,240,235); text-align:center;">
           <div style="color:{green}; font-weight:900; margin-bottom:6px;">Positiv</div>
@@ -1127,9 +1103,6 @@ class MainPage(QWidget):
         </div>
         """.strip()
 
-    # --------------------------
-    # News: refresh + rotate
-    # --------------------------
     def _refresh_news(self) -> None:
         if self._news_loading_label is not None:
             self._news_loading_label.setText("Lade News …")
@@ -1181,13 +1154,11 @@ class MainPage(QWidget):
             return
         pages = max(1, (len(self._news_items) + self._news_page_size - 1) // self._news_page_size)
         self._news_page = (self._news_page + 1) % pages
-        # Optional: beim Rotieren oben anfangen (fühlt sich sauberer an)
         if self._news_scroll is not None:
             self._news_scroll.verticalScrollBar().setValue(0)
         self._render_news()
 
     def _render_news(self) -> None:
-        # Scroll: wir befüllen so viele Cards wie wir haben (max 40, siehe _update_news_capacity)
         chunk = self._news_items[:len(self._news_cards)]
 
         for i in range(len(self._news_cards)):

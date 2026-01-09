@@ -16,9 +16,9 @@ from gui.widgets.worldbank_feed import WorldBankFeedWidget
 
 
 class AnalysePage(QWidget):
-    tab_changed = Signal(str)   # "brokerage" | "analyse"
+    tab_changed = Signal(str)    # "brokerage" | "analyse"
     avatar_clicked = Signal()
-    calendar_clicked = Signal()  # <-- NEU: Kreis-Button (Kalender)
+    calendar_clicked = Signal()  # Kreis-Button (Kalender)
 
     def __init__(self, parent: QWidget | None = None):
         super().__init__(parent)
@@ -41,22 +41,27 @@ class AnalysePage(QWidget):
         shell_v.setContentsMargins(22, 18, 22, 18)
         shell_v.setSpacing(14)
 
-        shell_v.addWidget(self._build_topbar(), 0)
-        shell_v.addWidget(self._build_middle_area(), 1)
-        shell_v.addWidget(self._build_bottom_area(), 0)
+        self._topbar = self._build_topbar()
+        self._middle = self._build_middle_area()
+        self._bottom = self._build_bottom_area()
+
+        shell_v.addWidget(self._topbar, 0)
+        shell_v.addWidget(self._middle, 1)
+        shell_v.addWidget(self._bottom, 0)
 
         root.addWidget(self._shell, 0, Qt.AlignCenter)
 
+        # Default tab state (keine Emission beim Init)
         self._seg_tabs.set_active("analyse", animate=False, emit=False)
 
     def resizeEvent(self, event) -> None:
         super().resizeEvent(event)
 
-        m = 40
-        avail_w = max(300, self.width() - 2 * m)
-        avail_h = max(300, self.height() - 2 * m)
+        margin = 40
+        avail_w = max(300, self.width() - 2 * margin)
+        avail_h = max(300, self.height() - 2 * margin)
 
-        ratio = 1.568
+        ratio = 1.568  # width / height
         w = min(avail_w, int(avail_h * ratio))
         h = min(avail_h, int(w / ratio))
         self._shell.setFixedSize(w, h)
@@ -73,24 +78,26 @@ class AnalysePage(QWidget):
         self._seg_tabs.setObjectName("SegmentedTabs")
         self._seg_tabs.changed.connect(self._set_active_tab)
 
-        # NEU: Kalender-Kreis (neben dem Avatar)
         cal_btn = QPushButton("◯")
         cal_btn.setObjectName("CalendarBtn")
         cal_btn.setFixedSize(44, 44)
+        cal_btn.setCursor(Qt.PointingHandCursor)
         cal_btn.clicked.connect(self.calendar_clicked.emit)
 
         avatar = QPushButton("N")
         avatar.setObjectName("Avatar")
         avatar.setFixedSize(44, 44)
+        avatar.setCursor(Qt.PointingHandCursor)
         avatar.clicked.connect(self.avatar_clicked.emit)
 
         h.addWidget(self._seg_tabs, 0, Qt.AlignLeft)
         h.addStretch(1)
-        h.addWidget(cal_btn, 0, Qt.AlignRight)   # <-- NEU
+        h.addWidget(cal_btn, 0, Qt.AlignRight)
         h.addWidget(avatar, 0, Qt.AlignRight)
         return bar
 
     def _set_active_tab(self, which: str) -> None:
+        # Defensive normalization
         which = "analyse" if which == "analyse" else "brokerage"
         self._seg_tabs.set_active(which, animate=True, emit=False)
         self.tab_changed.emit(which)
@@ -109,17 +116,31 @@ class AnalysePage(QWidget):
         left.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Expanding)
 
         # CENTER: minimal schmaler
-        center = self._panel("", "Analyse-Chart / Indikatoren\n(Placeholder)", min_w=820)
+        center = self._panel(
+            title="",
+            placeholder="Analyse-Chart / Indikatoren\n(Placeholder)",
+            min_w=820
+        )
         center.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
 
+        # RIGHT: stacked panels
         right = QWidget()
         right.setAttribute(Qt.WA_StyledBackground, True)
+
         rv = QVBoxLayout(right)
         rv.setContentsMargins(0, 0, 0, 0)
         rv.setSpacing(14)
 
-        right_top = self._panel("Portfolio\nRisiko", "Heatmap / Risiko\n(Placeholder)", min_w=320)
-        right_bottom = self._panel("Watchlist\nInsights", "Alerts / Insights\n(Placeholder)", min_w=320)
+        right_top = self._panel(
+            title="Portfolio\nRisiko",
+            placeholder="Heatmap / Risiko\n(Placeholder)",
+            min_w=320
+        )
+        right_bottom = self._panel(
+            title="Watchlist\nInsights",
+            placeholder="Alerts / Insights\n(Placeholder)",
+            min_w=320
+        )
 
         right_top.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Expanding)
         right_bottom.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Expanding)

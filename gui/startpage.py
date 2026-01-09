@@ -495,7 +495,8 @@ class StartPage(QWidget):
         s = (s or "").strip()
         if not (min_len <= len(s) <= max_len):
             return False
-        return bool(re.match(r"^[A-Za-zÀ-ÖØ-öø-ÿ0-9 .,'’\\-/#]+$", s))
+        return bool(re.match(r"^[A-Za-zÀ-ÖØ-öø-ÿ0-9 .,'’/#\-\\]+$", s))
+
 
     def _is_valid_postal_code(self, postal: str, country: str) -> bool:
         """
@@ -580,7 +581,7 @@ class StartPage(QWidget):
 
         has_lower = bool(re.search(r"[a-z]", pw))
         has_upper = bool(re.search(r"[A-Z]", pw))
-        has_digit = bool(re.search(r"\\d", pw))
+        has_digit = bool(re.search(r"\d", pw))
         has_special = bool(re.search(r"[^A-Za-z0-9]", pw))
 
         missing = []
