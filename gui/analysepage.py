@@ -11,6 +11,9 @@ from PySide6.QtWidgets import (
 from gui.mainpage import Palette, build_qss
 from gui.widgets.segmentedtabs import SegmentedTabs
 
+# World Bank feed widget
+from gui.widgets.worldbank_feed import WorldBankFeedWidget
+
 
 class AnalysePage(QWidget):
     tab_changed = Signal(str)   # "brokerage" | "analyse"
@@ -24,12 +27,10 @@ class AnalysePage(QWidget):
         self.setStyleSheet(build_qss(self._palette))
         self.setAttribute(Qt.WA_StyledBackground, True)
 
-        # Root layout
         root = QVBoxLayout(self)
         root.setContentsMargins(40, 40, 40, 40)
         root.setSpacing(0)
 
-        # Shell (identisch zum Brokerage-Look)
         self._shell = QFrame()
         self._shell.setObjectName("Shell")
         self._shell.setAttribute(Qt.WA_StyledBackground, True)
@@ -45,7 +46,6 @@ class AnalysePage(QWidget):
 
         root.addWidget(self._shell, 0, Qt.AlignCenter)
 
-        # Analyse Tab aktiv setzen (ohne Doppel-Emit)
         self._seg_tabs.set_active("analyse", animate=False, emit=False)
 
     def resizeEvent(self, event) -> None:
@@ -60,9 +60,6 @@ class AnalysePage(QWidget):
         h = min(avail_h, int(w / ratio))
         self._shell.setFixedSize(w, h)
 
-    # --------------------------
-    # Topbar (Sliding Tabs + Avatar)
-    # --------------------------
     def _build_topbar(self) -> QWidget:
         bar = QWidget()
         bar.setAttribute(Qt.WA_StyledBackground, True)
@@ -71,7 +68,6 @@ class AnalysePage(QWidget):
         h.setContentsMargins(0, 0, 0, 0)
         h.setSpacing(12)
 
-        # Sliding segmented tabs (wie MainPage)
         self._seg_tabs = SegmentedTabs()
         self._seg_tabs.setObjectName("SegmentedTabs")
         self._seg_tabs.changed.connect(self._set_active_tab)
@@ -88,16 +84,9 @@ class AnalysePage(QWidget):
 
     def _set_active_tab(self, which: str) -> None:
         which = "analyse" if which == "analyse" else "brokerage"
-
-        # Sliding UI korrekt halten (falls extern aufgerufen)
-        if hasattr(self, "_seg_tabs"):
-            self._seg_tabs.set_active(which, animate=True, emit=False)
-
+        self._seg_tabs.set_active(which, animate=True, emit=False)
         self.tab_changed.emit(which)
 
-    # --------------------------
-    # Middle layout (gleiches Raster)
-    # --------------------------
     def _build_middle_area(self) -> QWidget:
         w = QWidget()
         w.setAttribute(Qt.WA_StyledBackground, True)
@@ -106,10 +95,13 @@ class AnalysePage(QWidget):
         h.setContentsMargins(0, 0, 0, 0)
         h.setSpacing(14)
 
-        left = self._panel("Analyse\nSignale", "Analyse Feed / Signale\n(Placeholder)", min_w=360)
+        # LEFT: World Bank feed widget (etwas breiter)
+        left = WorldBankFeedWidget()
+        left.setMinimumWidth(420)  # vorher 360
         left.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Expanding)
 
-        center = self._panel("", "Analyse-Chart / Indikatoren\n(Placeholder)", min_w=860)
+        # CENTER: minimal schmaler
+        center = self._panel("", "Analyse-Chart / Indikatoren\n(Placeholder)", min_w=820)  # vorher 860
         center.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
 
         right = QWidget()
@@ -128,7 +120,7 @@ class AnalysePage(QWidget):
         rv.addWidget(right_bottom, 1)
 
         h.addWidget(left, 0)
-        h.addWidget(center, 1)
+        h.addWidget(center, 4)  # vorher 1
         h.addWidget(right, 0)
         return w
 

@@ -12,7 +12,8 @@ from PySide6.QtCore import Qt, Signal, QTimer, QThread, QObject, QUrl
 from PySide6.QtGui import QDesktopServices
 from PySide6.QtWidgets import (
     QWidget, QFrame, QLabel, QPushButton,
-    QHBoxLayout, QVBoxLayout, QSizePolicy, QDialog
+    QHBoxLayout, QVBoxLayout, QSizePolicy, QDialog,
+    QScrollArea
 )
 
 # FIX: richtiger Import + richtiger Dateiname
@@ -38,7 +39,6 @@ class Palette:
 
 
 def _qss_url(path: str) -> str:
-    # QSS expects forward slashes; also tolerate relative paths.
     p = (path or "").replace("\\", "/")
     return f'url("{p}")' if p else ""
 
@@ -93,14 +93,14 @@ def build_qss(p: Palette, background_image_path: str = "images/Backgroundimage.p
     #SegmentedTabs {{
         background: rgba(255,255,255,10);
         border: 1px solid rgba(39,48,59,170);
-        border-radius: 999px; /* komplett rund */
+        border-radius: 999px;
         padding: 0px;
     }}
 
     #SegmentedIndicator {{
         background: rgba(230,234,240,235);
         border: 1px solid rgba(39,48,59,110);
-        border-radius: 999px; /* komplett rund */
+        border-radius: 999px;
     }}
 
     QPushButton#SegmentedButton {{
@@ -130,7 +130,7 @@ def build_qss(p: Palette, background_image_path: str = "images/Backgroundimage.p
         border: 1px solid rgba(109,146,155,90);
     }}
 
-    /* News (FIX: multi-line titles, no clipping) */
+    /* News */
     #NewsCard {{
         background: transparent;
         border: 0px;
@@ -147,6 +147,33 @@ def build_qss(p: Palette, background_image_path: str = "images/Backgroundimage.p
     #NewsMeta {{
         color: rgba(174,183,194,150);
         font-size: 11px;
+    }}
+
+    /* ScrollArea: modern und unauffällig */
+    QScrollArea {{
+        border: 0px;
+        background: transparent;
+    }}
+    QScrollBar:vertical {{
+        border: 0px;
+        background: transparent;
+        width: 10px;
+        margin: 6px 2px 6px 2px;
+    }}
+    QScrollBar::handle:vertical {{
+        background: rgba(230,234,240,60);
+        border-radius: 5px;
+        min-height: 24px;
+    }}
+    QScrollBar::handle:vertical:hover {{
+        background: rgba(230,234,240,90);
+    }}
+    QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical {{
+        height: 0px;
+        width: 0px;
+    }}
+    QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {{
+        background: transparent;
     }}
 
     #Placeholder {{
@@ -227,6 +254,17 @@ def _fmt_time(ts: int) -> str:
 
 
 # --------------------------
+# Movers models (FMP)
+# --------------------------
+@dataclass(frozen=True)
+class MoverItem:
+    symbol: str
+    name: str
+    change_pct: float
+    price: float
+
+
+# --------------------------
 # External link confirmation dialog
 # --------------------------
 class ExternalLinkDialog(QDialog):
@@ -244,7 +282,6 @@ class ExternalLinkDialog(QDialog):
         self.setWindowTitle("Externe Ressource öffnen")
         self.setModal(True)
 
-        # IMPORTANT: ensure the dialog paints the styled background
         self.setObjectName("Root")
         self.setAttribute(Qt.WA_StyledBackground, True)
         self.setAutoFillBackground(True)
@@ -331,7 +368,7 @@ class ClickableNewsCard(QFrame):
 
 
 # --------------------------
-# Background fetch worker
+# Background fetch worker (News)
 # --------------------------
 class NewsFetcherWorker(QObject):
     finished = Signal(list)      # list[NewsItem]
@@ -416,9 +453,8 @@ class NewsFetcherWorker(QObject):
         url = f"{base}?{urllib.parse.urlencode({'category': 'general', 'token': self._finnhub_key})}"
 
         j = self._read_json(url, headers={"User-Agent": "Aurelic/1.0 (Desktop App)"})
-
         if isinstance(j, list):
-            for n in j[:30]:
+            for n in j[:60]:  # mehr laden
                 title = (n.get("headline") or "").strip()
                 link = (n.get("url") or "").strip()
                 ts = _safe_int(n.get("datetime"), 0)
@@ -435,7 +471,7 @@ class NewsFetcherWorker(QObject):
             "query": self._gdelt_query,
             "mode": "ArtList",
             "format": "json",
-            "maxrecords": "30",
+            "maxrecords": "80",  # mehr laden
             "sort": "hybridrel",
             "formatdatetime": "0",
         }
@@ -445,7 +481,7 @@ class NewsFetcherWorker(QObject):
 
         arts = j.get("articles", [])
         if isinstance(arts, list):
-            for a in arts[:30]:
+            for a in arts[:80]:
                 title = (a.get("title") or "").strip()
                 link = (a.get("url") or "").strip()
                 src = (a.get("sourceCommonName") or a.get("sourceCountry") or "GDELT").strip()
@@ -461,7 +497,86 @@ class NewsFetcherWorker(QObject):
 
                 if title and link and ts:
                     out.append(NewsItem(title=title, source=src, published_ts=ts, url=link, tag="politics"))
+        return out
 
+
+# --------------------------
+# Background fetch worker (FMP Movers)
+# --------------------------
+class MoversFetcherWorker(QObject):
+    finished = Signal(list, list)  # gainers, losers
+    failed = Signal(str)
+
+    def __init__(self, fmp_key: str, parent: QObject | None = None):
+        super().__init__(parent)
+        self._fmp_key = (fmp_key or "").strip()
+
+    def run(self) -> None:
+        if not self._fmp_key:
+            self.failed.emit("FMP_API_KEY fehlt.")
+            return
+
+        try:
+            gainers = self._fetch_overall("gainers")
+            losers = self._fetch_overall("losers")
+            self.finished.emit(gainers, losers)
+        except Exception as e:
+            self.failed.emit(str(e)[:220])
+
+    def _read_json(self, url: str, headers: Optional[dict] = None, timeout: int = 10):
+        import urllib.request
+        import urllib.error
+        import ssl
+        import certifi
+
+        req = urllib.request.Request(url, headers=headers or {}, method="GET")
+        ctx = ssl.create_default_context(cafile=certifi.where())
+
+        try:
+            with urllib.request.urlopen(req, timeout=timeout, context=ctx) as resp:
+                raw_bytes = resp.read()
+                raw = raw_bytes.decode("utf-8", errors="replace").strip()
+
+        except urllib.error.HTTPError as e:
+            try:
+                raw = (e.read() or b"").decode("utf-8", errors="replace").strip()
+            except Exception:
+                raw = ""
+            raise RuntimeError(f"FMP HTTP {e.code} — {raw[:200]}")
+
+        except urllib.error.URLError as e:
+            raise RuntimeError(f"FMP Network error: {e}")
+
+        if not raw:
+            raise RuntimeError("FMP: Empty response")
+
+        if raw[0] not in "{[":
+            raise RuntimeError(f"FMP: Non-JSON response: {raw[:200]}")
+
+        try:
+            return json.loads(raw)
+        except Exception as e:
+            raise RuntimeError(f"FMP JSON parse error: {e}. Body head: {raw[:200]}")
+
+    def _fetch_overall(self, which: str) -> list[MoverItem]:
+        stable_map = {
+            "gainers": "biggest-gainers",
+            "losers": "biggest-losers",
+        }
+        base = f"https://financialmodelingprep.com/stable/{stable_map[which]}"
+        url = f"{base}?{urllib.parse.urlencode({'apikey': self._fmp_key})}"
+
+        j = self._read_json(url, headers={"User-Agent": "Aurelic/1.0 (Desktop App)"})
+
+        out: list[MoverItem] = []
+        if isinstance(j, list):
+            for row in j[:25]:
+                sym = (row.get("symbol") or "").strip()
+                name = (row.get("name") or row.get("companyName") or "").strip() or sym
+                price = float(row.get("price") or 0.0)
+                cp = float(row.get("changesPercentage") or 0.0)
+                if sym:
+                    out.append(MoverItem(symbol=sym, name=name, change_pct=cp, price=price))
         return out
 
 
@@ -475,7 +590,6 @@ class MainPage(QWidget):
     def __init__(self, background_path: str = "images/Backgroundimage.png", parent: QWidget | None = None):
         super().__init__(parent)
 
-        # IMPORTANT: ensure the widget paints the styled background (prevents white showing through)
         self.setObjectName("Root")
         self.setAttribute(Qt.WA_StyledBackground, True)
         self.setAutoFillBackground(True)
@@ -484,15 +598,34 @@ class MainPage(QWidget):
         self._background_path = background_path
         self.setStyleSheet(build_qss(self._palette, self._background_path))
 
+        # NEWS state
         self._news_items: list[NewsItem] = []
         self._news_page: int = 0
         self._news_page_size: int = 6
+
+        self._news_panel: QFrame | None = None
+        self._news_scroll: QScrollArea | None = None
+        self._news_scroll_content: QWidget | None = None
+        self._news_cards_layout: QVBoxLayout | None = None
+        self._news_title_label: QLabel | None = None
+        self._news_footer_label: QLabel | None = None
 
         self._news_cards: list[ClickableNewsCard] = []
         self._news_title_labels: list[QLabel] = []
         self._news_meta_labels: list[QLabel] = []
         self._news_loading_label: QLabel | None = None
 
+        # Movers
+        self._overall_gainers: list[MoverItem] = []
+        self._overall_losers: list[MoverItem] = []
+        self._overall_movers_label: QLabel | None = None
+
+        # FMP rate limit
+        self._fmp_calls_today: int = 0
+        self._fmp_calls_date: str = datetime.now().strftime("%Y-%m-%d")
+        self._fmp_daily_limit: int = 200
+
+        # Timers
         self._news_refresh_timer = QTimer(self)
         self._news_refresh_timer.setInterval(180_000)
         self._news_refresh_timer.timeout.connect(self._refresh_news)
@@ -501,6 +634,11 @@ class MainPage(QWidget):
         self._news_rotate_timer.setInterval(180_000)
         self._news_rotate_timer.timeout.connect(self._rotate_news_page)
 
+        self._movers_refresh_timer = QTimer(self)
+        self._movers_refresh_timer.setInterval(1_200_000)  # 20 Minuten
+        self._movers_refresh_timer.timeout.connect(self._refresh_movers)
+
+        # Layout root
         self._root = QVBoxLayout(self)
         self._root.setContentsMargins(40, 40, 40, 40)
         self._root.setSpacing(0)
@@ -520,12 +658,16 @@ class MainPage(QWidget):
 
         self._root.addWidget(self._shell, 0, Qt.AlignCenter)
 
-        # FIX: also set segmented control to brokerage on init (keeps UI in sync)
         self._set_active_tab("brokerage", sync_tabs=True)
 
         self._refresh_news()
         self._news_refresh_timer.start()
         self._news_rotate_timer.start()
+
+        self._refresh_movers()
+        self._movers_refresh_timer.start()
+
+        QTimer.singleShot(0, self._update_news_capacity)
 
     def resizeEvent(self, event) -> None:
         super().resizeEvent(event)
@@ -538,6 +680,8 @@ class MainPage(QWidget):
         w = min(avail_w, int(avail_h * ratio))
         h = min(avail_h, int(w / ratio))
         self._shell.setFixedSize(w, h)
+
+        self._update_news_capacity()
 
     # --------------------------
     # Topbar
@@ -553,8 +697,6 @@ class MainPage(QWidget):
         self._seg_tabs = SegmentedTabs()
         self._seg_tabs.setObjectName("SegmentedTabs")
         self._seg_tabs.set_active("brokerage", animate=False, emit=False)
-
-        # FIX: when user clicks, we switch pages AND keep UI state in sync
         self._seg_tabs.changed.connect(lambda which: self._set_active_tab(which, sync_tabs=False))
 
         avatar = QPushButton("N")
@@ -569,11 +711,8 @@ class MainPage(QWidget):
 
     def _set_active_tab(self, which: str, sync_tabs: bool = True) -> None:
         which = "analyse" if which == "analyse" else "brokerage"
-
-        # keep segmented tabs visual state in sync even when page changes externally
         if sync_tabs and hasattr(self, "_seg_tabs") and self._seg_tabs is not None:
             self._seg_tabs.set_active(which, animate=True, emit=False)
-
         self.tab_changed.emit(which)
 
     # --------------------------
@@ -603,11 +742,18 @@ class MainPage(QWidget):
         rv.setContentsMargins(0, 0, 0, 0)
         rv.setSpacing(14)
 
-        right_top = self._panel(
-            title="Overall\nTop Mover",
-            placeholder="+\n-",
+        right_top, self._overall_movers_label = self._panel_with_body(
+            title="Top Mover:",
+            placeholder="Lade Movers …",
             min_w=320
         )
+
+        if self._overall_movers_label is not None:
+            self._overall_movers_label.setTextFormat(Qt.RichText)
+            self._overall_movers_label.setTextInteractionFlags(Qt.NoTextInteraction)
+            # Zentriere horizontal + vertikal (im Panel_with_body wird Stretch oben/unten gesetzt)
+            self._overall_movers_label.setAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
+
         right_bottom = self._panel(
             title="Favoriten-Kategorie\nTop Mover",
             placeholder="+\n-",
@@ -626,34 +772,73 @@ class MainPage(QWidget):
         return w
 
     # --------------------------
-    # News Panel
+    # News Panel (scrollbar + dynamische "Page Size" fürs Feeling)
     # --------------------------
     def _build_news_panel(self, min_w: int = 360) -> QFrame:
         panel = QFrame()
         panel.setObjectName("Panel")
         panel.setAttribute(Qt.WA_StyledBackground, True)
         panel.setMinimumWidth(min_w)
+        self._news_panel = panel
 
         v = QVBoxLayout(panel)
         v.setContentsMargins(16, 14, 16, 14)
         v.setSpacing(10)
 
-        title = QLabel("Favoriten-Kategorie\nNews")
-        title.setObjectName("PanelTitle")
-        title.setWordWrap(True)
-        v.addWidget(title, 0, Qt.AlignLeft)
+        self._news_title_label = QLabel("News:")
+        self._news_title_label.setObjectName("PanelTitle")
+        self._news_title_label.setWordWrap(True)
+        v.addWidget(self._news_title_label, 0, Qt.AlignLeft)
 
         self._news_loading_label = QLabel("Lade News …")
         self._news_loading_label.setObjectName("FinePrint")
         self._news_loading_label.setWordWrap(True)
-        v.addWidget(self._news_loading_label)
+        v.addWidget(self._news_loading_label, 0, Qt.AlignLeft)
 
-        # cards with wrap-capable QLabel titles
-        self._news_cards.clear()
-        self._news_title_labels.clear()
-        self._news_meta_labels.clear()
+        # ScrollArea füllt den Rest
+        self._news_scroll = QScrollArea()
+        self._news_scroll.setWidgetResizable(True)
+        self._news_scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        self._news_scroll.setVerticalScrollBarPolicy(Qt.ScrollBarAsNeeded)
 
-        for _ in range(self._news_page_size):
+        self._news_scroll_content = QWidget()
+        self._news_scroll_content.setAttribute(Qt.WA_StyledBackground, True)
+        self._news_scroll_content.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
+
+        self._news_cards_layout = QVBoxLayout(self._news_scroll_content)
+        self._news_cards_layout.setContentsMargins(0, 0, 0, 0)
+        self._news_cards_layout.setSpacing(6)
+
+        self._news_scroll.setWidget(self._news_scroll_content)
+
+        v.addWidget(self._news_scroll, 1)
+
+        self._news_footer_label = QLabel("")
+        self._news_footer_label.setObjectName("FinePrint")
+        self._news_footer_label.setWordWrap(True)
+        v.addWidget(self._news_footer_label, 0, Qt.AlignLeft)
+
+        # Initial: erzeugt genug Karten, später wird es dynamisch angepasst
+        self._ensure_news_cards(10)
+
+        return panel
+
+    def _ensure_news_cards(self, count: int) -> None:
+        if self._news_cards_layout is None:
+            return
+
+        count = max(1, int(count))
+
+        while len(self._news_cards) > count:
+            card = self._news_cards.pop()
+            title = self._news_title_labels.pop()
+            meta = self._news_meta_labels.pop()
+            self._news_cards_layout.removeWidget(card)
+            card.deleteLater()
+            title.deleteLater()
+            meta.deleteLater()
+
+        while len(self._news_cards) < count:
             card = ClickableNewsCard()
             cv = QVBoxLayout(card)
             cv.setContentsMargins(10, 10, 10, 10)
@@ -674,20 +859,42 @@ class MainPage(QWidget):
             cv.addWidget(meta)
 
             card.setVisible(False)
-            v.addWidget(card)
+            self._news_cards_layout.addWidget(card)
 
             self._news_cards.append(card)
             self._news_title_labels.append(t)
             self._news_meta_labels.append(meta)
 
-        v.addStretch(1)
+        self._render_news()
 
-        footer = QLabel("Aktualisiert alle 3 Minuten.")
-        footer.setObjectName("FinePrint")
-        footer.setWordWrap(True)
-        v.addWidget(footer)
+    def _update_news_capacity(self) -> None:
+        """
+        Bleibt "sexy": wir berechnen anhand der Höhe, wie viele Cards wir initial
+        sichtbar rendern. ABER: wir laden deutlich mehr Items (siehe Worker) und
+        können dann scrollen, weil alle Cards befüllt werden.
+        """
+        if self._news_panel is None or self._news_scroll is None:
+            return
 
-        return panel
+        panel_h = self._news_panel.height()
+        if panel_h <= 0:
+            return
+
+        title_h = self._news_title_label.sizeHint().height() if self._news_title_label else 0
+        loading_h = self._news_loading_label.sizeHint().height() if (self._news_loading_label and self._news_loading_label.isVisible()) else 0
+        footer_h = self._news_footer_label.sizeHint().height() if self._news_footer_label else 0
+
+        inner_h = panel_h - (14 * 2)
+        usable_h = max(0, inner_h - title_h - loading_h - footer_h - 24)
+
+        est_card_h = 82
+        visible_cards = max(6, min(14, int(usable_h // est_card_h)))
+
+        # Für Scroll: wir erzeugen ein Vielfaches davon, damit es sich "voll" anfühlt
+        desired_total_cards = max(visible_cards, min(40, visible_cards * 3))
+
+        if desired_total_cards != len(self._news_cards):
+            self._ensure_news_cards(desired_total_cards)
 
     # --------------------------
     # External open confirm
@@ -779,6 +986,129 @@ class MainPage(QWidget):
         v.addStretch(1)
         return panel
 
+    def _panel_with_body(self, title: str, placeholder: str, min_w: int = 260) -> tuple[QFrame, QLabel]:
+        panel = QFrame()
+        panel.setObjectName("Panel")
+        panel.setAttribute(Qt.WA_StyledBackground, True)
+        panel.setMinimumWidth(min_w)
+        panel.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
+
+        v = QVBoxLayout(panel)
+        v.setContentsMargins(16, 14, 16, 14)
+        v.setSpacing(10)
+
+        if title.strip():
+            t = QLabel(title)
+            t.setObjectName("PanelTitle")
+            t.setWordWrap(True)
+            v.addWidget(t, 0, Qt.AlignLeft)
+
+        body = QLabel(placeholder)
+        body.setObjectName("Placeholder")
+        body.setWordWrap(True)
+        body.setTextFormat(Qt.RichText)
+
+        # für vertikales Zentrieren: Stretch oben und unten
+        v.addStretch(1)
+        v.addWidget(body, 0, Qt.AlignHCenter | Qt.AlignVCenter)
+        v.addStretch(1)
+
+        return panel, body
+
+    # --------------------------
+    # Movers: refresh + render
+    # --------------------------
+    def _refresh_movers(self) -> None:
+        today = datetime.now().strftime("%Y-%m-%d")
+        if today != self._fmp_calls_date:
+            self._fmp_calls_date = today
+            self._fmp_calls_today = 0
+
+        calls_needed = 2
+        if self._fmp_calls_today + calls_needed > self._fmp_daily_limit:
+            if self._overall_movers_label is not None:
+                self._overall_movers_label.setText(
+                    f"FMP Tageslimit erreicht ({self._fmp_calls_today}/{self._fmp_daily_limit}).<br>"
+                    "Keine weiteren Movers-Updates heute."
+                )
+            return
+
+        if self._overall_movers_label is not None:
+            self._overall_movers_label.setText("Lade Movers …")
+
+        fmp_key = os.getenv("FMP_API_KEY", "").strip()
+
+        self._movers_thread = QThread(self)
+        self._movers_worker = MoversFetcherWorker(fmp_key=fmp_key)
+        self._movers_worker.moveToThread(self._movers_thread)
+
+        self._movers_thread.started.connect(self._movers_worker.run)
+        self._movers_worker.finished.connect(self._on_movers_fetched)
+        self._movers_worker.failed.connect(self._on_movers_failed)
+
+        self._movers_worker.finished.connect(self._movers_thread.quit)
+        self._movers_worker.failed.connect(self._movers_thread.quit)
+        self._movers_thread.finished.connect(self._movers_worker.deleteLater)
+        self._movers_thread.finished.connect(self._movers_thread.deleteLater)
+
+        self._fmp_calls_today += calls_needed
+        self._movers_thread.start()
+
+    def _on_movers_failed(self, msg: str) -> None:
+        if self._overall_movers_label is not None:
+            safe = (msg or "").replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;").replace("\n", "<br>")
+            self._overall_movers_label.setText(f"Movers konnten nicht geladen werden:<br>{safe}")
+
+    def _on_movers_fetched(self, gainers: list, losers: list) -> None:
+        self._overall_gainers = [x for x in gainers if isinstance(x, MoverItem)]
+        self._overall_losers = [x for x in losers if isinstance(x, MoverItem)]
+
+        if self._overall_movers_label is not None:
+            self._overall_movers_label.setText(
+                self._format_movers_block(self._overall_gainers, self._overall_losers, n=3)
+            )
+
+    def _format_movers_block(self, gainers: list[MoverItem], losers: list[MoverItem], n: int = 3) -> str:
+        def clamp_name(s: str, max_len: int = 26) -> str:
+            s = (s or "").strip()
+            if len(s) <= max_len:
+                return s
+            return s[:max_len - 1] + "…"
+
+        def esc(s: str) -> str:
+            return (s or "").replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+
+        green = "#4ADE80"
+        red = "#FB7185"
+
+        def item_html(it: MoverItem, positive: bool) -> str:
+            num_color = green if positive else red
+            sign = "+" if positive else ""
+            name = clamp_name(it.name, 26)
+            return (
+                "<div style='margin: 8px 0 10px 0;'>"
+                f"  <div><span style='font-weight:900;'>{esc(it.symbol)}</span> &nbsp;·&nbsp; {esc(name)}</div>"
+                f"  <div style='color:{num_color}; font-weight:850;'>{sign}{it.change_pct:.2f}% &nbsp;·&nbsp; {it.price:.2f}</div>"
+                "</div>"
+            )
+
+        top_g = gainers[:n]
+        top_l = losers[:n]
+
+        g_block = "".join(item_html(it, True) for it in top_g) if top_g else "<div>—</div>"
+        l_block = "".join(item_html(it, False) for it in top_l) if top_l else "<div>—</div>"
+
+        # größerer Abstand zwischen letztem positiven Item und "Negativ"
+        return f"""
+        <div style="font-size: 12px; line-height: 1.25; color: rgba(230,234,240,235); text-align:center;">
+          <div style="color:{green}; font-weight:900; margin-bottom:6px;">Positiv</div>
+          {g_block}
+          <div style="height:22px;"></div>
+          <div style="color:{red}; font-weight:900; margin-bottom:6px;">Negativ</div>
+          {l_block}
+        </div>
+        """.strip()
+
     # --------------------------
     # News: refresh + rotate
     # --------------------------
@@ -788,7 +1118,6 @@ class MainPage(QWidget):
             self._news_loading_label.setVisible(True)
 
         finnhub_key = os.getenv("FINNHUB_API_KEY", "").strip()
-
         gdelt_query = os.getenv(
             "AURELIC_GDELT_QUERY",
             "politics OR election OR government OR parliament OR sanctions OR war OR inflation OR central bank OR interest rates"
@@ -826,6 +1155,7 @@ class MainPage(QWidget):
             else:
                 self._news_loading_label.setVisible(False)
 
+        self._update_news_capacity()
         self._render_news()
 
     def _rotate_news_page(self) -> None:
@@ -833,14 +1163,16 @@ class MainPage(QWidget):
             return
         pages = max(1, (len(self._news_items) + self._news_page_size - 1) // self._news_page_size)
         self._news_page = (self._news_page + 1) % pages
+        # Optional: beim Rotieren oben anfangen (fühlt sich sauberer an)
+        if self._news_scroll is not None:
+            self._news_scroll.verticalScrollBar().setValue(0)
         self._render_news()
 
     def _render_news(self) -> None:
-        items = self._news_items
-        start = self._news_page * self._news_page_size
-        chunk = items[start:start + self._news_page_size]
+        # Scroll: wir befüllen so viele Cards wie wir haben (max 40, siehe _update_news_capacity)
+        chunk = self._news_items[:len(self._news_cards)]
 
-        for i in range(self._news_page_size):
+        for i in range(len(self._news_cards)):
             card = self._news_cards[i]
             title = self._news_title_labels[i]
             meta = self._news_meta_labels[i]
@@ -849,7 +1181,6 @@ class MainPage(QWidget):
                 it = chunk[i]
                 title.setText(it.title)
                 meta.setText(f"{_fmt_time(it.published_ts)} · {it.source} · {it.tag.upper()}")
-
                 card.set_url(it.url)
                 card.setVisible(True)
             else:
