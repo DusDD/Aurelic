@@ -20,6 +20,13 @@ if not FINNHUB_KEY:
         "FINNHUB_API_KEY is not set. "
         "Please set it as an environment variable before starting the app."
     )
+# --- FMP API KEY: aus System-Env lesen (empfohlen) ---
+FMP_KEY = os.getenv("FMP_API_KEY")
+if not FMP_KEY:
+    raise RuntimeError(
+        "FMP_API_KEY is not set. "
+        "Please set it as an environment variable before starting the app."
+    )
 
 from gui.startpage import StartPage
 from gui.mainpage import MainPage
