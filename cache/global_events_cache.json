@@ -1,0 +1,8176 @@
+{
+  "nager:2026:AR": [
+    {
+      "date": "2026-01-01",
+      "localName": "Año Nuevo",
+      "name": "New Year's Day",
+      "countryCode": "AR",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-02-16",
+      "localName": "Carnaval",
+      "name": "Carnival",
+      "countryCode": "AR",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-02-17",
+      "localName": "Carnaval",
+      "name": "Carnival",
+      "countryCode": "AR",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-03-24",
+      "localName": "Día Nacional de la Memoria por la Verdad y la Justicia",
+      "name": "Day of Remembrance for Truth and Justice",
+      "countryCode": "AR",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-04-02",
+      "localName": "Día del Veterano y de los Caídos en la Guerra de Malvinas",
+      "name": "Day of the Veterans and Fallen of the Malvinas War",
+      "countryCode": "AR",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-04-03",
+      "localName": "Viernes Santo",
+      "name": "Good Friday",
+      "countryCode": "AR",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-05-01",
+      "localName": "Día del Trabajador",
+      "name": "Labour Day",
+      "countryCode": "AR",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-05-25",
+      "localName": "Día de la Revolución de Mayo",
+      "name": "May Revolution",
+      "countryCode": "AR",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-06-15",
+      "localName": "Paso a la Inmortalidad del General Martín Miguel de Güemes",
+      "name": "Anniversary of the Passing of General Martín Miguel de Güemes",
+      "countryCode": "AR",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-06-20",
+      "localName": "Paso a la Inmortalidad del General Manuel Belgrano",
+      "name": "General Manuel Belgrano Memorial Day",
+      "countryCode": "AR",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-07-09",
+      "localName": "Día de la Independencia",
+      "name": "Independence Day",
+      "countryCode": "AR",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-08-17",
+      "localName": "Paso a la Inmortalidad del General José de San Martín",
+      "name": "General José de San Martín Memorial Day",
+      "countryCode": "AR",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-10-12",
+      "localName": "Día del Respeto a la Diversidad Cultural",
+      "name": "Day of Respect for Cultural Diversity",
+      "countryCode": "AR",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-11-23",
+      "localName": "Día de la Soberanía Nacional",
+      "name": "National Sovereignty Day",
+      "countryCode": "AR",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-12-08",
+      "localName": "Día de la Inmaculada Concepción de María",
+      "name": "Immaculate Conception Day",
+      "countryCode": "AR",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-12-25",
+      "localName": "Navidad",
+      "name": "Christmas Day",
+      "countryCode": "AR",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    }
+  ],
+  "nager:2026:AT": [
+    {
+      "date": "2026-01-01",
+      "localName": "Neujahr",
+      "name": "New Year's Day",
+      "countryCode": "AT",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-01-06",
+      "localName": "Heilige Drei Könige",
+      "name": "Epiphany",
+      "countryCode": "AT",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-04-05",
+      "localName": "Ostersonntag",
+      "name": "Easter Sunday",
+      "countryCode": "AT",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-04-06",
+      "localName": "Ostermontag",
+      "name": "Easter Monday",
+      "countryCode": "AT",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-05-01",
+      "localName": "Staatsfeiertag",
+      "name": "National Holiday",
+      "countryCode": "AT",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-05-14",
+      "localName": "Christi Himmelfahrt",
+      "name": "Ascension Day",
+      "countryCode": "AT",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-05-24",
+      "localName": "Pfingstsonntag",
+      "name": "Pentecost",
+      "countryCode": "AT",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-05-25",
+      "localName": "Pfingstmontag",
+      "name": "Whit Monday",
+      "countryCode": "AT",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-06-04",
+      "localName": "Fronleichnam",
+      "name": "Corpus Christi",
+      "countryCode": "AT",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-08-15",
+      "localName": "Maria Himmelfahrt",
+      "name": "Assumption Day",
+      "countryCode": "AT",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-10-26",
+      "localName": "Nationalfeiertag",
+      "name": "National Holiday",
+      "countryCode": "AT",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-11-01",
+      "localName": "Allerheiligen",
+      "name": "All Saints' Day",
+      "countryCode": "AT",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-12-08",
+      "localName": "Mariä Empfängnis",
+      "name": "Immaculate Conception",
+      "countryCode": "AT",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-12-25",
+      "localName": "Weihnachten",
+      "name": "Christmas Day",
+      "countryCode": "AT",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-12-26",
+      "localName": "Stefanitag",
+      "name": "St. Stephen's Day",
+      "countryCode": "AT",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    }
+  ],
+  "nager:2026:AU": [
+    {
+      "date": "2026-01-01",
+      "localName": "New Year's Day",
+      "name": "New Year's Day",
+      "countryCode": "AU",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-01-26",
+      "localName": "Australia Day",
+      "name": "Australia Day",
+      "countryCode": "AU",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-03-02",
+      "localName": "Labour Day",
+      "name": "Labour Day",
+      "countryCode": "AU",
+      "fixed": false,
+      "global": false,
+      "counties": [
+        "AU-WA"
+      ],
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-03-09",
+      "localName": "Canberra Day",
+      "name": "Canberra Day",
+      "countryCode": "AU",
+      "fixed": false,
+      "global": false,
+      "counties": [
+        "AU-ACT"
+      ],
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-03-09",
+      "localName": "Adelaide Cup Day",
+      "name": "Adelaide Cup Day",
+      "countryCode": "AU",
+      "fixed": false,
+      "global": false,
+      "counties": [
+        "AU-SA"
+      ],
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-03-09",
+      "localName": "Eight Hours Day",
+      "name": "Eight Hours Day",
+      "countryCode": "AU",
+      "fixed": false,
+      "global": false,
+      "counties": [
+        "AU-TAS"
+      ],
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-03-09",
+      "localName": "Labour Day",
+      "name": "Labour Day",
+      "countryCode": "AU",
+      "fixed": false,
+      "global": false,
+      "counties": [
+        "AU-VIC"
+      ],
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-04-03",
+      "localName": "Good Friday",
+      "name": "Good Friday",
+      "countryCode": "AU",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-04-04",
+      "localName": "Easter Eve",
+      "name": "Holy Saturday",
+      "countryCode": "AU",
+      "fixed": false,
+      "global": false,
+      "counties": [
+        "AU-ACT",
+        "AU-NSW",
+        "AU-NT",
+        "AU-QLD",
+        "AU-SA",
+        "AU-VIC"
+      ],
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-04-05",
+      "localName": "Easter Sunday",
+      "name": "Easter Sunday",
+      "countryCode": "AU",
+      "fixed": false,
+      "global": false,
+      "counties": [
+        "AU-ACT",
+        "AU-NSW",
+        "AU-NT",
+        "AU-QLD",
+        "AU-SA",
+        "AU-VIC",
+        "AU-WA"
+      ],
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-04-06",
+      "localName": "Easter Monday",
+      "name": "Easter Monday",
+      "countryCode": "AU",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-04-25",
+      "localName": "Anzac Day",
+      "name": "Anzac Day",
+      "countryCode": "AU",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-05-04",
+      "localName": "May Day",
+      "name": "May Day",
+      "countryCode": "AU",
+      "fixed": false,
+      "global": false,
+      "counties": [
+        "AU-NT"
+      ],
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-05-04",
+      "localName": "Labour Day",
+      "name": "Labour Day",
+      "countryCode": "AU",
+      "fixed": false,
+      "global": false,
+      "counties": [
+        "AU-QLD"
+      ],
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-06-01",
+      "localName": "Reconciliation Day",
+      "name": "Reconciliation Day",
+      "countryCode": "AU",
+      "fixed": false,
+      "global": false,
+      "counties": [
+        "AU-ACT"
+      ],
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-06-01",
+      "localName": "Western Australia Day",
+      "name": "Western Australia Day",
+      "countryCode": "AU",
+      "fixed": false,
+      "global": false,
+      "counties": [
+        "AU-WA"
+      ],
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-06-08",
+      "localName": "King's Birthday",
+      "name": "King's Birthday",
+      "countryCode": "AU",
+      "fixed": false,
+      "global": false,
+      "counties": [
+        "AU-ACT",
+        "AU-NSW",
+        "AU-NT",
+        "AU-SA",
+        "AU-TAS",
+        "AU-VIC"
+      ],
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-08-03",
+      "localName": "Picnic Day",
+      "name": "Picnic Day",
+      "countryCode": "AU",
+      "fixed": false,
+      "global": false,
+      "counties": [
+        "AU-NT"
+      ],
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-09-28",
+      "localName": "King's Birthday",
+      "name": "King's Birthday",
+      "countryCode": "AU",
+      "fixed": false,
+      "global": false,
+      "counties": [
+        "AU-WA"
+      ],
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-10-05",
+      "localName": "Labour Day",
+      "name": "Labour Day",
+      "countryCode": "AU",
+      "fixed": false,
+      "global": false,
+      "counties": [
+        "AU-ACT",
+        "AU-NSW",
+        "AU-SA"
+      ],
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-10-05",
+      "localName": "King's Birthday",
+      "name": "King's Birthday",
+      "countryCode": "AU",
+      "fixed": false,
+      "global": false,
+      "counties": [
+        "AU-QLD"
+      ],
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-11-03",
+      "localName": "Melbourne Cup",
+      "name": "Melbourne Cup",
+      "countryCode": "AU",
+      "fixed": false,
+      "global": false,
+      "counties": [
+        "AU-VIC"
+      ],
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-12-25",
+      "localName": "Christmas Day",
+      "name": "Christmas Day",
+      "countryCode": "AU",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-12-28",
+      "localName": "Boxing Day",
+      "name": "St. Stephen's Day",
+      "countryCode": "AU",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    }
+  ],
+  "nager:2026:BE": [
+    {
+      "date": "2026-01-01",
+      "localName": "Nieuwjaar",
+      "name": "New Year's Day",
+      "countryCode": "BE",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-04-03",
+      "localName": "Goede Vrijdag",
+      "name": "Good Friday",
+      "countryCode": "BE",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Bank"
+      ]
+    },
+    {
+      "date": "2026-04-05",
+      "localName": "Pasen",
+      "name": "Easter Sunday",
+      "countryCode": "BE",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-04-06",
+      "localName": "Paasmaandag",
+      "name": "Easter Monday",
+      "countryCode": "BE",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-05-01",
+      "localName": "Dag van de arbeid",
+      "name": "Labour Day",
+      "countryCode": "BE",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-05-14",
+      "localName": "Onze Lieve Heer hemel",
+      "name": "Ascension Day",
+      "countryCode": "BE",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-05-15",
+      "localName": "Day after Ascension Day",
+      "name": "Day after Ascension Day",
+      "countryCode": "BE",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Bank"
+      ]
+    },
+    {
+      "date": "2026-05-25",
+      "localName": "Pinkstermaandag",
+      "name": "Whit Monday",
+      "countryCode": "BE",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-07-21",
+      "localName": "Nationale feestdag",
+      "name": "Belgian National Day",
+      "countryCode": "BE",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-08-15",
+      "localName": "Onze Lieve Vrouw hemelvaart",
+      "name": "Assumption Day",
+      "countryCode": "BE",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-11-01",
+      "localName": "Allerheiligen",
+      "name": "All Saints' Day",
+      "countryCode": "BE",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-11-11",
+      "localName": "Wapenstilstand",
+      "name": "Armistice Day",
+      "countryCode": "BE",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-12-25",
+      "localName": "Kerstdag",
+      "name": "Christmas Day",
+      "countryCode": "BE",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-12-26",
+      "localName": "Boxing Day",
+      "name": "St. Stephen's Day",
+      "countryCode": "BE",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Bank"
+      ]
+    }
+  ],
+  "nager:2026:BG": [
+    {
+      "date": "2026-01-01",
+      "localName": "Нова година",
+      "name": "New Year's Day",
+      "countryCode": "BG",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-01-02",
+      "localName": "Ден на валутната смяна",
+      "name": "Currency change day",
+      "countryCode": "BG",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-03-03",
+      "localName": "Ден на oсвобождението на България от Oсманско робство",
+      "name": "Liberation Day",
+      "countryCode": "BG",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-04-10",
+      "localName": "Разпети петък",
+      "name": "Good Friday",
+      "countryCode": "BG",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-04-11",
+      "localName": "Велика събота",
+      "name": "Holy Saturday",
+      "countryCode": "BG",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-04-12",
+      "localName": "Великден",
+      "name": "Easter Sunday",
+      "countryCode": "BG",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-04-13",
+      "localName": "Велики понеделник",
+      "name": "Easter Monday",
+      "countryCode": "BG",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-05-01",
+      "localName": "Ден на труда и на международната работническа солидарност",
+      "name": "International Workers' Day",
+      "countryCode": "BG",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-05-06",
+      "localName": "Гергьовден, ден на храбростта и Българската армия",
+      "name": "Saint George's Day",
+      "countryCode": "BG",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-05-24",
+      "localName": "Ден на Българската просвета и култура и на славянската писменост",
+      "name": "Saints Cyril and Methodius Day",
+      "countryCode": "BG",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-09-06",
+      "localName": "Ден на съединението",
+      "name": "Unification Day",
+      "countryCode": "BG",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-09-22",
+      "localName": "Ден на независимостта на България",
+      "name": "Independence Day",
+      "countryCode": "BG",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-12-24",
+      "localName": "Бъдни вечер",
+      "name": "Christmas Eve",
+      "countryCode": "BG",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-12-25",
+      "localName": "Рождество Христово",
+      "name": "Christmas Day",
+      "countryCode": "BG",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-12-26",
+      "localName": "Рождество Христово",
+      "name": "Second day of Christmas",
+      "countryCode": "BG",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    }
+  ],
+  "nager:2026:BR": [
+    {
+      "date": "2026-01-01",
+      "localName": "Confraternização Universal",
+      "name": "New Year's Day",
+      "countryCode": "BR",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-02-16",
+      "localName": "Carnaval",
+      "name": "Carnival",
+      "countryCode": "BR",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Bank",
+        "Optional"
+      ]
+    },
+    {
+      "date": "2026-02-17",
+      "localName": "Carnaval",
+      "name": "Carnival",
+      "countryCode": "BR",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Bank",
+        "Optional"
+      ]
+    },
+    {
+      "date": "2026-04-03",
+      "localName": "Sexta-feira Santa",
+      "name": "Good Friday",
+      "countryCode": "BR",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-04-05",
+      "localName": "Domingo de Páscoa",
+      "name": "Easter Sunday",
+      "countryCode": "BR",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-04-21",
+      "localName": "Dia de Tiradentes",
+      "name": "Tiradentes",
+      "countryCode": "BR",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-05-01",
+      "localName": "Dia do Trabalhador",
+      "name": "Labour Day",
+      "countryCode": "BR",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-06-04",
+      "localName": "Corpus Christi",
+      "name": "Corpus Christi",
+      "countryCode": "BR",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-07-09",
+      "localName": "Revolução Constitucionalista de 1932",
+      "name": "Constitutionalist Revolution of 1932",
+      "countryCode": "BR",
+      "fixed": false,
+      "global": false,
+      "counties": [
+        "BR-SP"
+      ],
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-09-07",
+      "localName": "Dia da Independência",
+      "name": "Independence Day",
+      "countryCode": "BR",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-10-12",
+      "localName": "Nossa Senhora Aparecida",
+      "name": "Our Lady of Aparecida",
+      "countryCode": "BR",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-11-02",
+      "localName": "Dia de Finados",
+      "name": "All Souls' Day",
+      "countryCode": "BR",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-11-15",
+      "localName": "Proclamação da República",
+      "name": "Republic Proclamation Day",
+      "countryCode": "BR",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-11-20",
+      "localName": "Dia da Consciência Negra",
+      "name": "Black Awareness Day",
+      "countryCode": "BR",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-12-25",
+      "localName": "Natal",
+      "name": "Christmas Day",
+      "countryCode": "BR",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    }
+  ],
+  "nager:2026:CA": [
+    {
+      "date": "2026-01-01",
+      "localName": "New Year's Day",
+      "name": "New Year's Day",
+      "countryCode": "CA",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-02-16",
+      "localName": "Louis Riel Day",
+      "name": "Louis Riel Day",
+      "countryCode": "CA",
+      "fixed": false,
+      "global": false,
+      "counties": [
+        "CA-MB"
+      ],
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-02-16",
+      "localName": "Islander Day",
+      "name": "Islander Day",
+      "countryCode": "CA",
+      "fixed": false,
+      "global": false,
+      "counties": [
+        "CA-PE"
+      ],
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-02-16",
+      "localName": "Heritage Day",
+      "name": "Heritage Day",
+      "countryCode": "CA",
+      "fixed": false,
+      "global": false,
+      "counties": [
+        "CA-NS"
+      ],
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-02-16",
+      "localName": "Family Day",
+      "name": "Family Day",
+      "countryCode": "CA",
+      "fixed": false,
+      "global": false,
+      "counties": [
+        "CA-AB",
+        "CA-BC",
+        "CA-NB",
+        "CA-ON",
+        "CA-SK"
+      ],
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-03-17",
+      "localName": "Saint Patrick's Day",
+      "name": "Saint Patrick's Day",
+      "countryCode": "CA",
+      "fixed": false,
+      "global": false,
+      "counties": [
+        "CA-NL"
+      ],
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-04-03",
+      "localName": "Good Friday",
+      "name": "Good Friday",
+      "countryCode": "CA",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-04-06",
+      "localName": "Easter Monday",
+      "name": "Easter Monday",
+      "countryCode": "CA",
+      "fixed": false,
+      "global": false,
+      "counties": [
+        "CA-AB",
+        "CA-PE"
+      ],
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-04-23",
+      "localName": "Saint George's Day",
+      "name": "Saint George's Day",
+      "countryCode": "CA",
+      "fixed": false,
+      "global": false,
+      "counties": [
+        "CA-NL"
+      ],
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-05-18",
+      "localName": "National Patriots' Day",
+      "name": "National Patriots' Day",
+      "countryCode": "CA",
+      "fixed": false,
+      "global": false,
+      "counties": [
+        "CA-QC"
+      ],
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-05-18",
+      "localName": "Victoria Day",
+      "name": "Victoria Day",
+      "countryCode": "CA",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-06-21",
+      "localName": "National Aboriginal Day",
+      "name": "National Aboriginal Day",
+      "countryCode": "CA",
+      "fixed": false,
+      "global": false,
+      "counties": [
+        "CA-NT"
+      ],
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-06-24",
+      "localName": "Discovery Day",
+      "name": "Discovery Day",
+      "countryCode": "CA",
+      "fixed": false,
+      "global": false,
+      "counties": [
+        "CA-NL"
+      ],
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-06-24",
+      "localName": "Fête nationale du Québec",
+      "name": "National Holiday",
+      "countryCode": "CA",
+      "fixed": false,
+      "global": false,
+      "counties": [
+        "CA-QC"
+      ],
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-07-01",
+      "localName": "Canada Day",
+      "name": "Canada Day",
+      "countryCode": "CA",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-07-12",
+      "localName": "Orangemen's Day",
+      "name": "Orangemen's Day",
+      "countryCode": "CA",
+      "fixed": false,
+      "global": false,
+      "counties": [
+        "CA-NL"
+      ],
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-08-03",
+      "localName": "Civic Holiday",
+      "name": "Civic Holiday",
+      "countryCode": "CA",
+      "fixed": false,
+      "global": false,
+      "counties": [
+        "CA-MB",
+        "CA-NL",
+        "CA-NT",
+        "CA-NU",
+        "CA-ON"
+      ],
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-08-03",
+      "localName": "British Columbia Day",
+      "name": "British Columbia Day",
+      "countryCode": "CA",
+      "fixed": false,
+      "global": false,
+      "counties": [
+        "CA-BC"
+      ],
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-08-03",
+      "localName": "Heritage Day",
+      "name": "Heritage Day",
+      "countryCode": "CA",
+      "fixed": false,
+      "global": false,
+      "counties": [
+        "CA-AB",
+        "CA-YT"
+      ],
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-08-03",
+      "localName": "New Brunswick Day",
+      "name": "New Brunswick Day",
+      "countryCode": "CA",
+      "fixed": false,
+      "global": false,
+      "counties": [
+        "CA-NB"
+      ],
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-08-03",
+      "localName": "Natal Day",
+      "name": "Natal Day",
+      "countryCode": "CA",
+      "fixed": false,
+      "global": false,
+      "counties": [
+        "CA-NS"
+      ],
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-08-03",
+      "localName": "Saskatchewan Day",
+      "name": "Saskatchewan Day",
+      "countryCode": "CA",
+      "fixed": false,
+      "global": false,
+      "counties": [
+        "CA-SK"
+      ],
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-08-17",
+      "localName": "Gold Cup Parade Day",
+      "name": "Gold Cup Parade Day",
+      "countryCode": "CA",
+      "fixed": false,
+      "global": false,
+      "counties": [
+        "CA-PE"
+      ],
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-08-17",
+      "localName": "Discovery Day",
+      "name": "Discovery Day",
+      "countryCode": "CA",
+      "fixed": false,
+      "global": false,
+      "counties": [
+        "CA-YT"
+      ],
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-09-07",
+      "localName": "Labour Day",
+      "name": "Labour Day",
+      "countryCode": "CA",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-09-30",
+      "localName": "National Day for Truth and Reconciliation",
+      "name": "National Day for Truth and Reconciliation",
+      "countryCode": "CA",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-10-12",
+      "localName": "Thanksgiving",
+      "name": "Thanksgiving",
+      "countryCode": "CA",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-11-11",
+      "localName": "Armistice Day",
+      "name": "Armistice Day",
+      "countryCode": "CA",
+      "fixed": false,
+      "global": false,
+      "counties": [
+        "CA-NL"
+      ],
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-11-11",
+      "localName": "Remembrance Day",
+      "name": "Remembrance Day",
+      "countryCode": "CA",
+      "fixed": false,
+      "global": false,
+      "counties": [
+        "CA-AB",
+        "CA-BC",
+        "CA-NB",
+        "CA-NT",
+        "CA-NS",
+        "CA-NU",
+        "CA-PE",
+        "CA-SK",
+        "CA-YT"
+      ],
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-12-25",
+      "localName": "Christmas Day",
+      "name": "Christmas Day",
+      "countryCode": "CA",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-12-26",
+      "localName": "Boxing Day",
+      "name": "St. Stephen's Day",
+      "countryCode": "CA",
+      "fixed": false,
+      "global": false,
+      "counties": [
+        "CA-AB",
+        "CA-NB",
+        "CA-NS",
+        "CA-ON",
+        "CA-PE"
+      ],
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    }
+  ],
+  "nager:2026:CN": [
+    {
+      "date": "2026-01-01",
+      "localName": "元旦",
+      "name": "New Year's Day",
+      "countryCode": "CN",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-02-17",
+      "localName": "春节",
+      "name": "Chinese New Year (Spring Festival)",
+      "countryCode": "CN",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-05-01",
+      "localName": "劳动节",
+      "name": "Labour Day",
+      "countryCode": "CN",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-06-19",
+      "localName": "端午节",
+      "name": "Dragon Boat Festival",
+      "countryCode": "CN",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-09-25",
+      "localName": "中秋节",
+      "name": "Mid-Autumn Festival",
+      "countryCode": "CN",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-10-01",
+      "localName": "国庆节",
+      "name": "National Day",
+      "countryCode": "CN",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    }
+  ],
+  "nager:2026:CY": [
+    {
+      "date": "2026-01-01",
+      "localName": "Πρωτοχρονιά",
+      "name": "New Year's Day",
+      "countryCode": "CY",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-01-06",
+      "localName": "Θεοφάνεια",
+      "name": "Epiphany",
+      "countryCode": "CY",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-02-23",
+      "localName": "Καθαρή Δευτέρα",
+      "name": "Green Monday",
+      "countryCode": "CY",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-03-25",
+      "localName": "Επέτειος Ελληνικής Ανεξαρτησίας",
+      "name": "Greek Independence Day",
+      "countryCode": "CY",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-04-01",
+      "localName": "Κυπριακή Εθνική Επέτειος",
+      "name": "Cyprus National Day",
+      "countryCode": "CY",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-04-10",
+      "localName": "Μεγάλη Παρασκευή",
+      "name": "Good Friday",
+      "countryCode": "CY",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-04-13",
+      "localName": "Δευτέρα της Διακαινησίμου",
+      "name": "Easter Monday",
+      "countryCode": "CY",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-04-14",
+      "localName": "Τρίτη της Διακαινησίμου",
+      "name": "Easter Tuesday",
+      "countryCode": "CY",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Bank"
+      ]
+    },
+    {
+      "date": "2026-05-01",
+      "localName": "Πρωτομαγιά",
+      "name": "Labour Day",
+      "countryCode": "CY",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-05-31",
+      "localName": "Αγίου Πνεύματος",
+      "name": "Pentecost",
+      "countryCode": "CY",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-06-01",
+      "localName": "Δευτέρα Πεντηκοστής",
+      "name": "Whit Monday",
+      "countryCode": "CY",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-08-15",
+      "localName": "Η Κοίμησις της Θεοτόκου",
+      "name": "Assumption of the Virgin Mary",
+      "countryCode": "CY",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-10-01",
+      "localName": "Επέτειος Κυπριακής Ανεξαρτησίας",
+      "name": "Cyprus Independence Day",
+      "countryCode": "CY",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-10-28",
+      "localName": "Το Όχι",
+      "name": "Ohi Day",
+      "countryCode": "CY",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-12-24",
+      "localName": "Παραμονή Χριστουγέννων",
+      "name": "Christmas Eve",
+      "countryCode": "CY",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-12-25",
+      "localName": "Χριστούγεννα",
+      "name": "Christmas Day",
+      "countryCode": "CY",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-12-26",
+      "localName": "Δεύτερη μέρα των Χριστουγέννων",
+      "name": "St. Stephen's Day",
+      "countryCode": "CY",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    }
+  ],
+  "nager:2026:CZ": [
+    {
+      "date": "2026-01-01",
+      "localName": "Den obnovy samostatného českého státu; Nový rok",
+      "name": "New Year's Day",
+      "countryCode": "CZ",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-04-03",
+      "localName": "Velký pátek",
+      "name": "Good Friday",
+      "countryCode": "CZ",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-04-06",
+      "localName": "Velikonoční pondělí",
+      "name": "Easter Monday",
+      "countryCode": "CZ",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-05-01",
+      "localName": "Svátek práce",
+      "name": "Labour Day",
+      "countryCode": "CZ",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-05-08",
+      "localName": "Den vítězství",
+      "name": "Liberation Day",
+      "countryCode": "CZ",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-07-05",
+      "localName": "Den slovanských věrozvěstů Cyrila a Metoděje",
+      "name": "Saints Cyril and Methodius Day",
+      "countryCode": "CZ",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-07-06",
+      "localName": "Den upálení mistra Jana Husa",
+      "name": "Jan Hus Day",
+      "countryCode": "CZ",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-09-28",
+      "localName": "Den české státnosti",
+      "name": "St. Wenceslas Day",
+      "countryCode": "CZ",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-10-28",
+      "localName": "Den vzniku samostatného československého státu",
+      "name": "Independent Czechoslovak State Day",
+      "countryCode": "CZ",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-11-17",
+      "localName": "Den boje za svobodu a demokracii a Mezinárodní den studentstva",
+      "name": "Struggle for Freedom and Democracy Day",
+      "countryCode": "CZ",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-12-24",
+      "localName": "Štědrý den",
+      "name": "Christmas Eve",
+      "countryCode": "CZ",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-12-25",
+      "localName": "1. svátek vánoční",
+      "name": "Christmas Day",
+      "countryCode": "CZ",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-12-26",
+      "localName": "2. svátek vánoční",
+      "name": "St. Stephen's Day",
+      "countryCode": "CZ",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    }
+  ],
+  "nager:2026:DE": [
+    {
+      "date": "2026-01-01",
+      "localName": "Neujahr",
+      "name": "New Year's Day",
+      "countryCode": "DE",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-01-06",
+      "localName": "Heilige Drei Könige",
+      "name": "Epiphany",
+      "countryCode": "DE",
+      "fixed": false,
+      "global": false,
+      "counties": [
+        "DE-BW",
+        "DE-BY",
+        "DE-ST"
+      ],
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-03-08",
+      "localName": "Internationaler Frauentag",
+      "name": "International Women's Day",
+      "countryCode": "DE",
+      "fixed": false,
+      "global": false,
+      "counties": [
+        "DE-BE",
+        "DE-MV"
+      ],
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-04-03",
+      "localName": "Karfreitag",
+      "name": "Good Friday",
+      "countryCode": "DE",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-04-05",
+      "localName": "Ostersonntag",
+      "name": "Easter Sunday",
+      "countryCode": "DE",
+      "fixed": false,
+      "global": false,
+      "counties": [
+        "DE-BB"
+      ],
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-04-06",
+      "localName": "Ostermontag",
+      "name": "Easter Monday",
+      "countryCode": "DE",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-05-01",
+      "localName": "Tag der Arbeit",
+      "name": "Labour Day",
+      "countryCode": "DE",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-05-14",
+      "localName": "Christi Himmelfahrt",
+      "name": "Ascension Day",
+      "countryCode": "DE",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-05-24",
+      "localName": "Pfingstsonntag",
+      "name": "Pentecost",
+      "countryCode": "DE",
+      "fixed": false,
+      "global": false,
+      "counties": [
+        "DE-BB"
+      ],
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-05-25",
+      "localName": "Pfingstmontag",
+      "name": "Whit Monday",
+      "countryCode": "DE",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-06-04",
+      "localName": "Fronleichnam",
+      "name": "Corpus Christi",
+      "countryCode": "DE",
+      "fixed": false,
+      "global": false,
+      "counties": [
+        "DE-BW",
+        "DE-BY",
+        "DE-HE",
+        "DE-NW",
+        "DE-RP",
+        "DE-SL"
+      ],
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-08-15",
+      "localName": "Mariä Himmelfahrt",
+      "name": "Assumption Day",
+      "countryCode": "DE",
+      "fixed": false,
+      "global": false,
+      "counties": [
+        "DE-SL"
+      ],
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-09-20",
+      "localName": "Weltkindertag",
+      "name": "World Children's Day",
+      "countryCode": "DE",
+      "fixed": false,
+      "global": false,
+      "counties": [
+        "DE-TH"
+      ],
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-10-03",
+      "localName": "Tag der Deutschen Einheit",
+      "name": "German Unity Day",
+      "countryCode": "DE",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-10-31",
+      "localName": "Reformationstag",
+      "name": "Reformation Day",
+      "countryCode": "DE",
+      "fixed": false,
+      "global": false,
+      "counties": [
+        "DE-BB",
+        "DE-MV",
+        "DE-SN",
+        "DE-ST",
+        "DE-TH",
+        "DE-HB",
+        "DE-HH",
+        "DE-NI",
+        "DE-SH"
+      ],
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-11-01",
+      "localName": "Allerheiligen",
+      "name": "All Saints' Day",
+      "countryCode": "DE",
+      "fixed": false,
+      "global": false,
+      "counties": [
+        "DE-BW",
+        "DE-BY",
+        "DE-NW",
+        "DE-RP",
+        "DE-SL"
+      ],
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-11-18",
+      "localName": "Buß- und Bettag",
+      "name": "Repentance and Prayer Day",
+      "countryCode": "DE",
+      "fixed": false,
+      "global": false,
+      "counties": [
+        "DE-SN"
+      ],
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-12-25",
+      "localName": "Erster Weihnachtstag",
+      "name": "Christmas Day",
+      "countryCode": "DE",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-12-26",
+      "localName": "Zweiter Weihnachtstag",
+      "name": "St. Stephen's Day",
+      "countryCode": "DE",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    }
+  ],
+  "nager:2026:DK": [
+    {
+      "date": "2026-01-01",
+      "localName": "Nytårsdag",
+      "name": "New Year's Day",
+      "countryCode": "DK",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-04-02",
+      "localName": "Skærtorsdag",
+      "name": "Maundy Thursday",
+      "countryCode": "DK",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-04-03",
+      "localName": "Langfredag",
+      "name": "Good Friday",
+      "countryCode": "DK",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-04-05",
+      "localName": "Påskedag",
+      "name": "Easter Sunday",
+      "countryCode": "DK",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-04-06",
+      "localName": "2. Påskedag",
+      "name": "Easter Monday",
+      "countryCode": "DK",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-05-14",
+      "localName": "Kristi Himmelfartsdag",
+      "name": "Ascension Day",
+      "countryCode": "DK",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-05-15",
+      "localName": "Banklukkedag",
+      "name": "Bank closing day",
+      "countryCode": "DK",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Bank",
+        "School",
+        "Optional"
+      ]
+    },
+    {
+      "date": "2026-05-24",
+      "localName": "Pinsedag",
+      "name": "Pentecost",
+      "countryCode": "DK",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-05-25",
+      "localName": "2. Pinsedag",
+      "name": "Whit Monday",
+      "countryCode": "DK",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-06-05",
+      "localName": "Grundlovsdag",
+      "name": "Constitution Day",
+      "countryCode": "DK",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Bank",
+        "School",
+        "Optional"
+      ]
+    },
+    {
+      "date": "2026-12-24",
+      "localName": "Juleaftensdag",
+      "name": "Christmas Eve",
+      "countryCode": "DK",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Bank",
+        "School",
+        "Optional"
+      ]
+    },
+    {
+      "date": "2026-12-25",
+      "localName": "Juledag / 1. juledag",
+      "name": "Christmas Day",
+      "countryCode": "DK",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-12-26",
+      "localName": "2. juledag",
+      "name": "St. Stephen's Day",
+      "countryCode": "DK",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-12-31",
+      "localName": "Nytårsaftensdag",
+      "name": "New Year's Eve",
+      "countryCode": "DK",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Bank",
+        "School",
+        "Optional"
+      ]
+    }
+  ],
+  "nager:2026:EE": [
+    {
+      "date": "2026-01-01",
+      "localName": "uusaasta",
+      "name": "New Year's Day",
+      "countryCode": "EE",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-02-24",
+      "localName": "iseseisvuspäev",
+      "name": "Independence Day",
+      "countryCode": "EE",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-04-03",
+      "localName": "suur reede",
+      "name": "Good Friday",
+      "countryCode": "EE",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-04-05",
+      "localName": "ülestõusmispühade 1. püha",
+      "name": "Easter Sunday",
+      "countryCode": "EE",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-05-01",
+      "localName": "kevadpüha",
+      "name": "Spring Day",
+      "countryCode": "EE",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-05-24",
+      "localName": "nelipühade 1. püha",
+      "name": "Pentecost",
+      "countryCode": "EE",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-06-23",
+      "localName": "võidupüha and jaanilaupäev",
+      "name": "Victory Day",
+      "countryCode": "EE",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-06-24",
+      "localName": "jaanipäev",
+      "name": "Midsummer Day",
+      "countryCode": "EE",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-08-20",
+      "localName": "taasiseseisvumispäev",
+      "name": "Day of Restoration of Independence",
+      "countryCode": "EE",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-12-24",
+      "localName": "jõululaupäev",
+      "name": "Christmas Eve",
+      "countryCode": "EE",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-12-25",
+      "localName": "esimene jõulupüha",
+      "name": "Christmas Day",
+      "countryCode": "EE",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-12-26",
+      "localName": "teine jõulupüha",
+      "name": "St. Stephen's Day",
+      "countryCode": "EE",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    }
+  ],
+  "nager:2026:ES": [
+    {
+      "date": "2026-01-01",
+      "localName": "Año Nuevo",
+      "name": "New Year's Day",
+      "countryCode": "ES",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-01-06",
+      "localName": "Día de Reyes / Epifanía del Señor",
+      "name": "Epiphany",
+      "countryCode": "ES",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-02-28",
+      "localName": "Día de Andalucía",
+      "name": "Day of Andalucía",
+      "countryCode": "ES",
+      "fixed": false,
+      "global": false,
+      "counties": [
+        "ES-AN"
+      ],
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-03-01",
+      "localName": "Dia de les Illes Balears",
+      "name": "Day of the Balearic Islands",
+      "countryCode": "ES",
+      "fixed": false,
+      "global": false,
+      "counties": [
+        "ES-IB"
+      ],
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-04-02",
+      "localName": "Jueves Santo",
+      "name": "Maundy Thursday",
+      "countryCode": "ES",
+      "fixed": false,
+      "global": false,
+      "counties": [
+        "ES-AN",
+        "ES-AR",
+        "ES-CL",
+        "ES-CM",
+        "ES-CN",
+        "ES-EX",
+        "ES-GA",
+        "ES-IB",
+        "ES-RI",
+        "ES-MD",
+        "ES-MC",
+        "ES-NC",
+        "ES-AS",
+        "ES-PV",
+        "ES-CB"
+      ],
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-04-03",
+      "localName": "Viernes Santo",
+      "name": "Good Friday",
+      "countryCode": "ES",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-04-06",
+      "localName": "Lunes de Pascua",
+      "name": "Easter Monday",
+      "countryCode": "ES",
+      "fixed": false,
+      "global": false,
+      "counties": [
+        "ES-CT",
+        "ES-IB",
+        "ES-RI",
+        "ES-NC",
+        "ES-PV",
+        "ES-VC"
+      ],
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-04-23",
+      "localName": "Día de Castilla y León",
+      "name": "Castile and León Day",
+      "countryCode": "ES",
+      "fixed": false,
+      "global": false,
+      "counties": [
+        "ES-CL"
+      ],
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-04-23",
+      "localName": "San Jorge (Día de Aragón)",
+      "name": "Day of Aragón",
+      "countryCode": "ES",
+      "fixed": false,
+      "global": false,
+      "counties": [
+        "ES-AR"
+      ],
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-05-01",
+      "localName": "Fiesta del trabajo",
+      "name": "Labour Day",
+      "countryCode": "ES",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-05-02",
+      "localName": "Fiesta de la Comunidad de Madrid",
+      "name": "Day of Madrid",
+      "countryCode": "ES",
+      "fixed": false,
+      "global": false,
+      "counties": [
+        "ES-MD"
+      ],
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-05-17",
+      "localName": "Día das Letras Galegas",
+      "name": "Galician Literature Day",
+      "countryCode": "ES",
+      "fixed": false,
+      "global": false,
+      "counties": [
+        "ES-GA"
+      ],
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-05-30",
+      "localName": "Día de Canarias",
+      "name": "Day of the Canary Islands",
+      "countryCode": "ES",
+      "fixed": false,
+      "global": false,
+      "counties": [
+        "ES-CN"
+      ],
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-05-31",
+      "localName": "Día de la Región Castilla-La Mancha",
+      "name": "Day of Castilla-La Mancha",
+      "countryCode": "ES",
+      "fixed": false,
+      "global": false,
+      "counties": [
+        "ES-CM"
+      ],
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-06-04",
+      "localName": "Corpus Christi",
+      "name": "Corpus Christi",
+      "countryCode": "ES",
+      "fixed": false,
+      "global": false,
+      "counties": [
+        "ES-CM"
+      ],
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-06-09",
+      "localName": "Día de La Rioja",
+      "name": "Day of La Rioja",
+      "countryCode": "ES",
+      "fixed": false,
+      "global": false,
+      "counties": [
+        "ES-RI"
+      ],
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-06-09",
+      "localName": "Día de la Región de Murcia",
+      "name": "Day of Murcia",
+      "countryCode": "ES",
+      "fixed": false,
+      "global": false,
+      "counties": [
+        "ES-MC"
+      ],
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-06-24",
+      "localName": "Sant Joan",
+      "name": "St. John's Day",
+      "countryCode": "ES",
+      "fixed": false,
+      "global": false,
+      "counties": [
+        "ES-CT",
+        "ES-VC"
+      ],
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-07-25",
+      "localName": "Santiago Apóstol",
+      "name": "Santiago Apóstol",
+      "countryCode": "ES",
+      "fixed": false,
+      "global": false,
+      "counties": [
+        "ES-GA",
+        "ES-PV"
+      ],
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-07-28",
+      "localName": "Día de las Instituciones de Cantabria",
+      "name": "Day of the Cantabrian Institutions",
+      "countryCode": "ES",
+      "fixed": false,
+      "global": false,
+      "counties": [
+        "ES-CB"
+      ],
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-08-15",
+      "localName": "Asunción",
+      "name": "Assumption",
+      "countryCode": "ES",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-09-08",
+      "localName": "Día de Asturias",
+      "name": "Day of Asturias",
+      "countryCode": "ES",
+      "fixed": false,
+      "global": false,
+      "counties": [
+        "ES-AS"
+      ],
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-09-08",
+      "localName": "Día de Extremadura",
+      "name": "Day of Extremadura",
+      "countryCode": "ES",
+      "fixed": false,
+      "global": false,
+      "counties": [
+        "ES-EX"
+      ],
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-09-11",
+      "localName": "Diada Nacional de Catalunya",
+      "name": "National Day of Catalonia",
+      "countryCode": "ES",
+      "fixed": false,
+      "global": false,
+      "counties": [
+        "ES-CT"
+      ],
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-09-15",
+      "localName": "Festividad de la Bien Aparecida",
+      "name": "Feast of Our Lady of Bien Aparecida",
+      "countryCode": "ES",
+      "fixed": false,
+      "global": false,
+      "counties": [
+        "ES-CB"
+      ],
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-10-09",
+      "localName": "Dia de la Comunitat Valenciana",
+      "name": "Day of the Valencian Community",
+      "countryCode": "ES",
+      "fixed": false,
+      "global": false,
+      "counties": [
+        "ES-VC"
+      ],
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-10-12",
+      "localName": "Fiesta Nacional de España",
+      "name": "National Day of Spain",
+      "countryCode": "ES",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-11-01",
+      "localName": "Día de todos los Santos",
+      "name": "All Saints Day",
+      "countryCode": "ES",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-12-06",
+      "localName": "Día de la Constitución",
+      "name": "Constitution Day",
+      "countryCode": "ES",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-12-08",
+      "localName": "Inmaculada Concepción",
+      "name": "Immaculate Conception",
+      "countryCode": "ES",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-12-25",
+      "localName": "Navidad",
+      "name": "Christmas Day",
+      "countryCode": "ES",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-12-26",
+      "localName": "Feast of Saint Stephen",
+      "name": "St. Stephen's Day",
+      "countryCode": "ES",
+      "fixed": false,
+      "global": false,
+      "counties": [
+        "ES-CT"
+      ],
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    }
+  ],
+  "nager:2026:FI": [
+    {
+      "date": "2026-01-01",
+      "localName": "Uudenvuodenpäivä",
+      "name": "New Year's Day",
+      "countryCode": "FI",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-01-06",
+      "localName": "Loppiainen",
+      "name": "Epiphany",
+      "countryCode": "FI",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-04-03",
+      "localName": "Pitkäperjantai",
+      "name": "Good Friday",
+      "countryCode": "FI",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-04-05",
+      "localName": "Pääsiäispäivä",
+      "name": "Easter Sunday",
+      "countryCode": "FI",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-04-06",
+      "localName": "Toinen pääsiäispäivä",
+      "name": "Easter Monday",
+      "countryCode": "FI",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-05-01",
+      "localName": "Vappu",
+      "name": "May Day",
+      "countryCode": "FI",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-05-14",
+      "localName": "Helatorstai",
+      "name": "Ascension Day",
+      "countryCode": "FI",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-05-24",
+      "localName": "Helluntaipäivä",
+      "name": "Pentecost",
+      "countryCode": "FI",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-06-19",
+      "localName": "Juhannusaatto",
+      "name": "Midsummer Eve",
+      "countryCode": "FI",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-06-20",
+      "localName": "Juhannuspäivä",
+      "name": "Midsummer Day",
+      "countryCode": "FI",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-10-31",
+      "localName": "Pyhäinpäivä",
+      "name": "All Saints' Day",
+      "countryCode": "FI",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-12-06",
+      "localName": "Itsenäisyyspäivä",
+      "name": "Independence Day",
+      "countryCode": "FI",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-12-24",
+      "localName": "Jouluaatto",
+      "name": "Christmas Eve",
+      "countryCode": "FI",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-12-25",
+      "localName": "Joulupäivä",
+      "name": "Christmas Day",
+      "countryCode": "FI",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-12-26",
+      "localName": "Tapaninpäivä",
+      "name": "St. Stephen's Day",
+      "countryCode": "FI",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    }
+  ],
+  "nager:2026:FR": [
+    {
+      "date": "2026-01-01",
+      "localName": "Jour de l'an",
+      "name": "New Year's Day",
+      "countryCode": "FR",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-04-06",
+      "localName": "Lundi de Pâques",
+      "name": "Easter Monday",
+      "countryCode": "FR",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-05-01",
+      "localName": "Fête du Travail",
+      "name": "Labour Day",
+      "countryCode": "FR",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-05-08",
+      "localName": "Victoire 1945",
+      "name": "Victory in Europe Day",
+      "countryCode": "FR",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-05-14",
+      "localName": "Ascension",
+      "name": "Ascension Day",
+      "countryCode": "FR",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-05-25",
+      "localName": "Lundi de Pentecôte",
+      "name": "Whit Monday",
+      "countryCode": "FR",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-07-14",
+      "localName": "Fête nationale",
+      "name": "Bastille Day",
+      "countryCode": "FR",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-08-15",
+      "localName": "Assomption",
+      "name": "Assumption Day",
+      "countryCode": "FR",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-11-01",
+      "localName": "Toussaint",
+      "name": "All Saints' Day",
+      "countryCode": "FR",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-11-11",
+      "localName": "Armistice 1918",
+      "name": "Armistice Day",
+      "countryCode": "FR",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-12-25",
+      "localName": "Noël",
+      "name": "Christmas Day",
+      "countryCode": "FR",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    }
+  ],
+  "nager:2026:GR": [
+    {
+      "date": "2026-01-01",
+      "localName": "Πρωτοχρονιά",
+      "name": "New Year's Day",
+      "countryCode": "GR",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-01-06",
+      "localName": "Θεοφάνεια",
+      "name": "Epiphany",
+      "countryCode": "GR",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-02-23",
+      "localName": "Καθαρά Δευτέρα",
+      "name": "Clean Monday",
+      "countryCode": "GR",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-03-25",
+      "localName": "Ευαγγελισμός της Θεοτόκου",
+      "name": "Annunciation",
+      "countryCode": "GR",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-03-25",
+      "localName": "Εικοστή Πέμπτη Μαρτίου",
+      "name": "Independence Day",
+      "countryCode": "GR",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-04-10",
+      "localName": "Μεγάλη Παρασκευή",
+      "name": "Good Friday",
+      "countryCode": "GR",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-04-12",
+      "localName": "Κυριακή του Πάσχα",
+      "name": "Easter Sunday",
+      "countryCode": "GR",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-04-13",
+      "localName": "Δευτέρα του Πάσχα",
+      "name": "Easter Monday",
+      "countryCode": "GR",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-05-01",
+      "localName": "Εργατική Πρωτομαγιά",
+      "name": "Labour Day",
+      "countryCode": "GR",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-05-31",
+      "localName": "Πεντηκοστή",
+      "name": "Pentecost",
+      "countryCode": "GR",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-06-01",
+      "localName": "Δευτέρα Πεντηκοστής",
+      "name": "Whit Monday",
+      "countryCode": "GR",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-08-15",
+      "localName": "Κοίμηση της Θεοτόκου",
+      "name": "Assumption Day",
+      "countryCode": "GR",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-10-28",
+      "localName": "Το Όχι",
+      "name": "Ochi Day",
+      "countryCode": "GR",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-12-25",
+      "localName": "Χριστούγεννα",
+      "name": "Christmas Day",
+      "countryCode": "GR",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-12-26",
+      "localName": "Σύναξις Υπεραγίας Θεοτόκου Μαρίας",
+      "name": "St. Stephen's Day",
+      "countryCode": "GR",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    }
+  ],
+  "nager:2026:HR": [
+    {
+      "date": "2026-01-01",
+      "localName": "Nova Godina",
+      "name": "New Year's Day",
+      "countryCode": "HR",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-01-06",
+      "localName": "Bogojavljenje, Sveta tri kralja",
+      "name": "Epiphany",
+      "countryCode": "HR",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-04-05",
+      "localName": "Uskrs i uskrsni ponedjeljak",
+      "name": "Easter Sunday",
+      "countryCode": "HR",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-04-06",
+      "localName": "Uskrs i uskrsni ponedjeljak",
+      "name": "Easter Monday",
+      "countryCode": "HR",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-05-01",
+      "localName": "Međunarodni praznik rada",
+      "name": "International Workers' Day",
+      "countryCode": "HR",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-05-30",
+      "localName": "Dan državnosti",
+      "name": "National Day",
+      "countryCode": "HR",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-06-04",
+      "localName": "Tijelovo",
+      "name": "Corpus Christi",
+      "countryCode": "HR",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-06-22",
+      "localName": "Dan antifašističke borbe",
+      "name": "Anti-Fascist Struggle Day",
+      "countryCode": "HR",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-08-05",
+      "localName": "Dan pobjede i domovinske zahvalnosti i Dan hrvatskih branitelja",
+      "name": "Victory and Homeland Thanksgiving Day and the Day of Croatian defenders",
+      "countryCode": "HR",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-08-15",
+      "localName": "Velika Gospa",
+      "name": "Assumption Day",
+      "countryCode": "HR",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-11-01",
+      "localName": "Dan svih svetih",
+      "name": "All Saints' Day",
+      "countryCode": "HR",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-11-18",
+      "localName": "Dan sjećanja na žrtve Domovinskog rata",
+      "name": "Remembrance Day",
+      "countryCode": "HR",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-12-25",
+      "localName": "Božić",
+      "name": "Christmas Day",
+      "countryCode": "HR",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-12-26",
+      "localName": "Prvi dan po Božiću, Sveti Stjepan, Štefanje, Stipanje",
+      "name": "St. Stephen's Day",
+      "countryCode": "HR",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    }
+  ],
+  "nager:2026:HU": [
+    {
+      "date": "2026-01-01",
+      "localName": "Újév",
+      "name": "New Year's Day",
+      "countryCode": "HU",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-03-15",
+      "localName": "Nemzeti ünnep",
+      "name": "1848 Revolution Memorial Day",
+      "countryCode": "HU",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-04-03",
+      "localName": "Nagypéntek",
+      "name": "Good Friday",
+      "countryCode": "HU",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-04-05",
+      "localName": "Húsvétvasárnap",
+      "name": "Easter Sunday",
+      "countryCode": "HU",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-04-06",
+      "localName": "Húsvéthétfő",
+      "name": "Easter Monday",
+      "countryCode": "HU",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-05-01",
+      "localName": "A munka ünnepe",
+      "name": "Labour day",
+      "countryCode": "HU",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-05-24",
+      "localName": "Pünkösdvasárnap",
+      "name": "Pentecost",
+      "countryCode": "HU",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-05-25",
+      "localName": "Pünkösdhétfő",
+      "name": "Whit Monday",
+      "countryCode": "HU",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-08-20",
+      "localName": "Az államalapítás ünnepe",
+      "name": "State Foundation Day",
+      "countryCode": "HU",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-10-23",
+      "localName": "Nemzeti ünnep",
+      "name": "1956 Revolution Memorial Day",
+      "countryCode": "HU",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-11-01",
+      "localName": "Mindenszentek",
+      "name": "All Saints Day",
+      "countryCode": "HU",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-12-25",
+      "localName": "Karácsony",
+      "name": "Christmas Day",
+      "countryCode": "HU",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-12-26",
+      "localName": "Karácsony másnapja",
+      "name": "St. Stephen's Day",
+      "countryCode": "HU",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    }
+  ],
+  "nager:2026:ID": [
+    {
+      "date": "2026-01-01",
+      "localName": "Tahun Baru Masehi",
+      "name": "New Year's Day",
+      "countryCode": "ID",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-04-03",
+      "localName": "Wafat Isa Almasih",
+      "name": "Good Friday",
+      "countryCode": "ID",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-04-05",
+      "localName": "Paskah",
+      "name": "Easter Sunday",
+      "countryCode": "ID",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-05-01",
+      "localName": "Hari Buruh Internasional",
+      "name": "Labour Day",
+      "countryCode": "ID",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-05-14",
+      "localName": "Kenaikan Isa Almasih",
+      "name": "Ascension Day",
+      "countryCode": "ID",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-06-01",
+      "localName": "Hari Lahir Pancasila",
+      "name": "Pancasila Day",
+      "countryCode": "ID",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-08-17",
+      "localName": "Hari Ulang Tahun Kemerdekaan Republik Indonesia",
+      "name": "Independence Day",
+      "countryCode": "ID",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-12-25",
+      "localName": "Hari Raya Natal",
+      "name": "Christmas Day",
+      "countryCode": "ID",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    }
+  ],
+  "nager:2026:IE": [
+    {
+      "date": "2026-01-01",
+      "localName": "Lá Caille",
+      "name": "New Year's Day",
+      "countryCode": "IE",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-02-02",
+      "localName": "Lá Fhéile Bríde",
+      "name": "Saint Brigid's Day",
+      "countryCode": "IE",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-03-17",
+      "localName": "Lá Fhéile Pádraig",
+      "name": "Saint Patrick's Day",
+      "countryCode": "IE",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-04-03",
+      "localName": "Aoine an Chéasta",
+      "name": "Good Friday",
+      "countryCode": "IE",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Bank",
+        "School"
+      ]
+    },
+    {
+      "date": "2026-04-06",
+      "localName": "Luan Cásca",
+      "name": "Easter Monday",
+      "countryCode": "IE",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-05-04",
+      "localName": "Lá Bealtaine",
+      "name": "May Day",
+      "countryCode": "IE",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-06-01",
+      "localName": "Lá Saoire i mí an Mheithimh",
+      "name": "June Holiday",
+      "countryCode": "IE",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-08-03",
+      "localName": "Lá Saoire i mí Lúnasa",
+      "name": "August Holiday",
+      "countryCode": "IE",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-10-26",
+      "localName": "Lá Saoire i mí Dheireadh Fómhair",
+      "name": "October Holiday",
+      "countryCode": "IE",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-12-25",
+      "localName": "Lá Nollag",
+      "name": "Christmas Day",
+      "countryCode": "IE",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-12-26",
+      "localName": "Lá Fhéile Stiofáin",
+      "name": "St. Stephen's Day",
+      "countryCode": "IE",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    }
+  ],
+  "nager:2026:IT": [
+    {
+      "date": "2026-01-01",
+      "localName": "Capodanno",
+      "name": "New Year's Day",
+      "countryCode": "IT",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-01-06",
+      "localName": "Epifania",
+      "name": "Epiphany",
+      "countryCode": "IT",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-04-05",
+      "localName": "Pasqua",
+      "name": "Easter Sunday",
+      "countryCode": "IT",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-04-06",
+      "localName": "Lunedì dell'Angelo",
+      "name": "Easter Monday",
+      "countryCode": "IT",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-04-25",
+      "localName": "Festa della Liberazione",
+      "name": "Liberation Day",
+      "countryCode": "IT",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-05-01",
+      "localName": "Festa del Lavoro",
+      "name": "International Workers Day",
+      "countryCode": "IT",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-05-25",
+      "localName": "Lunedì di Pentecoste",
+      "name": "Whit Monday",
+      "countryCode": "IT",
+      "fixed": false,
+      "global": false,
+      "counties": [
+        "IT-32"
+      ],
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-06-02",
+      "localName": "Festa della Repubblica",
+      "name": "Republic Day",
+      "countryCode": "IT",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-08-15",
+      "localName": "Ferragosto o Assunzione",
+      "name": "Assumption Day",
+      "countryCode": "IT",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-10-04",
+      "localName": "San Francesco d'Assisi",
+      "name": "St. Francis of Assisi's Day",
+      "countryCode": "IT",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-11-01",
+      "localName": "Tutti i santi",
+      "name": "All Saints Day",
+      "countryCode": "IT",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-12-08",
+      "localName": "Immacolata Concezione",
+      "name": "Immaculate Conception",
+      "countryCode": "IT",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-12-25",
+      "localName": "Natale",
+      "name": "Christmas Day",
+      "countryCode": "IT",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-12-26",
+      "localName": "Santo Stefano",
+      "name": "St. Stephen's Day",
+      "countryCode": "IT",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    }
+  ],
+  "nager:2026:JP": [
+    {
+      "date": "2026-01-01",
+      "localName": "元日",
+      "name": "New Year's Day",
+      "countryCode": "JP",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-01-12",
+      "localName": "成人の日",
+      "name": "Coming of Age Day",
+      "countryCode": "JP",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-02-11",
+      "localName": "建国記念の日",
+      "name": "Foundation Day",
+      "countryCode": "JP",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-02-23",
+      "localName": "天皇誕生日",
+      "name": "The Emperor's Birthday",
+      "countryCode": "JP",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-03-20",
+      "localName": "春分の日",
+      "name": "Vernal Equinox Day",
+      "countryCode": "JP",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-04-29",
+      "localName": "昭和の日",
+      "name": "Shōwa Day",
+      "countryCode": "JP",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-05-04",
+      "localName": "憲法記念日",
+      "name": "Constitution Memorial Day",
+      "countryCode": "JP",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-05-04",
+      "localName": "みどりの日",
+      "name": "Greenery Day",
+      "countryCode": "JP",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-05-05",
+      "localName": "こどもの日",
+      "name": "Children's Day",
+      "countryCode": "JP",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-07-20",
+      "localName": "海の日",
+      "name": "Marine Day",
+      "countryCode": "JP",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-08-11",
+      "localName": "山の日",
+      "name": "Mountain Day",
+      "countryCode": "JP",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-09-21",
+      "localName": "敬老の日",
+      "name": "Respect for the Aged Day",
+      "countryCode": "JP",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-09-23",
+      "localName": "秋分の日",
+      "name": "Autumnal Equinox Day",
+      "countryCode": "JP",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-10-12",
+      "localName": "スポーツの日",
+      "name": "Sports Day",
+      "countryCode": "JP",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-11-03",
+      "localName": "文化の日",
+      "name": "Culture Day",
+      "countryCode": "JP",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-11-23",
+      "localName": "勤労感謝の日",
+      "name": "Labour Thanksgiving Day",
+      "countryCode": "JP",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    }
+  ],
+  "nager:2026:KR": [
+    {
+      "date": "2026-01-01",
+      "localName": "새해",
+      "name": "New Year's Day",
+      "countryCode": "KR",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-02-16",
+      "localName": "설날",
+      "name": "Lunar New Year",
+      "countryCode": "KR",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-02-17",
+      "localName": "설날",
+      "name": "Lunar New Year",
+      "countryCode": "KR",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-02-18",
+      "localName": "설날",
+      "name": "Lunar New Year",
+      "countryCode": "KR",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-03-01",
+      "localName": "3·1절",
+      "name": "Independence Movement Day",
+      "countryCode": "KR",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-05-05",
+      "localName": "어린이날",
+      "name": "Children's Day",
+      "countryCode": "KR",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-05-24",
+      "localName": "부처님 오신 날",
+      "name": "Buddha's Birthday",
+      "countryCode": "KR",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-06-06",
+      "localName": "현충일",
+      "name": "Memorial Day",
+      "countryCode": "KR",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-08-15",
+      "localName": "광복절",
+      "name": "Liberation Day",
+      "countryCode": "KR",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-09-24",
+      "localName": "추석",
+      "name": "Chuseok",
+      "countryCode": "KR",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-09-25",
+      "localName": "추석",
+      "name": "Chuseok",
+      "countryCode": "KR",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-09-26",
+      "localName": "추석",
+      "name": "Chuseok",
+      "countryCode": "KR",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-10-03",
+      "localName": "개천절",
+      "name": "National Foundation Day",
+      "countryCode": "KR",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-10-09",
+      "localName": "한글날",
+      "name": "Hangul Day",
+      "countryCode": "KR",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-12-25",
+      "localName": "크리스마스",
+      "name": "Christmas Day",
+      "countryCode": "KR",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    }
+  ],
+  "nager:2026:LT": [
+    {
+      "date": "2026-01-01",
+      "localName": "Naujieji metai",
+      "name": "New Year's Day",
+      "countryCode": "LT",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-02-16",
+      "localName": "Lietuvos valstybės atkūrimo diena",
+      "name": "The Day of Restoration of the State of Lithuania",
+      "countryCode": "LT",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-03-11",
+      "localName": "Lietuvos nepriklausomybės atkūrimo diena",
+      "name": "Day of Restoration of Independence of Lithuania",
+      "countryCode": "LT",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-04-05",
+      "localName": "Velykos",
+      "name": "Easter Sunday",
+      "countryCode": "LT",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-04-06",
+      "localName": "Antroji Velykų diena",
+      "name": "Easter Monday",
+      "countryCode": "LT",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-05-01",
+      "localName": "Tarptautinė darbo diena",
+      "name": "International Working Day",
+      "countryCode": "LT",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-06-24",
+      "localName": "Joninės, Rasos",
+      "name": "St. John's Day",
+      "countryCode": "LT",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-07-06",
+      "localName": "Valstybės diena",
+      "name": "Statehood Day",
+      "countryCode": "LT",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-08-15",
+      "localName": "Žolinė",
+      "name": "Assumption Day",
+      "countryCode": "LT",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-11-01",
+      "localName": "Visų šventųjų diena",
+      "name": "All Saints' Day",
+      "countryCode": "LT",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-11-02",
+      "localName": "Vėlinės",
+      "name": "All Souls' Day",
+      "countryCode": "LT",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-12-24",
+      "localName": "Šv. Kūčios",
+      "name": "Christmas Eve",
+      "countryCode": "LT",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-12-25",
+      "localName": "Šv. Kalėdos",
+      "name": "Christmas Day",
+      "countryCode": "LT",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-12-26",
+      "localName": "Šv. Kalėdos",
+      "name": "St. Stephen's Day",
+      "countryCode": "LT",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    }
+  ],
+  "nager:2026:LU": [
+    {
+      "date": "2026-01-01",
+      "localName": "Neijoerschdag",
+      "name": "New Year's Day",
+      "countryCode": "LU",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-04-03",
+      "localName": "Karfreideg",
+      "name": "Good Friday",
+      "countryCode": "LU",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Bank"
+      ]
+    },
+    {
+      "date": "2026-04-06",
+      "localName": "Ouschterméindeg",
+      "name": "Easter Monday",
+      "countryCode": "LU",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-05-01",
+      "localName": "Dag vun der Aarbecht",
+      "name": "Labour Day",
+      "countryCode": "LU",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-05-09",
+      "localName": "Europadag",
+      "name": "Europe Day",
+      "countryCode": "LU",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-05-14",
+      "localName": "Christi Himmelfaart",
+      "name": "Ascension Day",
+      "countryCode": "LU",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-05-25",
+      "localName": "Péngschtméindeg",
+      "name": "Whit Monday",
+      "countryCode": "LU",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-06-23",
+      "localName": "Groussherzogsgebuertsdag",
+      "name": "Sovereign's birthday",
+      "countryCode": "LU",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-08-15",
+      "localName": "Léiffrawëschdag",
+      "name": "Assumption Day",
+      "countryCode": "LU",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-11-01",
+      "localName": "Allerhellgen",
+      "name": "All Saints' Day",
+      "countryCode": "LU",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-12-25",
+      "localName": "Chrëschtdag",
+      "name": "Christmas Day",
+      "countryCode": "LU",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-12-26",
+      "localName": "Stiefesdag",
+      "name": "St. Stephen's Day",
+      "countryCode": "LU",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    }
+  ],
+  "nager:2026:LV": [
+    {
+      "date": "2026-01-01",
+      "localName": "Jaunais Gads",
+      "name": "New Year's Day",
+      "countryCode": "LV",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-04-03",
+      "localName": "Lielā Piektdiena",
+      "name": "Good Friday",
+      "countryCode": "LV",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-04-05",
+      "localName": "Lieldienas",
+      "name": "Easter Sunday",
+      "countryCode": "LV",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-04-06",
+      "localName": "Otrās Lieldienas",
+      "name": "Easter Monday",
+      "countryCode": "LV",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-05-01",
+      "localName": "Darba svētki",
+      "name": "Labour Day",
+      "countryCode": "LV",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-05-04",
+      "localName": "Latvijas Republikas Neatkarības atjaunošanas diena",
+      "name": "Restoration of Independence day",
+      "countryCode": "LV",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-05-10",
+      "localName": "Mātes diena",
+      "name": "Mother's Day",
+      "countryCode": "LV",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-06-23",
+      "localName": "Līgo Diena",
+      "name": "Midsummer Eve",
+      "countryCode": "LV",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-06-24",
+      "localName": "Jāņi",
+      "name": "Midsummer Day",
+      "countryCode": "LV",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-11-18",
+      "localName": "Latvijas Republikas proklamēšanas diena",
+      "name": "Proclamation Day of the Republic of Latvia",
+      "countryCode": "LV",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-12-24",
+      "localName": "Ziemassvētku vakars",
+      "name": "Christmas Eve",
+      "countryCode": "LV",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-12-25",
+      "localName": "Ziemassvētki",
+      "name": "Christmas Day",
+      "countryCode": "LV",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-12-26",
+      "localName": "Otrie Ziemassvētki",
+      "name": "St. Stephen's Day",
+      "countryCode": "LV",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-12-31",
+      "localName": "Vecgada vakars",
+      "name": "New Year's Eve",
+      "countryCode": "LV",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    }
+  ],
+  "nager:2026:MT": [
+    {
+      "date": "2026-01-01",
+      "localName": "L-Ewwel tas-Sena",
+      "name": "New Year's Day",
+      "countryCode": "MT",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-02-10",
+      "localName": "In-Nawfraġju ta’ San Pawl",
+      "name": "Feast of St. Paul's Shipwreck",
+      "countryCode": "MT",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-03-19",
+      "localName": "San Ġużepp",
+      "name": "Feast of St. Joseph",
+      "countryCode": "MT",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-03-31",
+      "localName": "Jum il-Ħelsien",
+      "name": "Freedom Day",
+      "countryCode": "MT",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-04-03",
+      "localName": "Il-Ġimgħa l-Kbira",
+      "name": "Good Friday",
+      "countryCode": "MT",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-05-01",
+      "localName": "Jum il-Ħaddiem",
+      "name": "Worker's Day",
+      "countryCode": "MT",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-06-07",
+      "localName": "Sette Giugno",
+      "name": "Sette Giugno",
+      "countryCode": "MT",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-06-29",
+      "localName": "L-Imnarja",
+      "name": "Feast of St.Peter and St.Paul",
+      "countryCode": "MT",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-08-15",
+      "localName": "Santa Marija",
+      "name": "Assumption Day",
+      "countryCode": "MT",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-09-08",
+      "localName": "Il-Vittorja",
+      "name": "Feast of Our Lady of Victories",
+      "countryCode": "MT",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-09-21",
+      "localName": "L-Indipendenza",
+      "name": "Independence Day",
+      "countryCode": "MT",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-12-08",
+      "localName": "L-Immakulata Kunċizzjoni",
+      "name": "Feast of the Immaculate Conception",
+      "countryCode": "MT",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-12-13",
+      "localName": "Jum ir-Repubblika",
+      "name": "Republic Day",
+      "countryCode": "MT",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-12-25",
+      "localName": "Il-Milied​",
+      "name": "​Christmas Day",
+      "countryCode": "MT",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    }
+  ],
+  "nager:2026:MX": [
+    {
+      "date": "2026-01-01",
+      "localName": "Año Nuevo",
+      "name": "New Year's Day",
+      "countryCode": "MX",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-02-02",
+      "localName": "Día de la Constitución",
+      "name": "Constitution Day",
+      "countryCode": "MX",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-03-16",
+      "localName": "Natalicio de Benito Juárez",
+      "name": "Benito Juárez's birthday",
+      "countryCode": "MX",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-04-02",
+      "localName": "Jueves Santo",
+      "name": "Maundy Thursday",
+      "countryCode": "MX",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Bank",
+        "School",
+        "Authorities"
+      ]
+    },
+    {
+      "date": "2026-04-03",
+      "localName": "Viernes Santo",
+      "name": "Good Friday",
+      "countryCode": "MX",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Bank",
+        "School",
+        "Authorities"
+      ]
+    },
+    {
+      "date": "2026-05-01",
+      "localName": "Día del Trabajo",
+      "name": "Labour Day",
+      "countryCode": "MX",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-09-16",
+      "localName": "Día de la Independencia",
+      "name": "Independence Day",
+      "countryCode": "MX",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-11-16",
+      "localName": "Día de la Revolución",
+      "name": "Revolution Day",
+      "countryCode": "MX",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-12-25",
+      "localName": "Navidad",
+      "name": "Christmas Day",
+      "countryCode": "MX",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    }
+  ],
+  "nager:2026:NL": [
+    {
+      "date": "2026-01-01",
+      "localName": "Nieuwjaarsdag",
+      "name": "New Year's Day",
+      "countryCode": "NL",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-04-03",
+      "localName": "Goede Vrijdag",
+      "name": "Good Friday",
+      "countryCode": "NL",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "School",
+        "Authorities",
+        "Observance"
+      ]
+    },
+    {
+      "date": "2026-04-05",
+      "localName": "Eerste Paasdag",
+      "name": "Easter Sunday",
+      "countryCode": "NL",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-04-06",
+      "localName": "Tweede Paasdag",
+      "name": "Easter Monday",
+      "countryCode": "NL",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-04-27",
+      "localName": "Koningsdag",
+      "name": "King's Day",
+      "countryCode": "NL",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-05-05",
+      "localName": "Bevrijdingsdag",
+      "name": "Liberation Day",
+      "countryCode": "NL",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "School",
+        "Authorities"
+      ]
+    },
+    {
+      "date": "2026-05-14",
+      "localName": "Hemelvaartsdag",
+      "name": "Ascension Day",
+      "countryCode": "NL",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-05-24",
+      "localName": "Eerste Pinksterdag",
+      "name": "Pentecost",
+      "countryCode": "NL",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-05-25",
+      "localName": "Tweede Pinksterdag",
+      "name": "Whit Monday",
+      "countryCode": "NL",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-12-25",
+      "localName": "Eerste Kerstdag",
+      "name": "Christmas Day",
+      "countryCode": "NL",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-12-26",
+      "localName": "Tweede Kerstdag",
+      "name": "St. Stephen's Day",
+      "countryCode": "NL",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    }
+  ],
+  "nager:2026:PL": [
+    {
+      "date": "2026-01-01",
+      "localName": "Nowy Rok",
+      "name": "New Year's Day",
+      "countryCode": "PL",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-01-06",
+      "localName": "Święto Trzech Króli",
+      "name": "Epiphany",
+      "countryCode": "PL",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-04-05",
+      "localName": "Wielkanoc",
+      "name": "Easter Sunday",
+      "countryCode": "PL",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-04-06",
+      "localName": "Drugi Dzień Wielkanocy",
+      "name": "Easter Monday",
+      "countryCode": "PL",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-05-01",
+      "localName": "Święto Pracy",
+      "name": "May Day",
+      "countryCode": "PL",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-05-03",
+      "localName": "Święto Narodowe Trzeciego Maja",
+      "name": "Constitution Day",
+      "countryCode": "PL",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-05-24",
+      "localName": "Zielone Świątki",
+      "name": "Pentecost",
+      "countryCode": "PL",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-06-04",
+      "localName": "Boże Ciało",
+      "name": "Corpus Christi",
+      "countryCode": "PL",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-08-15",
+      "localName": "Wniebowzięcie Najświętszej Maryi Panny",
+      "name": "Assumption Day",
+      "countryCode": "PL",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-11-01",
+      "localName": "Wszystkich Świętych",
+      "name": "All Saints' Day",
+      "countryCode": "PL",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-11-11",
+      "localName": "Narodowe Święto Niepodległości",
+      "name": "Independence Day",
+      "countryCode": "PL",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-12-24",
+      "localName": "Wolna Wigilia",
+      "name": "Christmas Eve",
+      "countryCode": "PL",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-12-25",
+      "localName": "Boże Narodzenie",
+      "name": "Christmas Day",
+      "countryCode": "PL",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-12-26",
+      "localName": "Drugi Dzień Bożego Narodzenia",
+      "name": "St. Stephen's Day",
+      "countryCode": "PL",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    }
+  ],
+  "nager:2026:PT": [
+    {
+      "date": "2026-01-01",
+      "localName": "Ano Novo",
+      "name": "New Year's Day",
+      "countryCode": "PT",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-02-17",
+      "localName": "Carnaval",
+      "name": "Carnival",
+      "countryCode": "PT",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Optional"
+      ]
+    },
+    {
+      "date": "2026-04-03",
+      "localName": "Sexta-feira Santa",
+      "name": "Good Friday",
+      "countryCode": "PT",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-04-05",
+      "localName": "Domingo de Páscoa",
+      "name": "Easter Sunday",
+      "countryCode": "PT",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-04-25",
+      "localName": "Dia da Liberdade",
+      "name": "Freedom Day",
+      "countryCode": "PT",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-05-01",
+      "localName": "Dia do Trabalhador",
+      "name": "Labour Day",
+      "countryCode": "PT",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-06-01",
+      "localName": "Dia dos Açores",
+      "name": "Azores Day",
+      "countryCode": "PT",
+      "fixed": false,
+      "global": false,
+      "counties": [
+        "PT-20"
+      ],
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-06-04",
+      "localName": "Corpo de Deus",
+      "name": "Corpus Christi",
+      "countryCode": "PT",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-06-10",
+      "localName": "Dia de Portugal, de Camões e das Comunidades Portuguesas",
+      "name": "National Day",
+      "countryCode": "PT",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-07-01",
+      "localName": "Dia da Madeira",
+      "name": "Madeira Day",
+      "countryCode": "PT",
+      "fixed": false,
+      "global": false,
+      "counties": [
+        "PT-30"
+      ],
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-08-15",
+      "localName": "Assunção de Nossa Senhora",
+      "name": "Assumption Day",
+      "countryCode": "PT",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-10-05",
+      "localName": "Implantação da República",
+      "name": "Republic Day",
+      "countryCode": "PT",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-11-01",
+      "localName": "Dia de Todos-os-Santos",
+      "name": "All Saints Day",
+      "countryCode": "PT",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-12-01",
+      "localName": "Restauração da Independência",
+      "name": "Restoration of Independence",
+      "countryCode": "PT",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-12-08",
+      "localName": "Imaculada Conceição",
+      "name": "Immaculate Conception",
+      "countryCode": "PT",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-12-25",
+      "localName": "Natal",
+      "name": "Christmas Day",
+      "countryCode": "PT",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-12-26",
+      "localName": "Primeira Oitava",
+      "name": "St. Stephen's Day",
+      "countryCode": "PT",
+      "fixed": false,
+      "global": false,
+      "counties": [
+        "PT-30"
+      ],
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    }
+  ],
+  "nager:2026:RO": [
+    {
+      "date": "2026-01-01",
+      "localName": "Anul Nou",
+      "name": "New Year's Day",
+      "countryCode": "RO",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-01-02",
+      "localName": "Anul Nou",
+      "name": "Day after New Year's Day",
+      "countryCode": "RO",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-01-06",
+      "localName": "Bobotează",
+      "name": "Epiphany",
+      "countryCode": "RO",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-01-07",
+      "localName": "Sfântul Ion",
+      "name": "Saint John the Baptist",
+      "countryCode": "RO",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-01-24",
+      "localName": "Unirea Principatelor Române/Mica Unire",
+      "name": "Union Day/Small Union",
+      "countryCode": "RO",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-04-10",
+      "localName": "Vinerea mare",
+      "name": "Good Friday",
+      "countryCode": "RO",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-04-12",
+      "localName": "Paștele",
+      "name": "Easter Sunday",
+      "countryCode": "RO",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-04-13",
+      "localName": "Paștele",
+      "name": "Easter Monday",
+      "countryCode": "RO",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-05-01",
+      "localName": "Ziua Muncii",
+      "name": "Labour Day",
+      "countryCode": "RO",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-05-31",
+      "localName": "Rusaliile",
+      "name": "Pentecost",
+      "countryCode": "RO",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-06-01",
+      "localName": "Ziua Copilului",
+      "name": "Children's Day",
+      "countryCode": "RO",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-06-01",
+      "localName": "Rusaliile",
+      "name": "Whit Monday",
+      "countryCode": "RO",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-08-15",
+      "localName": "Adormirea Maicii Domnului/Sfânta Maria Mare",
+      "name": "Dormition of the Theotokos",
+      "countryCode": "RO",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-11-30",
+      "localName": "Sfântul Andrei",
+      "name": "St. Andrew's Day",
+      "countryCode": "RO",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-12-01",
+      "localName": "Ziua Națională/Marea Unire",
+      "name": "National Day/Great Union",
+      "countryCode": "RO",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-12-25",
+      "localName": "Crăciunul",
+      "name": "Christmas Day",
+      "countryCode": "RO",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-12-26",
+      "localName": "Crăciunul",
+      "name": "St. Stephen's Day",
+      "countryCode": "RO",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    }
+  ],
+  "nager:2026:RU": [
+    {
+      "date": "2026-01-01",
+      "localName": "Новый год",
+      "name": "New Year's Day",
+      "countryCode": "RU",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-01-02",
+      "localName": "Новогодние каникулы",
+      "name": "New Year holiday",
+      "countryCode": "RU",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-01-03",
+      "localName": "Новогодние каникулы",
+      "name": "New Year holiday",
+      "countryCode": "RU",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-01-04",
+      "localName": "Новогодние каникулы",
+      "name": "New Year holiday",
+      "countryCode": "RU",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-01-05",
+      "localName": "Новогодние каникулы",
+      "name": "New Year holiday",
+      "countryCode": "RU",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-01-06",
+      "localName": "Новогодние каникулы",
+      "name": "New Year holiday",
+      "countryCode": "RU",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-01-07",
+      "localName": "Рождество Христово",
+      "name": "Christmas Day (Orthodox)",
+      "countryCode": "RU",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-02-23",
+      "localName": "День защитника Отечества",
+      "name": "Defender of the Fatherland Day",
+      "countryCode": "RU",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-03-08",
+      "localName": "Международный женский день",
+      "name": "International Women's Day",
+      "countryCode": "RU",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-05-01",
+      "localName": "День труда",
+      "name": "Labour Day",
+      "countryCode": "RU",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-05-09",
+      "localName": "День Победы",
+      "name": "Victory Day",
+      "countryCode": "RU",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-06-12",
+      "localName": "День России",
+      "name": "Russia Day",
+      "countryCode": "RU",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-11-04",
+      "localName": "День народного единства",
+      "name": "Unity Day",
+      "countryCode": "RU",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    }
+  ],
+  "nager:2026:SE": [
+    {
+      "date": "2026-01-01",
+      "localName": "Nyårsdagen",
+      "name": "New Year's Day",
+      "countryCode": "SE",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-01-06",
+      "localName": "Trettondedag jul",
+      "name": "Epiphany",
+      "countryCode": "SE",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-04-03",
+      "localName": "Långfredagen",
+      "name": "Good Friday",
+      "countryCode": "SE",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-04-05",
+      "localName": "Påskdagen",
+      "name": "Easter Sunday",
+      "countryCode": "SE",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-04-06",
+      "localName": "Annandag påsk",
+      "name": "Easter Monday",
+      "countryCode": "SE",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-05-01",
+      "localName": "Första maj",
+      "name": "International Workers' Day",
+      "countryCode": "SE",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-05-14",
+      "localName": "Kristi himmelsfärdsdag",
+      "name": "Ascension Day",
+      "countryCode": "SE",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-05-24",
+      "localName": "Pingstdagen",
+      "name": "Pentecost",
+      "countryCode": "SE",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-06-06",
+      "localName": "Sveriges nationaldag",
+      "name": "National Day of Sweden",
+      "countryCode": "SE",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-06-19",
+      "localName": "Midsommarafton",
+      "name": "Midsummer Eve",
+      "countryCode": "SE",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-06-20",
+      "localName": "Midsommardagen",
+      "name": "Midsummer Day",
+      "countryCode": "SE",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-10-31",
+      "localName": "Alla helgons dag",
+      "name": "All Saints' Day",
+      "countryCode": "SE",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-12-24",
+      "localName": "Julafton",
+      "name": "Christmas Eve",
+      "countryCode": "SE",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-12-25",
+      "localName": "Juldagen",
+      "name": "Christmas Day",
+      "countryCode": "SE",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-12-26",
+      "localName": "Annandag jul",
+      "name": "St. Stephen's Day",
+      "countryCode": "SE",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-12-31",
+      "localName": "Nyårsafton",
+      "name": "New Year's Eve",
+      "countryCode": "SE",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    }
+  ],
+  "nager:2026:SI": [
+    {
+      "date": "2026-01-01",
+      "localName": "novo leto",
+      "name": "New Year's Day",
+      "countryCode": "SI",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-01-02",
+      "localName": "novo leto",
+      "name": "New Year's Day",
+      "countryCode": "SI",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-02-08",
+      "localName": "Prešernov dan",
+      "name": "Prešeren Day",
+      "countryCode": "SI",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-04-05",
+      "localName": "velikonočna nedelja in ponedeljek",
+      "name": "Easter Sunday",
+      "countryCode": "SI",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-04-06",
+      "localName": "velikonočna nedelja in ponedeljek",
+      "name": "Easter Monday",
+      "countryCode": "SI",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-04-27",
+      "localName": "dan upora proti okupatorju",
+      "name": "Day of Uprising Against Occupation",
+      "countryCode": "SI",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-05-01",
+      "localName": "praznik dela",
+      "name": "Labour Day",
+      "countryCode": "SI",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-05-02",
+      "localName": "praznik dela",
+      "name": "Labour Day",
+      "countryCode": "SI",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-05-02",
+      "localName": "dan Primoža Trubarja",
+      "name": "Primož Trubar Day",
+      "countryCode": "SI",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Observance"
+      ]
+    },
+    {
+      "date": "2026-05-24",
+      "localName": "binkoštna nedelja",
+      "name": "Pentecost",
+      "countryCode": "SI",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-06-25",
+      "localName": "dan državnosti",
+      "name": "Statehood Day",
+      "countryCode": "SI",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-08-14",
+      "localName": "dan suverenosti",
+      "name": "Sovereignty Day",
+      "countryCode": "SI",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Observance"
+      ]
+    },
+    {
+      "date": "2026-08-15",
+      "localName": "Marijino vnebovzetje",
+      "name": "Assumption Day",
+      "countryCode": "SI",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-08-15",
+      "localName": "združitev prekmurskih Slovencev z matičnim narodom",
+      "name": "Unification of Prekmurje Slovenes with the Mother Nation",
+      "countryCode": "SI",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Observance"
+      ]
+    },
+    {
+      "date": "2026-09-15",
+      "localName": "priključitev Primorske k matični domovini",
+      "name": "Integration of Primorska into the Homeland",
+      "countryCode": "SI",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Observance"
+      ]
+    },
+    {
+      "date": "2026-09-23",
+      "localName": "dan slovenskega športa",
+      "name": "Slovenian Sports Day",
+      "countryCode": "SI",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Observance"
+      ]
+    },
+    {
+      "date": "2026-10-31",
+      "localName": "dan reformacije",
+      "name": "Reformation Day",
+      "countryCode": "SI",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-11-01",
+      "localName": "dan spomina na mrtve",
+      "name": "Day of the Dead",
+      "countryCode": "SI",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-11-23",
+      "localName": "dan Rudolfa Maistra",
+      "name": "Rudolf Maister Day",
+      "countryCode": "SI",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Observance"
+      ]
+    },
+    {
+      "date": "2026-12-25",
+      "localName": "božič",
+      "name": "Christmas Day",
+      "countryCode": "SI",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-12-26",
+      "localName": "dan samostojnosti in enotnosti",
+      "name": "Independence and Unity Day",
+      "countryCode": "SI",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    }
+  ],
+  "nager:2026:SK": [
+    {
+      "date": "2026-01-01",
+      "localName": "Deň vzniku Slovenskej republiky",
+      "name": "Day of the Establishment of the Slovak Republic",
+      "countryCode": "SK",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-01-06",
+      "localName": "Zjavenie Pána",
+      "name": "Epiphany",
+      "countryCode": "SK",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-04-03",
+      "localName": "Veľkonočný piatok",
+      "name": "Good Friday",
+      "countryCode": "SK",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-04-06",
+      "localName": "Veľkonočný pondelok",
+      "name": "Easter Monday",
+      "countryCode": "SK",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-05-01",
+      "localName": "Sviatok práce",
+      "name": "International Workers' Day",
+      "countryCode": "SK",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-05-08",
+      "localName": "Deň víťazstva nad fašizmom",
+      "name": "Day of victory over fascism",
+      "countryCode": "SK",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Observance"
+      ]
+    },
+    {
+      "date": "2026-07-05",
+      "localName": "Sviatok svätého Cyrila a svätého Metoda",
+      "name": "St. Cyril and Methodius Day",
+      "countryCode": "SK",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-08-29",
+      "localName": "Výročie Slovenského národného povstania",
+      "name": "Slovak National Uprising anniversary",
+      "countryCode": "SK",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-09-01",
+      "localName": "Deň Ústavy Slovenskej republiky",
+      "name": "Day of the Constitution of the Slovak Republic",
+      "countryCode": "SK",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Observance"
+      ]
+    },
+    {
+      "date": "2026-09-15",
+      "localName": "Sedembolestná Panna Mária",
+      "name": "Day of Our Lady of the Seven Sorrows",
+      "countryCode": "SK",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Observance"
+      ]
+    },
+    {
+      "date": "2026-11-01",
+      "localName": "Sviatok Všetkých svätých",
+      "name": "All Saints’ Day",
+      "countryCode": "SK",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-11-17",
+      "localName": "Deň boja za slobodu a demokraciu",
+      "name": "Struggle for Freedom and Democracy Day",
+      "countryCode": "SK",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Observance"
+      ]
+    },
+    {
+      "date": "2026-12-24",
+      "localName": "Štedrý deň",
+      "name": "Christmas Eve",
+      "countryCode": "SK",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-12-25",
+      "localName": "Prvý sviatok vianočný",
+      "name": "Christmas Day",
+      "countryCode": "SK",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-12-26",
+      "localName": "Druhý sviatok vianočný",
+      "name": "St. Stephen's Day",
+      "countryCode": "SK",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    }
+  ],
+  "nager:2026:TR": [
+    {
+      "date": "2026-01-01",
+      "localName": "Yılbaşı",
+      "name": "New Year's Day",
+      "countryCode": "TR",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-04-23",
+      "localName": "Ulusal Egemenlik ve Çocuk Bayramı",
+      "name": "National Independence & Children's Day",
+      "countryCode": "TR",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-05-01",
+      "localName": "İşçi Bayramı",
+      "name": "Labour Day",
+      "countryCode": "TR",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-05-19",
+      "localName": "Atatürk'ü Anma, Gençlik ve Spor Bayramı",
+      "name": "Atatürk Commemoration & Youth Day",
+      "countryCode": "TR",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-07-15",
+      "localName": "Demokrasi ve Millî Birlik Günü",
+      "name": "Democracy and National Unity Day",
+      "countryCode": "TR",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-08-30",
+      "localName": "Zafer Bayramı",
+      "name": "Victory Day",
+      "countryCode": "TR",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-10-29",
+      "localName": "Cumhuriyet Bayramı",
+      "name": "Republic Day",
+      "countryCode": "TR",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    }
+  ],
+  "nager:2026:US": [
+    {
+      "date": "2026-01-01",
+      "localName": "New Year's Day",
+      "name": "New Year's Day",
+      "countryCode": "US",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-01-19",
+      "localName": "Martin Luther King, Jr. Day",
+      "name": "Martin Luther King, Jr. Day",
+      "countryCode": "US",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-02-12",
+      "localName": "Lincoln's Birthday",
+      "name": "Lincoln's Birthday",
+      "countryCode": "US",
+      "fixed": false,
+      "global": false,
+      "counties": [
+        "US-CA",
+        "US-CT",
+        "US-IL",
+        "US-IN",
+        "US-KY",
+        "US-MI",
+        "US-NY",
+        "US-MO",
+        "US-OH"
+      ],
+      "launchYear": null,
+      "types": [
+        "Observance"
+      ]
+    },
+    {
+      "date": "2026-02-16",
+      "localName": "Washington's Birthday",
+      "name": "Presidents Day",
+      "countryCode": "US",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-04-03",
+      "localName": "Good Friday",
+      "name": "Good Friday",
+      "countryCode": "US",
+      "fixed": false,
+      "global": false,
+      "counties": [
+        "US-CT",
+        "US-DE",
+        "US-HI",
+        "US-IN",
+        "US-KY",
+        "US-LA",
+        "US-NC",
+        "US-ND",
+        "US-NJ",
+        "US-TN"
+      ],
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-04-03",
+      "localName": "Good Friday",
+      "name": "Good Friday",
+      "countryCode": "US",
+      "fixed": false,
+      "global": false,
+      "counties": [
+        "US-TX"
+      ],
+      "launchYear": null,
+      "types": [
+        "Optional"
+      ]
+    },
+    {
+      "date": "2026-05-08",
+      "localName": "Truman Day",
+      "name": "Truman Day",
+      "countryCode": "US",
+      "fixed": false,
+      "global": false,
+      "counties": [
+        "US-MO"
+      ],
+      "launchYear": null,
+      "types": [
+        "School",
+        "Authorities"
+      ]
+    },
+    {
+      "date": "2026-05-25",
+      "localName": "Memorial Day",
+      "name": "Memorial Day",
+      "countryCode": "US",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-06-19",
+      "localName": "Juneteenth National Independence Day",
+      "name": "Juneteenth National Independence Day",
+      "countryCode": "US",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-07-03",
+      "localName": "Independence Day",
+      "name": "Independence Day",
+      "countryCode": "US",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-09-07",
+      "localName": "Labor Day",
+      "name": "Labour Day",
+      "countryCode": "US",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-10-12",
+      "localName": "Columbus Day",
+      "name": "Columbus Day",
+      "countryCode": "US",
+      "fixed": false,
+      "global": false,
+      "counties": [
+        "US-AL",
+        "US-AZ",
+        "US-CO",
+        "US-CT",
+        "US-GA",
+        "US-ID",
+        "US-IL",
+        "US-IN",
+        "US-IA",
+        "US-KS",
+        "US-KY",
+        "US-LA",
+        "US-ME",
+        "US-MD",
+        "US-MA",
+        "US-MS",
+        "US-MO",
+        "US-MT",
+        "US-NE",
+        "US-NH",
+        "US-NJ",
+        "US-NM",
+        "US-NY",
+        "US-NC",
+        "US-OH",
+        "US-OK",
+        "US-PA",
+        "US-RI",
+        "US-SC",
+        "US-TN",
+        "US-UT",
+        "US-VA",
+        "US-WV"
+      ],
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-10-12",
+      "localName": "Indigenous Peoples' Day",
+      "name": "Indigenous Peoples' Day",
+      "countryCode": "US",
+      "fixed": false,
+      "global": false,
+      "counties": [
+        "US-AK",
+        "US-AL",
+        "US-CA",
+        "US-HI",
+        "US-IA",
+        "US-LA",
+        "US-ME",
+        "US-MI",
+        "US-MN",
+        "US-NC",
+        "US-NE",
+        "US-NM",
+        "US-OK",
+        "US-OR",
+        "US-SD",
+        "US-TX",
+        "US-VA",
+        "US-VT",
+        "US-WI"
+      ],
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-11-11",
+      "localName": "Veterans Day",
+      "name": "Veterans Day",
+      "countryCode": "US",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-11-26",
+      "localName": "Thanksgiving Day",
+      "name": "Thanksgiving Day",
+      "countryCode": "US",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-12-25",
+      "localName": "Christmas Day",
+      "name": "Christmas Day",
+      "countryCode": "US",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    }
+  ],
+  "nager:2026:ZA": [
+    {
+      "date": "2026-01-01",
+      "localName": "New Year's Day",
+      "name": "New Year's Day",
+      "countryCode": "ZA",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-03-21",
+      "localName": "Human Rights Day",
+      "name": "Human Rights Day",
+      "countryCode": "ZA",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-04-03",
+      "localName": "Good Friday",
+      "name": "Good Friday",
+      "countryCode": "ZA",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-04-06",
+      "localName": "Family Day",
+      "name": "Family Day",
+      "countryCode": "ZA",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-04-27",
+      "localName": "Freedom Day",
+      "name": "Freedom Day",
+      "countryCode": "ZA",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-05-01",
+      "localName": "Workers' Day",
+      "name": "Workers' Day",
+      "countryCode": "ZA",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-06-16",
+      "localName": "Youth Day",
+      "name": "Youth Day",
+      "countryCode": "ZA",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-08-10",
+      "localName": "National Women's Day",
+      "name": "National Women's Day",
+      "countryCode": "ZA",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-09-24",
+      "localName": "Heritage Day",
+      "name": "Heritage Day",
+      "countryCode": "ZA",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-12-16",
+      "localName": "Day of Reconciliation",
+      "name": "Day of Reconciliation",
+      "countryCode": "ZA",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-12-25",
+      "localName": "Christmas Day",
+      "name": "Christmas Day",
+      "countryCode": "ZA",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2026-12-26",
+      "localName": "St. Stephen's Day",
+      "name": "Day of Goodwill",
+      "countryCode": "ZA",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    }
+  ]
+}
