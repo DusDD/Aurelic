@@ -30,7 +30,7 @@ class DividendEvent:
 
 
 class NasdaqCalendarWorker(QObject):
-    finished = Signal(list)  # list[DividendEvent]
+    finished = Signal(list, str)  # (list[DividendEvent], source_label)
     failed = Signal(str)
 
     def __init__(self, year: int, month: int, parent: QObject | None = None):
@@ -39,11 +39,31 @@ class NasdaqCalendarWorker(QObject):
         self._month = int(month)
 
     def run(self) -> None:
+        """
+        Strategy:
+        1) Try NASDAQ (no key) -> if returns events: use it
+        2) Else fallback to FMP dividends-calendar (requires FMP_API_KEY)
+        """
         try:
-            events = self._fetch_from_nasdaq_api()
-            self.finished.emit(events)
+            events = self._fetch_from_nasdaq_month()
+            if events:
+                self.finished.emit(events, "NASDAQ")
+                return
+        except Exception:
+            # Nasdaq is best-effort
+            pass
+
+        try:
+            events = self._fetch_from_fmp_month()
+            if events:
+                self.finished.emit(events, "FMP")
+                return
+            # If FMP returns empty, treat it as a real "no events" case
+            self.finished.emit([], "FMP")
         except Exception as e:
-            self.failed.emit(str(e)[:240])
+            self.failed.emit(str(e)[:500])
+
+    # ---------- HTTP helpers ----------
 
     def _read_json(self, url: str, headers: Optional[dict] = None, timeout: int = 12):
         import urllib.request
@@ -63,26 +83,29 @@ class NasdaqCalendarWorker(QObject):
                 raw = (e.read() or b"").decode("utf-8", errors="replace").strip()
             except Exception:
                 raw = ""
-            raise RuntimeError(f"NASDAQ HTTP {e.code} — {raw[:200]}")
+            raise RuntimeError(f"HTTP {e.code} — {raw[:200]}")
         except urllib.error.URLError as e:
-            raise RuntimeError(f"NASDAQ Network error: {e}")
+            raise RuntimeError(f"Network error: {e}")
 
         if not raw:
-            raise RuntimeError("NASDAQ: Empty response")
+            raise RuntimeError("Empty response")
 
         if raw[0] not in "{[":
-            raise RuntimeError(f"NASDAQ: Non-JSON response: {raw[:200]}")
+            raise RuntimeError(f"Non-JSON response: {raw[:200]}")
 
         try:
             return json.loads(raw)
         except Exception as e:
-            raise RuntimeError(f"NASDAQ JSON parse error: {e}. Body head: {raw[:200]}")
+            raise RuntimeError(f"JSON parse error: {e}. Body head: {raw[:200]}")
 
-    def _fetch_from_nasdaq_api(self) -> list[DividendEvent]:
+    # ---------- NASDAQ (best-effort) ----------
+
+    def _fetch_from_nasdaq_month(self) -> list[DividendEvent]:
         """
-        Nasdaq Calendar API liefert Dividenden i.d.R. pro Tag:
-        https://api.nasdaq.com/api/calendar/dividends?date=YYYY-MM-DD
-        Für Monatsansicht -> alle Tage des Monats abrufen und aggregieren.
+        Nasdaq calendar dividends is typically per-day:
+          https://api.nasdaq.com/api/calendar/dividends?date=YYYY-MM-DD
+        We aggregate days in the month.
+        Note: This endpoint can be flaky / blocked; we treat it as best-effort.
         """
         import calendar as _cal
 
@@ -92,23 +115,22 @@ class NasdaqCalendarWorker(QObject):
         ).strip()
 
         headers = {
-            "User-Agent": "Aurelic/1.0 (Desktop App)",
+            "User-Agent": "Mozilla/5.0 (Aurelic/1.0)",
             "Accept": "application/json, text/plain, */*",
             "Referer": "https://www.nasdaq.com/",
+            "Origin": "https://www.nasdaq.com",
         }
 
         last_day = _cal.monthrange(self._year, self._month)[1]
-
         out: list[DividendEvent] = []
-        seen = set()  # dedupe (symbol + ex_date + amount)
+        seen = set()
 
         for day in range(1, last_day + 1):
             date_str = f"{self._year:04d}-{self._month:02d}-{day:02d}"
             url = f"{base}?{urllib.parse.urlencode({'date': date_str})}"
 
-            j = self._read_json(url, headers=headers, timeout=8)
+            j = self._read_json(url, headers=headers, timeout=10)
 
-            # Common layout: {"data": {"calendar": {"rows":[...]}}}
             rows = None
             if isinstance(j, dict):
                 data = j.get("data")
@@ -118,8 +140,6 @@ class NasdaqCalendarWorker(QObject):
                         rows = cal.get("rows") or cal.get("data") or cal.get("table", {}).get("rows")
                     elif isinstance(cal, list):
                         rows = cal
-                if rows is None and isinstance(j.get("rows"), list):
-                    rows = j.get("rows")
 
             if not isinstance(rows, list):
                 continue
@@ -148,6 +168,85 @@ class NasdaqCalendarWorker(QObject):
                     DividendEvent(
                         symbol=sym,
                         company=company or sym,
+                        ex_date=ex_date,
+                        pay_date=pay_date,
+                        record_date=record_date,
+                        amount=amount,
+                        currency=currency,
+                    )
+                )
+
+        out.sort(key=lambda e: (e.ex_date or "", e.symbol))
+        return out
+
+    # ---------- FMP (reliable fallback) ----------
+
+    def _fetch_from_fmp_month(self) -> list[DividendEvent]:
+        """
+        FMP stable Dividends Calendar API:
+          https://financialmodelingprep.com/stable/dividends-calendar?from=YYYY-MM-DD&to=YYYY-MM-DD&apikey=KEY
+        Docs: stable/dividends-calendar :contentReference[oaicite:2]{index=2}
+        """
+        import calendar as _cal
+
+        fmp_key = os.getenv("FMP_API_KEY", "").strip()
+        if not fmp_key:
+            raise RuntimeError("FMP_API_KEY fehlt – FMP-Fallback kann nicht genutzt werden.")
+
+        first = f"{self._year:04d}-{self._month:02d}-01"
+        last_day = _cal.monthrange(self._year, self._month)[1]
+        last = f"{self._year:04d}-{self._month:02d}-{last_day:02d}"
+
+        base = "https://financialmodelingprep.com/stable/dividends-calendar"
+        url = f"{base}?{urllib.parse.urlencode({'from': first, 'to': last, 'apikey': fmp_key})}"
+
+        headers = {
+            "User-Agent": "Aurelic/1.0 (Desktop App)",
+            "Accept": "application/json, text/plain, */*",
+        }
+
+        j = self._read_json(url, headers=headers, timeout=12)
+
+        out: list[DividendEvent] = []
+        if not isinstance(j, list):
+            return out
+
+        for r in j:
+            if not isinstance(r, dict):
+                continue
+
+            sym = str(r.get("symbol") or "").strip()
+            # FMP liefert oft keine Company-Name im Calendar; wir setzen symbol als fallback
+            company = str(r.get("companyName") or r.get("name") or sym).strip() or sym
+
+            # In FMP calendar ist "date" typischerweise Ex-Dividend-Date
+            ex_date = str(r.get("date") or "").strip()
+            record_date = str(r.get("recordDate") or "").strip()
+            pay_date = str(r.get("paymentDate") or "").strip()
+
+            # dividend / adjDividend können floats sein
+            div_val = r.get("dividend")
+            adj_val = r.get("adjDividend")
+            amount = ""
+            if div_val is not None:
+                try:
+                    amount = f"{float(div_val):.6g}"
+                except Exception:
+                    amount = str(div_val)
+            elif adj_val is not None:
+                try:
+                    amount = f"{float(adj_val):.6g}"
+                except Exception:
+                    amount = str(adj_val)
+
+            # Currency ist im FMP Calendar oft nicht enthalten; default USD
+            currency = str(r.get("currency") or "USD").strip() or "USD"
+
+            if sym and ex_date:
+                out.append(
+                    DividendEvent(
+                        symbol=sym,
+                        company=company,
                         ex_date=ex_date,
                         pay_date=pay_date,
                         record_date=record_date,
@@ -219,7 +318,7 @@ class CalendarPage(QWidget):
         h.setContentsMargins(0, 0, 0, 0)
         h.setSpacing(12)
 
-        title = QLabel("Financial Calendar (NASDAQ) — Dividends")
+        title = QLabel("Financial Calendar — Dividends")
         title.setObjectName("PanelTitle")
         title.setWordWrap(True)
 
@@ -303,7 +402,7 @@ class CalendarPage(QWidget):
         rv = QVBoxLayout(right)
         rv.setContentsMargins(16, 14, 16, 14)
 
-        ph = QLabel("Hier kannst du später eine echte Monats-Grid-Ansicht einbauen.\nAktuell: Dividend-Events als Liste.")
+        ph = QLabel()
         ph.setObjectName("Placeholder")
         ph.setAlignment(Qt.AlignCenter)
         ph.setWordWrap(True)
@@ -356,17 +455,20 @@ class CalendarPage(QWidget):
         self._cal_thread.start()
 
     def _on_calendar_failed(self, msg: str) -> None:
+        self._events = []
         self._status.setText(f"Kalender konnte nicht geladen werden: {msg}")
 
-    def _on_calendar_loaded(self, events: list) -> None:
+    def _on_calendar_loaded(self, events: list, source: str) -> None:
         self._events = [e for e in events if isinstance(e, DividendEvent)]
+
         if not self._events:
-            self._status.setText("Keine Dividend-Events gefunden (Monat/Endpoint prüfen).")
+            self._status.setText(f"Keine Dividend-Events gefunden. Quelle: {source}.")
+            self._list_layout.addStretch(1)
             return
 
-        self._status.setText(f"{len(self._events)} Dividend-Events geladen.")
+        self._status.setText(f"{len(self._events)} Dividend-Events geladen. Quelle: {source}.")
 
-        for e in self._events[:200]:
+        for e in self._events[:250]:
             card = QFrame()
             card.setObjectName("NewsCard")
             card.setAttribute(Qt.WA_StyledBackground, True)
