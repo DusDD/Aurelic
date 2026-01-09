@@ -129,6 +129,18 @@ def build_qss(p: Palette, background_image_path: str = "images/Backgroundimage.p
         background: rgba(109,146,155,35);
         border: 1px solid rgba(109,146,155,90);
     }}
+    QPushButton#CalendarBtn {{
+        background: rgba(109,146,155,18);
+        border: 1px solid rgba(39,48,59,170);
+        border-radius: 22px;
+        padding: 0px;
+        font-weight: 900;
+        color: rgba(230,234,240,210);
+    }}
+    QPushButton#CalendarBtn:hover {{
+        background: rgba(109,146,155,30);
+        border: 1px solid rgba(109,146,155,90);
+    }}
 
     /* News */
     #NewsCard {{
@@ -586,7 +598,7 @@ class MoversFetcherWorker(QObject):
 class MainPage(QWidget):
     tab_changed = Signal(str)   # "brokerage" | "analyse"
     avatar_clicked = Signal()
-
+    calendar_clicked = Signal()
     def __init__(self, background_path: str = "images/Backgroundimage.png", parent: QWidget | None = None):
         super().__init__(parent)
 
@@ -699,6 +711,11 @@ class MainPage(QWidget):
         self._seg_tabs.set_active("brokerage", animate=False, emit=False)
         self._seg_tabs.changed.connect(lambda which: self._set_active_tab(which, sync_tabs=False))
 
+        cal_btn = QPushButton("◯")
+        cal_btn.setObjectName("CalendarBtn")
+        cal_btn.setFixedSize(44, 44)
+        cal_btn.clicked.connect(self.calendar_clicked.emit)
+
         avatar = QPushButton("N")
         avatar.setObjectName("Avatar")
         avatar.setFixedSize(44, 44)
@@ -706,6 +723,7 @@ class MainPage(QWidget):
 
         h.addWidget(self._seg_tabs, 0, Qt.AlignLeft)
         h.addStretch(1)
+        h.addWidget(cal_btn, 0, Qt.AlignRight)
         h.addWidget(avatar, 0, Qt.AlignRight)
         return bar
 
