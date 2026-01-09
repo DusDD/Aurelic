@@ -5,7 +5,7 @@ import os
 import json
 import urllib.parse
 from dataclasses import dataclass
-from datetime import datetime
+from datetime import datetime, date
 from typing import Optional
 
 from PySide6.QtCore import Qt, Signal, QTimer, QThread, QObject
@@ -684,8 +684,8 @@ ORDER BY ?date
                 continue
 
             dt_raw = str(((b.get("date") or {}).get("value")) or "").strip()
-            date = dt_raw[:10] if len(dt_raw) >= 10 else ""
-            if not date.startswith(f"{year:04d}-"):
+            date_str = dt_raw[:10] if len(dt_raw) >= 10 else ""
+            if not date_str.startswith(f"{year:04d}-"):
                 continue
 
             title = str(((b.get("electionLabel") or {}).get("value")) or "").strip()
@@ -694,7 +694,7 @@ ORDER BY ?date
 
             out.append(
                 GlobalEvent(
-                    date=date,
+                    date=date_str,
                     title=title,
                     country=cc,
                     category="ELECTION",
@@ -731,6 +731,53 @@ class CalendarPage(QWidget):
         self._global_events: list[GlobalEvent] = []
         self._global_filter: str = "ALL"  # ALL | HOLIDAY | ELECTION
 
+        # ISO2 -> display name (only for those we use)
+        self._country_names: dict[str, str] = {
+            "AR": "Argentina",
+            "AU": "Australia",
+            "AT": "Austria",
+            "BE": "Belgium",
+            "BR": "Brazil",
+            "BG": "Bulgaria",
+            "CA": "Canada",
+            "CN": "China",
+            "HR": "Croatia",
+            "CY": "Cyprus",
+            "CZ": "Czechia",
+            "DK": "Denmark",
+            "EE": "Estonia",
+            "FI": "Finland",
+            "FR": "France",
+            "DE": "Germany",
+            "GR": "Greece",
+            "HU": "Hungary",
+            "ID": "Indonesia",
+            "IN": "India",
+            "IE": "Ireland",
+            "IT": "Italy",
+            "JP": "Japan",
+            "KR": "South Korea",
+            "LV": "Latvia",
+            "LT": "Lithuania",
+            "LU": "Luxembourg",
+            "MT": "Malta",
+            "MX": "Mexico",
+            "NL": "Netherlands",
+            "PL": "Poland",
+            "PT": "Portugal",
+            "RO": "Romania",
+            "RU": "Russia",
+            "SA": "Saudi Arabia",
+            "SK": "Slovakia",
+            "SI": "Slovenia",
+            "ZA": "South Africa",
+            "ES": "Spain",
+            "SE": "Sweden",
+            "TR": "Türkiye",
+            "UK": "United Kingdom",
+            "US": "United States",
+        }
+
         root = QVBoxLayout(self)
         root.setContentsMargins(40, 40, 40, 40)
         root.setSpacing(0)
@@ -750,6 +797,47 @@ class CalendarPage(QWidget):
         root.addWidget(self._shell, 0, Qt.AlignCenter)
 
         QTimer.singleShot(0, self._refresh)
+
+    # -----------------------------
+    # Date helpers: show only upcoming events
+    # -----------------------------
+
+    def _today_date(self) -> date:
+        return datetime.now().date()
+
+    def _parse_ymd_date(self, s: str) -> Optional[date]:
+        s = (s or "").strip()
+        if not s:
+            return None
+        # Expect "YYYY-MM-DD" or ISO-like "YYYY-MM-DDTHH:MM:SS..."
+        try:
+            return datetime.fromisoformat(s[:10]).date()
+        except Exception:
+            return None
+
+    def _is_upcoming(self, date_str: str) -> bool:
+        d = self._parse_ymd_date(date_str)
+        if d is None:
+            # If we can't parse safely, do not show it
+            return False
+        return d >= self._today_date()
+
+    def _format_countries(self, codes: list[str], limit: int = 18) -> str:
+        """
+        Render countries as "DE (Germany), US (United States), ..."
+        Unknown codes are shown as-is.
+        """
+        out = []
+        for cc in codes:
+            cc = (cc or "").strip().upper()
+            if not cc:
+                continue
+            name = self._country_names.get(cc, "")
+            out.append(f"{cc} ({name})" if name else cc)
+
+        if len(out) > limit:
+            return ", ".join(out[:limit]) + f", +{len(out) - limit} more"
+        return ", ".join(out)
 
     def resizeEvent(self, event) -> None:
         super().resizeEvent(event)
@@ -995,14 +1083,18 @@ class CalendarPage(QWidget):
         self._status.setText(f"Kalender konnte nicht geladen werden: {msg}")
 
     def _on_calendar_loaded(self, events: list, source: str) -> None:
-        self._events = [e for e in events if isinstance(e, DividendEvent)]
+        # Nur valide DividendEvent
+        all_events = [e for e in events if isinstance(e, DividendEvent)]
+
+        # Nur kommende Events (>= heute) nach ex_date
+        self._events = [e for e in all_events if self._is_upcoming(e.ex_date)]
 
         if not self._events:
-            self._status.setText(f"Keine Dividend-Events gefunden. Quelle: {source}.")
+            self._status.setText(f"Keine kommenden Dividend-Events gefunden. Quelle: {source}.")
             self._list_layout.addStretch(1)
             return
 
-        self._status.setText(f"{len(self._events)} Dividend-Events geladen. Quelle: {source}.")
+        self._status.setText(f"{len(self._events)} kommende Dividend-Events geladen. Quelle: {source}.")
 
         for e in self._events[:250]:
             card = QFrame()
@@ -1074,12 +1166,18 @@ class CalendarPage(QWidget):
 
         mode = self._global_filter  # ALL | HOLIDAY | ELECTION
         month_prefix = f"{self._year:04d}-{self._month:02d}-"
+        today = self._today_date()
 
         # ---- Aggregate duplicates: group by (date, title, category, source) -> set[countries] ----
         grouped: dict[tuple[str, str, str, str], set[str]] = {}
 
         for e in self._global_events:
             if mode != "ALL" and e.category != mode:
+                continue
+
+            # Nur kommende/aktuelle Events (>= heute)
+            d = self._parse_ymd_date(e.date)
+            if d is None or d < today:
                 continue
 
             # Keep "ALL" clean: elections only for current month
@@ -1102,14 +1200,9 @@ class CalendarPage(QWidget):
         keys = sorted(grouped.keys(), key=lambda k: (k[0], k[2], k[1], k[3]))
 
         shown = 0
-        for (date, title, category, source) in keys:
-            countries = sorted([c for c in grouped[(date, title, category, source)] if c])
-
-            N = 18
-            if len(countries) > N:
-                country_txt = ", ".join(countries[:N]) + f", +{len(countries) - N} more"
-            else:
-                country_txt = ", ".join(countries)
+        for (date_str, title, category, source) in keys:
+            codes = sorted([c for c in grouped[(date_str, title, category, source)] if c])
+            country_txt = self._format_countries(codes, limit=18)
 
             card = QFrame()
             card.setObjectName("NewsCard")
@@ -1123,7 +1216,7 @@ class CalendarPage(QWidget):
             head.setObjectName("NewsTitle")
             head.setWordWrap(True)
 
-            meta = QLabel(f"{date} · {category.title()} · {source}")
+            meta = QLabel(f"{date_str} · {category.title()} · {source}")
             meta.setObjectName("NewsMeta")
             meta.setWordWrap(True)
 

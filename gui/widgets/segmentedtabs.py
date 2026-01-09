@@ -1,16 +1,18 @@
 # gui/widgets/segmentedtabs.py
 from __future__ import annotations
 
-from PySide6.QtCore import (
-    Qt, Signal, QPropertyAnimation, QRect, QEasingCurve, QTimer, QEvent
-)
-from PySide6.QtWidgets import QWidget, QPushButton, QFrame, QHBoxLayout
+from PySide6.QtCore import Qt, Signal, QPropertyAnimation, QEasingCurve, QRect, QTimer
+from PySide6.QtGui import QPainterPath, QRegion
+from PySide6.QtWidgets import QPushButton, QHBoxLayout, QFrame
 
 
-class SegmentedTabs(QWidget):
+class SegmentedTabs(QFrame):
     """
-    iOS-like segmented control with sliding indicator.
-    Emits `changed("analyse"|"brokerage")`.
+    2-Segment Tabs: "Analyse" und "Brokerage"
+    - pill container + pill indicator
+    - indicator animiert im Hintergrund (unter Buttons)
+    - echte Round-Masks (Container + Indicator), damit garantiert rund
+    - Single click always updates indicator (no double-click needed)
     """
     changed = Signal(str)
 
@@ -20,126 +22,153 @@ class SegmentedTabs(QWidget):
         self.setObjectName("SegmentedTabs")
         self.setAttribute(Qt.WA_StyledBackground, True)
 
-        self._active = "brokerage"
+        # Wichtig: QFrame soll NICHT selbst einen eckigen Frame zeichnen
+        self.setFrameShape(QFrame.NoFrame)
+        self.setLineWidth(0)
 
-        # Indicator (sliding pill)
+        self._layout = QHBoxLayout(self)
+        self._layout.setContentsMargins(0, 0, 0, 0)
+        self._layout.setSpacing(0)
+
+        # Indicator (hinter Buttons)
         self._indicator = QFrame(self)
         self._indicator.setObjectName("SegmentedIndicator")
         self._indicator.setAttribute(Qt.WA_StyledBackground, True)
-
-        # IMPORTANT: indicator must NOT steal clicks
-        self._indicator.setAttribute(Qt.WA_TransparentForMouseEvents, True)
-        self._indicator.lower()
+        self._indicator.setFrameShape(QFrame.NoFrame)
+        self._indicator.setLineWidth(0)
 
         # Buttons
-        self._btn_analyse = QPushButton("Analyse", self)
-        self._btn_brokerage = QPushButton("Brokerage", self)
-        for b in (self._btn_analyse, self._btn_brokerage):
-            b.setObjectName("SegmentedButton")
-            b.setCursor(Qt.PointingHandCursor)
-            b.setCheckable(False)
-            b.setFlat(True)
+        self._btn_analyse = self._make_btn("Analyse", "analyse")
+        self._btn_brokerage = self._make_btn("Brokerage", "brokerage")
 
-        self._btn_analyse.clicked.connect(lambda: self.set_active("analyse", animate=True, emit=True))
-        self._btn_brokerage.clicked.connect(lambda: self.set_active("brokerage", animate=True, emit=True))
+        self._layout.addWidget(self._btn_analyse)
+        self._layout.addWidget(self._btn_brokerage)
 
-        # Layout
-        lay = QHBoxLayout(self)
-        lay.setContentsMargins(6, 6, 6, 6)  # padding inside outer capsule
-        lay.setSpacing(6)
-        lay.addWidget(self._btn_analyse)
-        lay.addWidget(self._btn_brokerage)
+        self._active = "brokerage"
 
-        # Animation
         self._anim = QPropertyAnimation(self._indicator, b"geometry", self)
-        self._anim.setDuration(220)
-        self._anim.setEasingCurve(QEasingCurve.InOutCubic)
+        self._anim.setDuration(180)
+        self._anim.setEasingCurve(QEasingCurve.OutCubic)
 
-        # Reposition management (prevents "needs 2 clicks" due to late geometry)
-        self._queued_reposition = False
+        # Z-Order fix
+        self._indicator.lower()
+        self._btn_analyse.raise_()
+        self._btn_brokerage.raise_()
 
-        # Ensure indicator is positioned after first layout pass
-        QTimer.singleShot(0, self._reposition_indicator)
+        # Einheitliche Höhe (passt zu deinem QSS Padding)
+        self.setFixedHeight(44)
 
-    # --------------------------
-    # Public API
-    # --------------------------
-    def set_active(self, which: str, animate: bool = True, emit: bool = False) -> None:
+        # Init nach Layout
+        QTimer.singleShot(0, self._post_init)
+
+    def _post_init(self) -> None:
+        self.set_active(self._active, animate=False, emit=False)
+        self._apply_container_mask()
+        self._apply_indicator_mask()
+
+    def _make_btn(self, text: str, key: str) -> QPushButton:
+        b = QPushButton(text, self)
+        b.setObjectName("SegmentedButton")
+        b.setCursor(Qt.PointingHandCursor)
+        b.setFocusPolicy(Qt.NoFocus)
+        b.setProperty("active", "false")
+
+        # Wichtig: immer direkt set_active -> kein "2x klicken"
+        b.clicked.connect(lambda _=False, k=key: self.set_active(k, animate=True, emit=True))
+        return b
+
+    def active(self) -> str:
+        return self._active
+
+    def set_active(self, which: str, animate: bool = True, emit: bool = True) -> None:
         which = "analyse" if which == "analyse" else "brokerage"
 
         self._active = which
-        self._apply_text_state()
-
-        # Geometry may not be ready yet; ensure reposition happens robustly.
-        self._reposition_indicator(animate=animate)
+        self._sync_button_styles()
+        self._move_indicator(animate=animate)
 
         if emit:
             self.changed.emit(which)
 
-    # --------------------------
-    # Internal helpers
-    # --------------------------
-    def _apply_text_state(self) -> None:
-        self._btn_analyse.setProperty("active", self._active == "analyse")
-        self._btn_brokerage.setProperty("active", self._active == "brokerage")
+    def _sync_button_styles(self) -> None:
+        self._btn_analyse.setProperty("active", "true" if self._active == "analyse" else "false")
+        self._btn_brokerage.setProperty("active", "true" if self._active == "brokerage" else "false")
 
+        # QSS refresh
         for b in (self._btn_analyse, self._btn_brokerage):
             b.style().unpolish(b)
             b.style().polish(b)
-            b.update()
 
-    def _target_rect(self, which: str) -> QRect:
+    def _target_rect_for(self, which: str) -> QRect:
         btn = self._btn_analyse if which == "analyse" else self._btn_brokerage
-        g = btn.geometry()
+        r = btn.geometry()
 
-        # When widget is not yet laid out, geometry can be empty.
-        if g.width() <= 0 or g.height() <= 0:
-            return QRect(0, 0, 0, 0)
+        # Inset: muss zu #SegmentedTabs padding passen (siehe QSS Fix unten)
+        pad = 2
+        return QRect(
+            r.x() + pad,
+            r.y() + pad,
+            max(0, r.width() - 2 * pad),
+            max(0, r.height() - 2 * pad),
+        )
 
-        pad_x = 4
-        pad_y = 2
-        return QRect(g.x() - pad_x, g.y() - pad_y, g.width() + 2 * pad_x, g.height() + 2 * pad_y)
+    def _move_indicator(self, animate: bool) -> None:
+        target = self._target_rect_for(self._active)
 
-    def _reposition_indicator(self, animate: bool = False) -> None:
-        # If geometry isn't ready yet, queue a retry.
-        target = self._target_rect(self._active)
-        if target.width() <= 0 or target.height() <= 0:
-            self._queue_reposition()
-            return
+        # Indicator hinter Buttons
+        self._indicator.lower()
 
-        if animate and self._indicator.geometry().isValid() and self._indicator.geometry().width() > 0:
-            self._anim.stop()
-            self._anim.setStartValue(self._indicator.geometry())
-            self._anim.setEndValue(target)
-            self._anim.start()
-        else:
-            self._anim.stop()
+        self._anim.stop()
+
+        if not animate:
             self._indicator.setGeometry(target)
-
-    def _queue_reposition(self) -> None:
-        if self._queued_reposition:
+            self._apply_indicator_mask()
             return
-        self._queued_reposition = True
 
-        def _do():
-            self._queued_reposition = False
-            self._reposition_indicator(animate=False)
+        # Während Animation Maske nachziehen (sonst wirkt's eckig / "laggy")
+        def _on_value_changed(_):
+            self._apply_indicator_mask()
 
-        QTimer.singleShot(0, _do)
+        try:
+            self._anim.valueChanged.disconnect()
+        except Exception:
+            pass
+        self._anim.valueChanged.connect(_on_value_changed)
+
+        self._anim.setStartValue(self._indicator.geometry())
+        self._anim.setEndValue(target)
+        self._anim.finished.connect(self._apply_indicator_mask)
+        self._anim.start()
 
     # --------------------------
-    # Qt events (ensure correct first render)
+    # Hard rounded masks (Container + Indicator)
     # --------------------------
-    def showEvent(self, event) -> None:
-        super().showEvent(event)
-        self._reposition_indicator(animate=False)
+    def _rounded_region(self, rect: QRect, radius: int) -> QRegion:
+        path = QPainterPath()
+        path.addRoundedRect(rect, float(radius), float(radius))
+        poly = path.toFillPolygon().toPolygon()
+        return QRegion(poly)
+
+    def _apply_container_mask(self) -> None:
+        r = self.rect()
+        if r.width() <= 0 or r.height() <= 0:
+            return
+        radius = r.height() // 2
+        self.setMask(self._rounded_region(r, radius))
+
+    def _apply_indicator_mask(self) -> None:
+        r = self._indicator.rect()
+        if r.width() <= 0 or r.height() <= 0:
+            return
+        radius = r.height() // 2
+        self._indicator.setMask(self._rounded_region(r, radius))
 
     def resizeEvent(self, event) -> None:
         super().resizeEvent(event)
-        self._reposition_indicator(animate=False)
+        self._apply_container_mask()
+        # Beim Resize immer hart positionieren, sonst wirkt der Indicator "versetzt"
+        self._move_indicator(animate=False)
 
-    def event(self, e) -> bool:
-        # Catch layout/style changes that can affect geometry
-        if e.type() in (QEvent.LayoutRequest, QEvent.Polish, QEvent.StyleChange):
-            self._queue_reposition()
-        return super().event(e)
+    def showEvent(self, event) -> None:
+        super().showEvent(event)
+        QTimer.singleShot(0, self._post_init)
