@@ -18,6 +18,7 @@ from gui.widgets.worldbank_feed import WorldBankFeedWidget
 class AnalysePage(QWidget):
     tab_changed = Signal(str)   # "brokerage" | "analyse"
     avatar_clicked = Signal()
+    calendar_clicked = Signal()  # <-- NEU: Kreis-Button (Kalender)
 
     def __init__(self, parent: QWidget | None = None):
         super().__init__(parent)
@@ -72,6 +73,12 @@ class AnalysePage(QWidget):
         self._seg_tabs.setObjectName("SegmentedTabs")
         self._seg_tabs.changed.connect(self._set_active_tab)
 
+        # NEU: Kalender-Kreis (neben dem Avatar)
+        cal_btn = QPushButton("◯")
+        cal_btn.setObjectName("CalendarBtn")
+        cal_btn.setFixedSize(44, 44)
+        cal_btn.clicked.connect(self.calendar_clicked.emit)
+
         avatar = QPushButton("N")
         avatar.setObjectName("Avatar")
         avatar.setFixedSize(44, 44)
@@ -79,6 +86,7 @@ class AnalysePage(QWidget):
 
         h.addWidget(self._seg_tabs, 0, Qt.AlignLeft)
         h.addStretch(1)
+        h.addWidget(cal_btn, 0, Qt.AlignRight)   # <-- NEU
         h.addWidget(avatar, 0, Qt.AlignRight)
         return bar
 
@@ -97,11 +105,11 @@ class AnalysePage(QWidget):
 
         # LEFT: World Bank feed widget (etwas breiter)
         left = WorldBankFeedWidget()
-        left.setMinimumWidth(420)  # vorher 360
+        left.setMinimumWidth(420)
         left.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Expanding)
 
         # CENTER: minimal schmaler
-        center = self._panel("", "Analyse-Chart / Indikatoren\n(Placeholder)", min_w=820)  # vorher 860
+        center = self._panel("", "Analyse-Chart / Indikatoren\n(Placeholder)", min_w=820)
         center.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
 
         right = QWidget()
@@ -120,7 +128,7 @@ class AnalysePage(QWidget):
         rv.addWidget(right_bottom, 1)
 
         h.addWidget(left, 0)
-        h.addWidget(center, 4)  # vorher 1
+        h.addWidget(center, 4)
         h.addWidget(right, 0)
         return w
 
