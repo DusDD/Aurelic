@@ -1,12 +1,13 @@
 # src/daily_pull_alphavantage.py
+# VERALTET
 
 import requests
 from datetime import datetime
 import time
 import logging
 import pandas_market_calendars as mcal
-from data import insert_stock_prices
-from config import SYMBOLS, ALPHAVANTAGE_API_KEY
+from data.db_insert import insert_stock_prices
+from data.config import SYMBOLS, ALPHAVANTAGE_API_KEY
 
 # --------------------------
 # Setup logging

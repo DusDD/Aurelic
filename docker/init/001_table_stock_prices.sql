@@ -22,8 +22,23 @@ CREATE INDEX IF NOT EXISTS idx_stock_prices_date ON stocks.stock_prices(date);
 CREATE TABLE IF NOT EXISTS stocks.symbols (
     symbol TEXT PRIMARY KEY,
     name TEXT,
-    sector TEXT,
-    market TEXT
+    category TEXT CHECK (category IN ('stock','etf','crypto','commodity')),
+    exchange TEXT,
+    active BOOLEAN DEFAULT TRUE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS stocks.stock_intraday (
+    symbol TEXT REFERENCES stocks.symbols(symbol),
+    datetime TIMESTAMP,
+    open NUMERIC,
+    high NUMERIC,
+    low NUMERIC,
+    close NUMERIC,
+    volume BIGINT,
+    interval TEXT, -- '1min','5min','15min'
+    source TEXT,
+    PRIMARY KEY (symbol, datetime, interval)
 );
 
 -- Favorites per user
