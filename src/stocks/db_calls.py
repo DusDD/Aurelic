@@ -89,3 +89,21 @@ def get_user_favorites(token: str):
     rows = [row[0] for row in cursor.fetchall()]
     conn.close()
     return rows
+
+def get_intraday(token, symbol, interval="15min", limit=200):
+    require_auth(token)
+
+    conn = get_connection()
+    cur = conn.cursor()
+
+    cur.execute("""
+        SELECT datetime, open, high, low, close, volume
+        FROM stocks.stock_intraday
+        WHERE symbol=%s AND interval=%s
+        ORDER BY datetime DESC
+        LIMIT %s
+    """,(symbol,interval,limit))
+
+    rows = cur.fetchall()
+    conn.close()
+    return rows

@@ -21,13 +21,3 @@ if not POLYGON_API_KEY:
         "POLYGON_API_KEY not set. "
         "Please export POLYGON_API_KEY before running the app."
     )
-
-# --------------------------
-# Symbols
-# --------------------------
-SYMBOLS = [
-    "AAPL",
-    "MSFT",
-    "GOOGL",
-    "AMZN",
-]

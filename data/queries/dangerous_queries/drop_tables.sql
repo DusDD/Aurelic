@@ -1,2 +1,3 @@
 DROP TABLE IF EXISTS auth.login_events CASCADE;
 DROP TABLE IF EXISTS auth.users CASCADE;
+DROP TABLE IF EXISTS stocks.symbols CASCADE;
