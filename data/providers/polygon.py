@@ -8,7 +8,7 @@ log = logging.getLogger(__name__)
 INTERVAL_MIN = 15
 INTERVAL_LABEL = "15min"
 
-def fetch_daily(symbol: str, trading_day):
+def fetch_daily(asset_id, symbol: str, trading_day):
     """
     Holt Tageskerze für EIN Symbol an EINEM Tag
     """
@@ -33,7 +33,7 @@ def fetch_daily(symbol: str, trading_day):
         bar = data["results"][0]
 
         return {
-            "symbol": symbol,
+            "asset_id": asset_id,
             "date": trading_day,
             "open": bar["o"],
             "high": bar["h"],
