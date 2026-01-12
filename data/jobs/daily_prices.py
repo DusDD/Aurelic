@@ -3,7 +3,7 @@ import logging
 from datetime import datetime, timedelta
 import pandas_market_calendars as mcal
 
-from data.symbols import SYMBOLS
+from data.utils.symbols import SYMBOLS
 from data.providers.polygon import fetch_daily
 from data.repositories.stock_repo import insert_prices
 

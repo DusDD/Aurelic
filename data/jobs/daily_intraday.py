@@ -3,7 +3,7 @@ import logging
 from datetime import datetime, timedelta
 import pandas_market_calendars as mcal
 
-from data.db_insert import insert_intraday
+from z_outdated.db_insert import insert_intraday
 from data.db_connection import get_connection
 from data.providers.polygon import fetch_intraday
 

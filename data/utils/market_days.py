@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta
 import pandas_market_calendars as mcal
 
-def get_last_trading_days(n=7):
+def get_last_trading_days(n=30):
     nyse = mcal.get_calendar("NYSE")
     today = datetime.utcnow().date()
 

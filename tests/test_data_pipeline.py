@@ -1,5 +1,5 @@
 from data.providers.polygon import fetch_daily
-from data.symbols import SYMBOLS
+from data.utils.symbols import SYMBOLS
 from datetime import date
 
 
