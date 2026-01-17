@@ -1,46 +1,69 @@
 from data.db_connection import get_connection
 from ..auth.guard import require_auth
 
+
+# -----------------------------------
+# Helper
+# -----------------------------------
+def _get_asset_id(symbol: str):
+    conn = get_connection()
+    cur = conn.cursor()
+
+    cur.execute("""
+        SELECT a.asset_id
+        FROM stocks.assets a
+        JOIN stocks.asset_symbols s
+            ON a.asset_id = s.asset_id
+        WHERE s.provider_symbol = %s
+    """, (symbol,))
+
+    row = cur.fetchone()
+    conn.close()
+
+    if not row:
+        raise ValueError(f"Unknown symbol: {symbol}")
+
+    return row[0]
+
+
 # -----------------------------------
 # Stock Prices
 # -----------------------------------
 def get_stock_prices(token: str, symbol: str):
-    """
-    Liefert alle historischen Preise einer Aktie
-    """
     require_auth(token)
 
+    asset_id = _get_asset_id(symbol)
+
     conn = get_connection()
-    cursor = conn.cursor()
+    cur = conn.cursor()
 
-    cursor.execute("""
+    cur.execute("""
         SELECT date, open, high, low, close, volume
-        FROM stocks.stock_prices
-        WHERE symbol = %s
+        FROM stocks.prices
+        WHERE asset_id = %s
         ORDER BY date DESC
-    """, (symbol,))
+    """, (asset_id,))
 
-    rows = cursor.fetchall()
+    rows = cur.fetchall()
     conn.close()
     return rows
 
 
 def get_latest_closes(symbol: str, limit: int = 2):
-    """
-    Liefert die letzten N Schlusskurse
-    """
-    conn = get_connection()
-    cursor = conn.cursor()
+    asset_id = _get_asset_id(symbol)
 
-    cursor.execute("""
+    conn = get_connection()
+    cur = conn.cursor()
+
+    cur.execute("""
         SELECT date, close
-        FROM stocks.stock_prices
-        WHERE symbol = %s
+        FROM stocks.prices
+        WHERE asset_id = %s
         ORDER BY date DESC
         LIMIT %s
-    """, (symbol, limit))
+    """, (asset_id, limit))
 
-    rows = cursor.fetchall()
+    rows = cur.fetchall()
     conn.close()
     return rows
 
@@ -49,21 +72,18 @@ def get_latest_closes(symbol: str, limit: int = 2):
 # Symbols
 # -----------------------------------
 def get_all_symbols(token: str):
-    """
-    Liefert alle verfügbaren Symbole
-    """
     require_auth(token)
 
     conn = get_connection()
-    cursor = conn.cursor()
+    cur = conn.cursor()
 
-    cursor.execute("""
-        SELECT DISTINCT symbol
-        FROM stocks.stock_prices
-        ORDER BY symbol
+    cur.execute("""
+        SELECT provider_symbol
+        FROM stocks.asset_symbols
+        ORDER BY provider_symbol
     """)
 
-    rows = [row[0] for row in cursor.fetchall()]
+    rows = [r[0] for r in cur.fetchall()]
     conn.close()
     return rows
 
@@ -72,26 +92,31 @@ def get_all_symbols(token: str):
 # Favoriten
 # -----------------------------------
 def get_user_favorites(token: str):
-    """
-    Liefert Favoriten des Users
-    """
     user_id = require_auth(token)
 
     conn = get_connection()
-    cursor = conn.cursor()
+    cur = conn.cursor()
 
-    cursor.execute("""
-        SELECT symbol
-        FROM stocks.favorites
-        WHERE user_id = %s
+    cur.execute("""
+        SELECT s.provider_symbol
+        FROM stocks.favorites f
+        JOIN stocks.asset_symbols s
+            ON f.asset_id = s.asset_id
+        WHERE f.user_id = %s
     """, (user_id,))
 
-    rows = [row[0] for row in cursor.fetchall()]
+    rows = [r[0] for r in cur.fetchall()]
     conn.close()
     return rows
 
+
+# -----------------------------------
+# Intraday
+# -----------------------------------
 def get_intraday(token, symbol, interval="15min", limit=200):
     require_auth(token)
+
+    asset_id = _get_asset_id(symbol)
 
     conn = get_connection()
     cur = conn.cursor()
@@ -99,10 +124,10 @@ def get_intraday(token, symbol, interval="15min", limit=200):
     cur.execute("""
         SELECT datetime, open, high, low, close, volume
         FROM stocks.stock_intraday
-        WHERE symbol=%s AND interval=%s
+        WHERE asset_id=%s AND interval=%s
         ORDER BY datetime DESC
         LIMIT %s
-    """,(symbol,interval,limit))
+    """,(asset_id,interval,limit))
 
     rows = cur.fetchall()
     conn.close()
