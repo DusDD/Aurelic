@@ -53,7 +53,7 @@ if __name__ == "__main__":
     app.setWindowIcon(icon)
 
     db_conn = get_connection()
-    auth_ctrl = AuthController(db_conn)
+    auth_ctrl = AuthController()
 
     stack = QStackedWidget()
     stack.setWindowTitle("Aurelic")
@@ -72,11 +72,11 @@ if __name__ == "__main__":
 
     # Login/Register wiring
     start.login_requested.connect(auth_ctrl.on_login)
-    auth_ctrl.login_successful.connect(lambda: stack.setCurrentWidget(main))
+    auth_ctrl.login_successful.connect(lambda token: (main.set_token(token), stack.setCurrentWidget(main)))
     auth_ctrl.login_failed.connect(lambda msg: QMessageBox.warning(start, "Login failed", msg))
 
     start.register_requested_v2.connect(auth_ctrl.on_register)
-    auth_ctrl.register_successful.connect(lambda: stack.setCurrentWidget(main))
+    auth_ctrl.register_successful.connect(lambda token: (main.set_token(token), stack.setCurrentWidget(main)))
     auth_ctrl.register_failed.connect(lambda msg: QMessageBox.warning(start, "Register failed", msg))
 
     # Stack Seiten

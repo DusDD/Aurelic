@@ -10,6 +10,7 @@ from typing import Optional
 
 from PySide6.QtCore import Qt, Signal, QTimer, QThread, QObject, QUrl
 from PySide6.QtGui import QDesktopServices
+from PySide6.QtGui import QPainter
 from PySide6.QtWidgets import (
     QWidget, QFrame, QLabel, QPushButton,
     QHBoxLayout, QVBoxLayout, QSizePolicy, QDialog,
@@ -17,6 +18,14 @@ from PySide6.QtWidgets import (
 )
 
 from gui.widgets.segmentedtabs import SegmentedTabs
+from PySide6.QtWidgets import QComboBox
+from PySide6.QtCharts import QChart, QChartView, QLineSeries, QValueAxis, QDateTimeAxis
+from PySide6.QtCore import QDateTime
+
+from controller.stock_view import StockViewController
+from src.stocks.db_calls import get_all_assets
+from src.stocks.timeframes import TIMEFRAMES
+
 
 
 # --------------------------
@@ -680,6 +689,21 @@ class MainPage(QWidget):
 
         QTimer.singleShot(0, self._update_news_capacity)
 
+        # --- Stock chart state ---
+        self._token: str | None = None
+        self._stock_ctrl = StockViewController()
+        self._stock_ctrl.series_ready.connect(self._on_series_ready)
+        self._stock_ctrl.series_failed.connect(self._on_series_failed)
+
+        self._symbol_box: QComboBox | None = None
+        self._tf_box: QComboBox | None = None
+        self._chart: QChart | None = None
+        self._series: QLineSeries | None = None
+        self._chart_view: QChartView | None = None
+        self._x_axis_dt: QDateTimeAxis | None = None
+        self._y_axis: QValueAxis | None = None
+
+
     def resizeEvent(self, event) -> None:
         super().resizeEvent(event)
 
@@ -746,11 +770,9 @@ class MainPage(QWidget):
         left = self._build_news_panel(min_w=360)
         left.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Expanding)
 
-        center = self._panel(
-            title="",
-            placeholder="Linienchart oder\nKerzenchart",
-            min_w=860
-        )
+        center = self._build_chart_panel(min_w=860)
+        center.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
+
         center.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
 
         right = QWidget()
@@ -786,6 +808,172 @@ class MainPage(QWidget):
         h.addWidget(center, 1)
         h.addWidget(right, 0)
         return w
+
+    # --------------------------
+    # Chart area
+    # --------------------------
+
+    def _build_chart_panel(self, min_w: int = 860) -> QFrame:
+        panel = QFrame()
+        panel.setObjectName("Panel")
+        panel.setAttribute(Qt.WA_StyledBackground, True)
+        panel.setMinimumWidth(min_w)
+
+        v = QVBoxLayout(panel)
+        v.setContentsMargins(16, 14, 16, 14)
+        v.setSpacing(10)
+
+        # header row (controls)
+        header = QWidget()
+        hh = QHBoxLayout(header)
+        hh.setContentsMargins(0, 0, 0, 0)
+        hh.setSpacing(10)
+
+        title = QLabel("Chart")
+        title.setObjectName("PanelTitle")
+
+        self._symbol_box = QComboBox()
+        self._tf_box = QComboBox()
+
+        hh.addWidget(title, 0, Qt.AlignLeft)
+        hh.addStretch(1)
+        hh.addWidget(self._symbol_box, 0)
+        hh.addWidget(self._tf_box, 0)
+
+        # chart
+        self._chart = QChart()
+        self._chart.legend().hide()
+
+        self._series = QLineSeries()
+        self._chart.addSeries(self._series)
+
+        self._x_axis_dt = QDateTimeAxis()
+        self._x_axis_dt.setFormat("MM-dd")
+        self._chart.addAxis(self._x_axis_dt, Qt.AlignBottom)
+        self._series.attachAxis(self._x_axis_dt)
+
+        self._y_axis = QValueAxis()
+        self._chart.addAxis(self._y_axis, Qt.AlignLeft)
+        self._series.attachAxis(self._y_axis)
+
+        self._chart_view = QChartView(self._chart)
+        self._chart_view.setRenderHint(QPainter.Antialiasing, True)
+        self._chart_view.setStyleSheet("background: transparent;")
+
+        v.addWidget(header, 0)
+        v.addWidget(self._chart_view, 1)
+
+        # wire changes
+        self._symbol_box.currentIndexChanged.connect(self._reload_series_if_ready)
+        self._tf_box.currentIndexChanged.connect(self._reload_series_if_ready)
+
+        # if token already known, init
+        QTimer.singleShot(0, self._init_stock_controls)
+        return panel
+
+    def _init_stock_controls(self) -> None:
+        if not self._token:
+            return
+        if not self._symbol_box or not self._tf_box:
+            return
+        if self._symbol_box.count() > 0 and self._tf_box.count() > 0:
+            return  # already initialized
+
+        # load assets
+        assets = get_all_assets(self._token)  # [(sym,name,cat),...]
+        self._symbol_box.clear()
+        for sym, name, cat in assets:
+            self._symbol_box.addItem(f"{sym} · {name}", sym)
+
+        # timeframes
+        self._tf_box.clear()
+        for tf in TIMEFRAMES:
+            self._tf_box.addItem(tf.label, tf.key)
+
+        # defaults
+        if self._symbol_box.count() > 0:
+            self._symbol_box.setCurrentIndex(0)
+        # default to 1Y if present
+        for i in range(self._tf_box.count()):
+            if self._tf_box.itemData(i) == "1y":
+                self._tf_box.setCurrentIndex(i)
+                break
+
+        self._reload_series_if_ready()
+
+    def _reload_series_if_ready(self) -> None:
+        if not self._token or not self._symbol_box or not self._tf_box:
+            return
+        if self._symbol_box.count() == 0 or self._tf_box.count() == 0:
+            return
+
+        sym = self._symbol_box.currentData()
+        tf = self._tf_box.currentData()
+        if not sym or not tf:
+            return
+
+        self._stock_ctrl.load_series_async(self._token, sym, tf)
+
+    def _on_series_failed(self, msg: str) -> None:
+        # simple: clear series (keeps UI responsive)
+        if self._series is not None:
+            self._series.clear()
+
+    def _on_series_ready(self, payload: dict) -> None:
+        if not self._series or not self._x_axis_dt or not self._y_axis:
+            return
+
+        pts = payload.get("points") or []
+        self._series.clear()
+
+        # convert x->QDateTime and track min/max y
+        ymin = None
+        ymax = None
+        xmin_dt = None
+        xmax_dt = None
+
+        for x_str, y in pts:
+            try:
+                # daily: "YYYY-MM-DD"
+                # intraday: ISO "YYYY-MM-DDTHH:MM:SS"
+                if "T" in x_str:
+                    dt = QDateTime.fromString(x_str, Qt.ISODate)
+                else:
+                    dt = QDateTime.fromString(x_str + "T00:00:00", Qt.ISODate)
+                if not dt.isValid():
+                    continue
+
+                self._series.append(dt.toMSecsSinceEpoch(), float(y))
+
+                if ymin is None or y < ymin:
+                    ymin = float(y)
+                if ymax is None or y > ymax:
+                    ymax = float(y)
+
+                if xmin_dt is None or dt < xmin_dt:
+                    xmin_dt = dt
+                if xmax_dt is None or dt > xmax_dt:
+                    xmax_dt = dt
+            except Exception:
+                continue
+
+        if xmin_dt and xmax_dt:
+            self._x_axis_dt.setRange(xmin_dt, xmax_dt)
+
+        if ymin is not None and ymax is not None:
+            # add small padding
+            pad = (ymax - ymin) * 0.05 if ymax > ymin else max(1.0, ymax * 0.01)
+            self._y_axis.setRange(ymin - pad, ymax + pad)
+
+
+    def set_token(self, token: str) -> None:
+        self._token = (token or "").strip() or None
+        if not self._token:
+            return
+
+        # populate symbol/timeframe dropdowns and load initial series
+        self._init_stock_controls()
+
 
     # --------------------------
     # News Panel (scrollbar + dynamische "Page Size" fürs Feeling)

@@ -1,93 +1,49 @@
-from .db_calls import get_stock_prices
+# src/stocks/charts.py
+from __future__ import annotations
+
+from .db_calls import get_prices_daily, get_intraday
+from .timeframes import TIMEFRAME_BY_KEY, start_date_for_days, start_dt_for_days
 
 
-def get_price_timeseries(token: str, symbol: str, limit: int = 100):
+def get_line_series(token: str, canonical_symbol: str, timeframe_key: str):
     """
-    Liefert Kurs-Zeitreihe für Charts
-    Rückgabe:
+    Returns:
     {
-        "symbol": "AAPL",
-        "dates": [...],
-        "closes": [...],
-        "opens": [...],
-        "highs": [...],
-        "lows": [...],
-        "volumes": [...]
+      "symbol": "AAPL",
+      "timeframe": "1y",
+      "kind": "daily"|"intraday",
+      "points": [("2026-01-01", 123.4), ...] OR [("2026-01-01T10:15:00", 123.4), ...]
     }
     """
+    tf = TIMEFRAME_BY_KEY.get(timeframe_key)
+    if not tf:
+        raise ValueError(f"Unknown timeframe: {timeframe_key}")
 
-    rows = get_stock_prices(token, symbol)
+    if tf.kind == "daily":
+        start = start_date_for_days(tf.lookback_days)
+        rows = get_prices_daily(
+            token=token,
+            canonical_symbol=canonical_symbol,
+            source=tf.source,
+            start_date=start,
+        )
+        points = [(str(d), float(c)) for (d, c) in rows if c is not None]
 
-    # Optional: Limit
-    rows = rows[:limit]
-
-    dates = []
-    closes = []
-    opens = []
-    highs = []
-    lows = []
-    volumes = []
-
-    for row in reversed(rows):  # Chronologisch
-        date, open_, high, low, close, volume = row
-
-        dates.append(str(date))
-        closes.append(float(close))
-        opens.append(float(open_))
-        highs.append(float(high))
-        lows.append(float(low))
-        volumes.append(int(volume))
+    else:
+        start = start_dt_for_days(tf.lookback_days)
+        rows = get_intraday(
+            token=token,
+            canonical_symbol=canonical_symbol,
+            source=tf.source,
+            interval=tf.interval or "15min",
+            start_dt=start,
+        )
+        points = [(dt.isoformat(timespec="seconds"), float(c)) for (dt, c) in rows if c is not None]
 
     return {
-        "symbol": symbol,
-        "dates": dates,
-        "closes": closes,
-        "opens": opens,
-        "highs": highs,
-        "lows": lows,
-        "volumes": volumes
-    }
-
-
-def get_candlestick_data(token: str, symbol: str, limit: int = 100):
-    """
-    Liefert OHLC-Daten für Candlestick-Charts
-
-    Rückgabe:
-    {
-        "symbol": "AAPL",
-        "data": [
-            {
-                "date": "2026-01-05",
-                "open": 270.64,
-                "high": 271.51,
-                "low": 266.14,
-                "close": 267.26,
-                "volume": 45633196
-            },
-            ...
-        ]
-    }
-    """
-
-    rows = get_stock_prices(token, symbol)
-    rows = rows[:limit]
-
-    candles = []
-
-    for row in reversed(rows):
-        date, open_, high, low, close, volume = row
-
-        candles.append({
-            "date": str(date),
-            "open": float(open_),
-            "high": float(high),
-            "low": float(low),
-            "close": float(close),
-            "volume": int(volume)
-        })
-
-    return {
-        "symbol": symbol,
-        "data": candles
+        "symbol": canonical_symbol,
+        "timeframe": tf.key,
+        "kind": tf.kind,
+        "source": tf.source,
+        "points": points,
     }

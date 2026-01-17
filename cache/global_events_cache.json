@@ -1,4 +1,1017 @@
 {
+  "nager:2025:SI": [
+    {
+      "date": "2025-01-01",
+      "localName": "novo leto",
+      "name": "New Year's Day",
+      "countryCode": "SI",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2025-01-02",
+      "localName": "novo leto",
+      "name": "New Year's Day",
+      "countryCode": "SI",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2025-02-08",
+      "localName": "Prešernov dan",
+      "name": "Prešeren Day",
+      "countryCode": "SI",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2025-04-20",
+      "localName": "velikonočna nedelja in ponedeljek",
+      "name": "Easter Sunday",
+      "countryCode": "SI",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2025-04-21",
+      "localName": "velikonočna nedelja in ponedeljek",
+      "name": "Easter Monday",
+      "countryCode": "SI",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2025-04-27",
+      "localName": "dan upora proti okupatorju",
+      "name": "Day of Uprising Against Occupation",
+      "countryCode": "SI",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2025-05-01",
+      "localName": "praznik dela",
+      "name": "Labour Day",
+      "countryCode": "SI",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2025-05-02",
+      "localName": "praznik dela",
+      "name": "Labour Day",
+      "countryCode": "SI",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2025-05-02",
+      "localName": "dan Primoža Trubarja",
+      "name": "Primož Trubar Day",
+      "countryCode": "SI",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Observance"
+      ]
+    },
+    {
+      "date": "2025-06-08",
+      "localName": "binkoštna nedelja",
+      "name": "Pentecost",
+      "countryCode": "SI",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2025-06-25",
+      "localName": "dan državnosti",
+      "name": "Statehood Day",
+      "countryCode": "SI",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2025-08-14",
+      "localName": "dan suverenosti",
+      "name": "Sovereignty Day",
+      "countryCode": "SI",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Observance"
+      ]
+    },
+    {
+      "date": "2025-08-15",
+      "localName": "Marijino vnebovzetje",
+      "name": "Assumption Day",
+      "countryCode": "SI",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2025-08-15",
+      "localName": "združitev prekmurskih Slovencev z matičnim narodom",
+      "name": "Unification of Prekmurje Slovenes with the Mother Nation",
+      "countryCode": "SI",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Observance"
+      ]
+    },
+    {
+      "date": "2025-09-15",
+      "localName": "priključitev Primorske k matični domovini",
+      "name": "Integration of Primorska into the Homeland",
+      "countryCode": "SI",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Observance"
+      ]
+    },
+    {
+      "date": "2025-09-23",
+      "localName": "dan slovenskega športa",
+      "name": "Slovenian Sports Day",
+      "countryCode": "SI",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Observance"
+      ]
+    },
+    {
+      "date": "2025-10-31",
+      "localName": "dan reformacije",
+      "name": "Reformation Day",
+      "countryCode": "SI",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2025-11-01",
+      "localName": "dan spomina na mrtve",
+      "name": "Day of the Dead",
+      "countryCode": "SI",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2025-11-23",
+      "localName": "dan Rudolfa Maistra",
+      "name": "Rudolf Maister Day",
+      "countryCode": "SI",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Observance"
+      ]
+    },
+    {
+      "date": "2025-12-25",
+      "localName": "božič",
+      "name": "Christmas Day",
+      "countryCode": "SI",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2025-12-26",
+      "localName": "dan samostojnosti in enotnosti",
+      "name": "Independence and Unity Day",
+      "countryCode": "SI",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    }
+  ],
+  "nager:2025:SK": [
+    {
+      "date": "2025-01-01",
+      "localName": "Deň vzniku Slovenskej republiky",
+      "name": "Day of the Establishment of the Slovak Republic",
+      "countryCode": "SK",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2025-01-06",
+      "localName": "Zjavenie Pána",
+      "name": "Epiphany",
+      "countryCode": "SK",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2025-04-18",
+      "localName": "Veľkonočný piatok",
+      "name": "Good Friday",
+      "countryCode": "SK",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2025-04-21",
+      "localName": "Veľkonočný pondelok",
+      "name": "Easter Monday",
+      "countryCode": "SK",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2025-05-01",
+      "localName": "Sviatok práce",
+      "name": "International Workers' Day",
+      "countryCode": "SK",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2025-05-08",
+      "localName": "Deň víťazstva nad fašizmom",
+      "name": "Day of victory over fascism",
+      "countryCode": "SK",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2025-07-05",
+      "localName": "Sviatok svätého Cyrila a svätého Metoda",
+      "name": "St. Cyril and Methodius Day",
+      "countryCode": "SK",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2025-08-29",
+      "localName": "Výročie Slovenského národného povstania",
+      "name": "Slovak National Uprising anniversary",
+      "countryCode": "SK",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2025-09-01",
+      "localName": "Deň Ústavy Slovenskej republiky",
+      "name": "Day of the Constitution of the Slovak Republic",
+      "countryCode": "SK",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Observance"
+      ]
+    },
+    {
+      "date": "2025-09-15",
+      "localName": "Sedembolestná Panna Mária",
+      "name": "Day of Our Lady of the Seven Sorrows",
+      "countryCode": "SK",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2025-11-01",
+      "localName": "Sviatok Všetkých svätých",
+      "name": "All Saints’ Day",
+      "countryCode": "SK",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2025-11-17",
+      "localName": "Deň boja za slobodu a demokraciu",
+      "name": "Struggle for Freedom and Democracy Day",
+      "countryCode": "SK",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Observance"
+      ]
+    },
+    {
+      "date": "2025-12-24",
+      "localName": "Štedrý deň",
+      "name": "Christmas Eve",
+      "countryCode": "SK",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2025-12-25",
+      "localName": "Prvý sviatok vianočný",
+      "name": "Christmas Day",
+      "countryCode": "SK",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2025-12-26",
+      "localName": "Druhý sviatok vianočný",
+      "name": "St. Stephen's Day",
+      "countryCode": "SK",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    }
+  ],
+  "nager:2025:TR": [
+    {
+      "date": "2025-01-01",
+      "localName": "Yılbaşı",
+      "name": "New Year's Day",
+      "countryCode": "TR",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2025-04-23",
+      "localName": "Ulusal Egemenlik ve Çocuk Bayramı",
+      "name": "National Independence & Children's Day",
+      "countryCode": "TR",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2025-05-01",
+      "localName": "İşçi Bayramı",
+      "name": "Labour Day",
+      "countryCode": "TR",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2025-05-19",
+      "localName": "Atatürk'ü Anma, Gençlik ve Spor Bayramı",
+      "name": "Atatürk Commemoration & Youth Day",
+      "countryCode": "TR",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2025-07-15",
+      "localName": "Demokrasi ve Millî Birlik Günü",
+      "name": "Democracy and National Unity Day",
+      "countryCode": "TR",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2025-08-30",
+      "localName": "Zafer Bayramı",
+      "name": "Victory Day",
+      "countryCode": "TR",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2025-10-29",
+      "localName": "Cumhuriyet Bayramı",
+      "name": "Republic Day",
+      "countryCode": "TR",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    }
+  ],
+  "nager:2025:US": [
+    {
+      "date": "2025-01-01",
+      "localName": "New Year's Day",
+      "name": "New Year's Day",
+      "countryCode": "US",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2025-01-20",
+      "localName": "Martin Luther King, Jr. Day",
+      "name": "Martin Luther King, Jr. Day",
+      "countryCode": "US",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2025-02-12",
+      "localName": "Lincoln's Birthday",
+      "name": "Lincoln's Birthday",
+      "countryCode": "US",
+      "fixed": false,
+      "global": false,
+      "counties": [
+        "US-CA",
+        "US-CT",
+        "US-IL",
+        "US-IN",
+        "US-KY",
+        "US-MI",
+        "US-NY",
+        "US-MO",
+        "US-OH"
+      ],
+      "launchYear": null,
+      "types": [
+        "Observance"
+      ]
+    },
+    {
+      "date": "2025-02-17",
+      "localName": "Washington's Birthday",
+      "name": "Presidents Day",
+      "countryCode": "US",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2025-04-18",
+      "localName": "Good Friday",
+      "name": "Good Friday",
+      "countryCode": "US",
+      "fixed": false,
+      "global": false,
+      "counties": [
+        "US-CT",
+        "US-DE",
+        "US-HI",
+        "US-IN",
+        "US-KY",
+        "US-LA",
+        "US-NC",
+        "US-ND",
+        "US-NJ",
+        "US-TN"
+      ],
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2025-04-18",
+      "localName": "Good Friday",
+      "name": "Good Friday",
+      "countryCode": "US",
+      "fixed": false,
+      "global": false,
+      "counties": [
+        "US-TX"
+      ],
+      "launchYear": null,
+      "types": [
+        "Optional"
+      ]
+    },
+    {
+      "date": "2025-05-08",
+      "localName": "Truman Day",
+      "name": "Truman Day",
+      "countryCode": "US",
+      "fixed": false,
+      "global": false,
+      "counties": [
+        "US-MO"
+      ],
+      "launchYear": null,
+      "types": [
+        "School",
+        "Authorities"
+      ]
+    },
+    {
+      "date": "2025-05-26",
+      "localName": "Memorial Day",
+      "name": "Memorial Day",
+      "countryCode": "US",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2025-06-19",
+      "localName": "Juneteenth National Independence Day",
+      "name": "Juneteenth National Independence Day",
+      "countryCode": "US",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2025-07-04",
+      "localName": "Independence Day",
+      "name": "Independence Day",
+      "countryCode": "US",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2025-09-01",
+      "localName": "Labor Day",
+      "name": "Labour Day",
+      "countryCode": "US",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2025-10-13",
+      "localName": "Columbus Day",
+      "name": "Columbus Day",
+      "countryCode": "US",
+      "fixed": false,
+      "global": false,
+      "counties": [
+        "US-AL",
+        "US-AZ",
+        "US-CO",
+        "US-CT",
+        "US-GA",
+        "US-ID",
+        "US-IL",
+        "US-IN",
+        "US-IA",
+        "US-KS",
+        "US-KY",
+        "US-LA",
+        "US-ME",
+        "US-MD",
+        "US-MA",
+        "US-MS",
+        "US-MO",
+        "US-MT",
+        "US-NE",
+        "US-NH",
+        "US-NJ",
+        "US-NM",
+        "US-NY",
+        "US-NC",
+        "US-OH",
+        "US-OK",
+        "US-PA",
+        "US-RI",
+        "US-SC",
+        "US-TN",
+        "US-UT",
+        "US-VA",
+        "US-WV"
+      ],
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2025-10-13",
+      "localName": "Indigenous Peoples' Day",
+      "name": "Indigenous Peoples' Day",
+      "countryCode": "US",
+      "fixed": false,
+      "global": false,
+      "counties": [
+        "US-AK",
+        "US-AL",
+        "US-CA",
+        "US-HI",
+        "US-IA",
+        "US-LA",
+        "US-ME",
+        "US-MI",
+        "US-MN",
+        "US-NC",
+        "US-NE",
+        "US-NM",
+        "US-OK",
+        "US-OR",
+        "US-SD",
+        "US-TX",
+        "US-VA",
+        "US-VT",
+        "US-WI"
+      ],
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2025-11-11",
+      "localName": "Veterans Day",
+      "name": "Veterans Day",
+      "countryCode": "US",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2025-11-27",
+      "localName": "Thanksgiving Day",
+      "name": "Thanksgiving Day",
+      "countryCode": "US",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2025-12-25",
+      "localName": "Christmas Day",
+      "name": "Christmas Day",
+      "countryCode": "US",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    }
+  ],
+  "nager:2025:ZA": [
+    {
+      "date": "2025-01-01",
+      "localName": "New Year's Day",
+      "name": "New Year's Day",
+      "countryCode": "ZA",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2025-03-21",
+      "localName": "Human Rights Day",
+      "name": "Human Rights Day",
+      "countryCode": "ZA",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2025-04-18",
+      "localName": "Good Friday",
+      "name": "Good Friday",
+      "countryCode": "ZA",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2025-04-21",
+      "localName": "Family Day",
+      "name": "Family Day",
+      "countryCode": "ZA",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2025-04-28",
+      "localName": "Freedom Day",
+      "name": "Freedom Day",
+      "countryCode": "ZA",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2025-05-01",
+      "localName": "Workers' Day",
+      "name": "Workers' Day",
+      "countryCode": "ZA",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2025-06-16",
+      "localName": "Youth Day",
+      "name": "Youth Day",
+      "countryCode": "ZA",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2025-08-09",
+      "localName": "National Women's Day",
+      "name": "National Women's Day",
+      "countryCode": "ZA",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2025-09-24",
+      "localName": "Heritage Day",
+      "name": "Heritage Day",
+      "countryCode": "ZA",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2025-12-16",
+      "localName": "Day of Reconciliation",
+      "name": "Day of Reconciliation",
+      "countryCode": "ZA",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2025-12-25",
+      "localName": "Christmas Day",
+      "name": "Christmas Day",
+      "countryCode": "ZA",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2025-12-26",
+      "localName": "St. Stephen's Day",
+      "name": "Day of Goodwill",
+      "countryCode": "ZA",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    }
+  ],
   "nager:2026:AR": [
     {
       "date": "2026-01-01",

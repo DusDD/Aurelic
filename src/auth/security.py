@@ -19,31 +19,6 @@ FAILED_ATTEMPT_WINDOW = timedelta(minutes=1)
 MAX_FAILED_PER_WINDOW = 5
 user_failed_attempts = {}  # user_id: [timestamps]
 
-
-def hash_password(password: str) -> str:
-    return pwd_context.hash(password)
-
-
-def verify_password(password: str, hashed: str) -> bool:
-    return pwd_context.verify(password, hashed)
-
-
-def validate_password(password: str) -> tuple[bool, str]:
-    if len(password) < 8:
-        return False, "too_short"
-    if not re.search(r"[A-Z]", password):
-        return False, "missing_upper"
-    if not re.search(r"[a-z]", password):
-        return False, "missing_lower"
-    if not re.search(r"[0-9]", password):
-        return False, "missing_number"
-    if not re.search(r"[!@#$%^&*(),.?\":{}|<>]", password):
-        return False, "missing_special"
-    if password.lower() in COMMON_PASSWORDS:
-        return False, "too_common"
-    return True, ""
-
-
 def is_account_locked(user: dict) -> bool:
     locked_until = user.get("locked_until")
     if locked_until is None:
@@ -73,15 +48,21 @@ def register_failed_login(user_id: int, conn):
     conn.commit()
 
 
-def check_rate_limit(user_id: int) -> bool:
-    now = datetime.utcnow()
-    attempts = user_failed_attempts.get(user_id, [])
+def check_rate_limit(key: str) -> bool:
+    key = (key or "").strip().lower()
+    if not key:
+        return False
 
+    now = datetime.utcnow()
+    attempts = user_failed_attempts.get(key, [])
+
+    # nur Versuche im Zeitfenster behalten
     attempts = [t for t in attempts if now - t < FAILED_ATTEMPT_WINDOW]
 
     if len(attempts) >= MAX_FAILED_PER_WINDOW:
+        user_failed_attempts[key] = attempts  # optional: gespeichert lassen
         return False
 
     attempts.append(now)
-    user_failed_attempts[user_id] = attempts
+    user_failed_attempts[key] = attempts
     return True

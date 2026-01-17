@@ -13,6 +13,7 @@ from gui.widgets.segmentedtabs import SegmentedTabs
 
 # World Bank feed widget
 from gui.widgets.worldbank_feed import WorldBankFeedWidget
+from src.auth.require_session import require_session_token, NotAuthenticatedError
 
 
 class AnalysePage(QWidget):
@@ -53,6 +54,13 @@ class AnalysePage(QWidget):
 
         # Default tab state (keine Emission beim Init)
         self._seg_tabs.set_active("analyse", animate=False, emit=False)
+
+    def showEvent(self, event):
+        super().showEvent(event)
+        try:
+            require_session_token()
+        except NotAuthenticatedError:
+            self.back_requested.emit()  # oder stack.setCurrentWidget(StartPage)
 
     def resizeEvent(self, event) -> None:
         super().resizeEvent(event)
