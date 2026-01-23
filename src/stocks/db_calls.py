@@ -14,15 +14,9 @@ from ..auth.guard import require_auth
 def _get_asset_id_by_canonical(canonical_symbol: str) -> int:
     conn = get_connection()
     cur = conn.cursor()
-    cur.execute(
-        """
-        SELECT asset_id
-        FROM stocks.assets
-        WHERE canonical_symbol = %s
-        """,
-        (canonical_symbol,),
-    )
+    cur.execute("SELECT asset_id FROM stocks.assets WHERE canonical_symbol=%s", (canonical_symbol,))
     row = cur.fetchone()
+    cur.close()
     conn.close()
     if not row:
         raise ValueError(f"Unknown canonical symbol: {canonical_symbol}")
@@ -58,13 +52,11 @@ def get_prices_daily(
     canonical_symbol: str,
     source: str,
     start_date: Optional[date] = None,
+    end_date: Optional[date] = None,
     limit: Optional[int] = None,
 ):
     require_auth(token)
     asset_id = _get_asset_id_by_canonical(canonical_symbol)
-
-    conn = get_connection()
-    cur = conn.cursor()
 
     sql = """
         SELECT date, close
@@ -77,16 +69,24 @@ def get_prices_daily(
         sql += " AND date >= %s"
         params.append(start_date)
 
+    if end_date is not None:
+        sql += " AND date <= %s"
+        params.append(end_date)
+
     sql += " ORDER BY date ASC"
 
     if limit is not None:
         sql += " LIMIT %s"
         params.append(int(limit))
 
+    conn = get_connection()
+    cur = conn.cursor()
     cur.execute(sql, tuple(params))
     rows = cur.fetchall()
+    cur.close()
     conn.close()
-    return rows  # [(date, close), ...]
+    return rows
+
 
 
 def get_latest_closes(canonical_symbol: str, source: str, limit: int = 2):

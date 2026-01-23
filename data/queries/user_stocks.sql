@@ -10,3 +10,6 @@ SELECT 1, symbol
 FROM stocks.symbols
 LIMIT 3
 ON CONFLICT (user_id, symbol) DO NOTHING;
+
+SELECT DISTINCT source FROM stocks.prices;
+SELECT DISTINCT source FROM stocks.stock_intraday;

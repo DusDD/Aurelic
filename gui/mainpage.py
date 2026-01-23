@@ -7,6 +7,8 @@ import urllib.parse
 from dataclasses import dataclass
 from datetime import datetime
 from typing import Optional
+from datetime import date
+
 
 from PySide6.QtCore import Qt, Signal, QTimer, QThread, QObject, QUrl
 from PySide6.QtGui import QDesktopServices
@@ -19,12 +21,15 @@ from PySide6.QtWidgets import (
 
 from gui.widgets.segmentedtabs import SegmentedTabs
 from PySide6.QtWidgets import QComboBox
-from PySide6.QtCharts import QChart, QChartView, QLineSeries, QValueAxis, QDateTimeAxis
-from PySide6.QtCore import QDateTime
 
 from controller.stock_view import StockViewController
 from src.stocks.db_calls import get_all_assets
 from src.stocks.timeframes import TIMEFRAMES
+
+from PySide6.QtGui import QPen, QColor
+from PySide6.QtCharts import QChart, QChartView, QLineSeries, QValueAxis
+from PySide6.QtCore import QDateTime, Qt
+
 
 
 
@@ -700,9 +705,11 @@ class MainPage(QWidget):
         self._chart: QChart | None = None
         self._series: QLineSeries | None = None
         self._chart_view: QChartView | None = None
-        self._x_axis_dt: QDateTimeAxis | None = None
+        self._x_axis: QValueAxis | None = None
         self._y_axis: QValueAxis | None = None
 
+        self._x_axis = None
+        self._y_axis = None
 
     def resizeEvent(self, event) -> None:
         super().resizeEvent(event)
@@ -792,11 +799,7 @@ class MainPage(QWidget):
             self._overall_movers_label.setTextInteractionFlags(Qt.NoTextInteraction)
             self._overall_movers_label.setAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
 
-        right_bottom = self._panel(
-            title="Favoriten-Kategorie\nTop Mover",
-            placeholder="+\n-",
-            min_w=320
-        )
+        right_bottom = self._build_favorites_panel(min_w=320)
 
         right_top.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Expanding)
         right_bottom.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Expanding)
@@ -808,6 +811,45 @@ class MainPage(QWidget):
         h.addWidget(center, 1)
         h.addWidget(right, 0)
         return w
+
+    def _build_favorites_panel(self, min_w: int = 320) -> QFrame:
+
+        panel = QFrame()
+        panel.setObjectName("Panel")
+        panel.setAttribute(Qt.WA_StyledBackground, True)
+        panel.setMinimumWidth(min_w)
+
+        v = QVBoxLayout(panel)
+        v.setContentsMargins(16, 14, 16, 14)
+        v.setSpacing(10)
+
+        t = QLabel("Favoriten-Kategorie\nTop Mover")
+        t.setObjectName("PanelTitle")
+        t.setWordWrap(True)
+        v.addWidget(t, 0, Qt.AlignLeft)
+
+        # Apple Button (Test)
+        btn = QPushButton("AAPL · Apple (Polygon 7D)")
+        btn.setObjectName("Ghost")
+        btn.clicked.connect(self._load_apple_test_range)
+        self._fav_apple_btn = btn
+        v.addWidget(btn, 0)
+
+        v.addStretch(1)
+        return panel
+
+#    --------------------------------------TESTER FOR CHARTS-------------------------------------------
+
+    def _load_apple_test_range(self) -> None:
+        if not self._token:
+            return
+
+        if hasattr(self, "_fav_apple_btn") and self._fav_apple_btn:
+            self._fav_apple_btn.setEnabled(False)
+
+        self._stock_ctrl.load_polygon_7d_async(self._token, "AAPL")
+
+    # --------------------------------------------END TESTER------------------------------------------------
 
     # --------------------------
     # Chart area
@@ -847,10 +889,9 @@ class MainPage(QWidget):
         self._series = QLineSeries()
         self._chart.addSeries(self._series)
 
-        self._x_axis_dt = QDateTimeAxis()
-        self._x_axis_dt.setFormat("MM-dd")
-        self._chart.addAxis(self._x_axis_dt, Qt.AlignBottom)
-        self._series.attachAxis(self._x_axis_dt)
+        self._x_axis = QValueAxis()
+        self._chart.addAxis(self._x_axis, Qt.AlignBottom)
+        self._series.attachAxis(self._x_axis)
 
         self._y_axis = QValueAxis()
         self._chart.addAxis(self._y_axis, Qt.AlignLeft)
@@ -867,9 +908,42 @@ class MainPage(QWidget):
         self._symbol_box.currentIndexChanged.connect(self._reload_series_if_ready)
         self._tf_box.currentIndexChanged.connect(self._reload_series_if_ready)
 
+        self._chart.setPlotAreaBackgroundVisible(True)
+        self._chart.setPlotAreaBackgroundBrush(QColor(self._palette.bg0))
+
+        self._chart.setBackgroundVisible(True)
+        self._chart.setBackgroundBrush(QColor(self._palette.bg1))
+
         # if token already known, init
         QTimer.singleShot(0, self._init_stock_controls)
         return panel
+
+    def _parse_dt_to_ms(self, x_str: str) -> float | None:
+        s = str(x_str).strip()
+
+        # Daily: "YYYY-MM-DD"
+        if len(s) == 10 and s[4] == "-" and s[7] == "-":
+            s = s + "T00:00:00"
+
+        # Intraday often: "YYYY-MM-DD HH:MM:SS.ffffff"
+        s = s.replace(" ", "T")
+
+        # Qt ISODate is happiest with milliseconds (3 digits), not microseconds (6)
+        if "." in s:
+            head, frac = s.split(".", 1)
+            frac = "".join(ch for ch in frac if ch.isdigit())
+            if len(frac) >= 3:
+                frac = frac[:3]
+                s = f"{head}.{frac}"
+            else:
+                # no usable millis -> drop fraction
+                s = head
+
+        dt = QDateTime.fromString(s, Qt.ISODate)
+        if not dt.isValid():
+            return None
+
+        return float(dt.toMSecsSinceEpoch())
 
     def _init_stock_controls(self) -> None:
         if not self._token:
@@ -914,57 +988,90 @@ class MainPage(QWidget):
 
         self._stock_ctrl.load_series_async(self._token, sym, tf)
 
-    def _on_series_failed(self, msg: str) -> None:
-        # simple: clear series (keeps UI responsive)
-        if self._series is not None:
-            self._series.clear()
-
     def _on_series_ready(self, payload: dict) -> None:
-        if not self._series or not self._x_axis_dt or not self._y_axis:
+        if not self._chart_view:
             return
 
         pts = payload.get("points") or []
-        self._series.clear()
+        print("SERIES:", payload.get("symbol"), payload.get("timeframe"), "points=", len(pts))
 
-        # convert x->QDateTime and track min/max y
-        ymin = None
-        ymax = None
-        xmin_dt = None
-        xmax_dt = None
+        # Build a brand-new chart every time (robust against axis/attach issues)
+        chart = QChart()
+        chart.legend().hide()
+
+        # Backgrounds (dark)
+        chart.setBackgroundVisible(True)
+        chart.setBackgroundBrush(QColor(self._palette.bg1))
+        chart.setPlotAreaBackgroundVisible(True)
+        chart.setPlotAreaBackgroundBrush(QColor(self._palette.bg0))
+
+        series = QLineSeries()
+
+        # Visible styling on dark bg
+        pen = QPen(QColor(self._palette.accent2))
+        pen.setWidth(2)
+        series.setPen(pen)
+        series.setPointsVisible(True)
+
+        ymin = ymax = None
+        xmin = xmax = None
+        appended = 0
 
         for x_str, y in pts:
             try:
-                # daily: "YYYY-MM-DD"
-                # intraday: ISO "YYYY-MM-DDTHH:MM:SS"
-                if "T" in x_str:
-                    dt = QDateTime.fromString(x_str, Qt.ISODate)
-                else:
-                    dt = QDateTime.fromString(x_str + "T00:00:00", Qt.ISODate)
-                if not dt.isValid():
+                x_ms = self._parse_dt_to_ms(x_str)
+                if x_ms is None:
+                    print("BAD DT:", x_str)
                     continue
 
-                self._series.append(dt.toMSecsSinceEpoch(), float(y))
+                y_f = float(y)
+                series.append(x_ms, y_f)
+                appended += 1
 
-                if ymin is None or y < ymin:
-                    ymin = float(y)
-                if ymax is None or y > ymax:
-                    ymax = float(y)
-
-                if xmin_dt is None or dt < xmin_dt:
-                    xmin_dt = dt
-                if xmax_dt is None or dt > xmax_dt:
-                    xmax_dt = dt
-            except Exception:
+                ymin = y_f if ymin is None else min(ymin, y_f)
+                ymax = y_f if ymax is None else max(ymax, y_f)
+                xmin = x_ms if xmin is None else min(xmin, x_ms)
+                xmax = x_ms if xmax is None else max(xmax, x_ms)
+            except Exception as e:
+                print("SKIP:", x_str, y, e)
                 continue
 
-        if xmin_dt and xmax_dt:
-            self._x_axis_dt.setRange(xmin_dt, xmax_dt)
+        print("APPENDED:", appended, "xmin:", xmin, "xmax:", xmax, "ymin:", ymin, "ymax:", ymax)
 
-        if ymin is not None and ymax is not None:
-            # add small padding
-            pad = (ymax - ymin) * 0.05 if ymax > ymin else max(1.0, ymax * 0.01)
-            self._y_axis.setRange(ymin - pad, ymax + pad)
+        if appended == 0 or xmin is None or xmax is None or ymin is None or ymax is None:
+            # show empty chart anyway
+            self._chart_view.setChart(chart)
+            self._chart = chart
+            return
 
+        chart.addSeries(series)
+
+        x_axis = QValueAxis()
+        y_axis = QValueAxis()
+
+        chart.addAxis(x_axis, Qt.AlignBottom)
+        chart.addAxis(y_axis, Qt.AlignLeft)
+
+        series.attachAxis(x_axis)
+        series.attachAxis(y_axis)
+
+        x_axis.setRange(xmin, xmax)
+        pad = (ymax - ymin) * 0.05 if ymax > ymin else max(1.0, abs(ymax) * 0.01, 1.0)
+        y_axis.setRange(ymin - pad, ymax + pad)
+
+        # Swap chart into the view (THIS is the key)
+        self._chart_view.setChart(chart)
+        self._chart = chart
+
+        if hasattr(self, "_fav_apple_btn") and self._fav_apple_btn:
+            self._fav_apple_btn.setEnabled(True)
+
+    def _on_series_failed(self, msg: str) -> None:
+        if hasattr(self, "_fav_apple_btn") and self._fav_apple_btn:
+            self._fav_apple_btn.setEnabled(True)
+        # simple: clear series (keeps UI responsive)
+        if self._series is not None:
+            self._series.clear()
 
     def set_token(self, token: str) -> None:
         self._token = (token or "").strip() or None

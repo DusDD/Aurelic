@@ -16,6 +16,10 @@ from PySide6.QtCore import Qt
 from PySide6.QtGui import QIcon
 from PySide6.QtWidgets import QApplication, QStackedWidget, QMessageBox
 
+import faulthandler
+faulthandler.enable()
+
+
 # --- FINNHUB API KEY: aus System-Env lesen (empfohlen) ---
 FINNHUB_KEY = os.getenv("FINNHUB_API_KEY")
 if not FINNHUB_KEY:
