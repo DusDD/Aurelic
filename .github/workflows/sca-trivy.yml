@@ -1,4 +1,4 @@
-name: SCA (Trivy - Dependencies)
+name: SCA (Trivy - Vuln/Secrets/Config)
 
 on:
   push:
@@ -33,24 +33,50 @@ on:
       - "Dockerfile"
       - "docker/**"
       - ".github/workflows/sca-trivy.yml"
+  schedule:
+    - cron: "0 6 * * 1" # montags 06:00 UTC
   workflow_dispatch: {}
 
 permissions:
   contents: read
+  security-events: write
+
+concurrency:
+  group: sca-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   trivy:
-    name: Trivy Dependency Scan (FS)
+    name: Trivy SCA (FS) + SARIF Upload
     runs-on: ubuntu-latest
+    timeout-minutes: 20
 
     steps:
       - uses: actions/checkout@v4
+
+      - name: Cache Trivy DB
+        uses: actions/cache@v4
+        with:
+          path: .trivycache
+          key: trivy-${{ runner.os }}-${{ github.ref_name }}
+          restore-keys: |
+            trivy-${{ runner.os }}-
 
       - name: Run Trivy (filesystem scan)
         uses: aquasecurity/trivy-action@0.24.0
         with:
           scan-type: fs
           scan-ref: .
+          scanners: vuln,secret,config
           severity: HIGH,CRITICAL
           ignore-unfixed: true
+          format: sarif
+          output: trivy-results.sarif
           exit-code: 1
+          cache-dir: .trivycache
+
+      - name: Upload Trivy SARIF
+        if: always()
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: trivy-results.sarif

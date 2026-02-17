@@ -26,10 +26,15 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   python:
     name: Python - Lint & Tests (PostgreSQL)
     runs-on: ubuntu-latest
+    timeout-minutes: 20
 
     services:
       postgres:
@@ -58,6 +63,9 @@ jobs:
       POLYGON_API_KEY: "ci-dummy-key"
       ALPHAVANTAGE_API_KEY: "ci-dummy-key"
 
+      # Für saubere Imports (falls ihr relativ importiert)
+      PYTHONPATH: ${{ github.workspace }}
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -70,7 +78,9 @@ jobs:
 
       - name: Install deps
         run: |
-          python -m pip install --upgrade pip
+          set -euo pipefail
+          python -m pip install --upgrade pip wheel
+
           if [ -f requirements-dev.txt ]; then
             python -m pip install -r requirements.txt -r requirements-dev.txt
           elif [ -f requirements.txt ]; then
@@ -82,21 +92,27 @@ jobs:
             exit 1
           fi
 
-      - name: Ruff lint
+          # CI Tools (installiert ihr ggf. schon in requirements-dev.txt – doppelt ist ok)
+          python -m pip install -U ruff pytest pytest-cov
+
+      - name: Ruff lint (PR annotations)
         run: |
-          python -m pip install ruff
-          ruff check .
+          ruff check . --output-format=github
 
       - name: Ruff format (check)
         run: |
-          python -m pip install ruff
           ruff format --check .
 
-      - name: Run tests
+      - name: Compile check (import/bytecode sanity)
         run: |
-          python -m pip install pytest || true
-          if python -c "import pytest" 2>/dev/null; then
-            pytest -q
+          python -m compileall -q src gui tests main.py || true
+
+      - name: Run tests (pytest + coverage if possible)
+        run: |
+          set -euo pipefail
+          # Falls keine Tests vorhanden sind, soll’s nicht rot werden:
+          if [ -d tests ] && ls -1 tests 1>/dev/null 2>&1; then
+            pytest -q --maxfail=1 --disable-warnings --cov=. --cov-report=term-missing
           else
-            python -m unittest discover -s tests -p "test*.py"
+            echo "No tests/ directory found, skipping."
           fi
