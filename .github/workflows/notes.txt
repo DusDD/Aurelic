@@ -1,0 +1,168 @@
+1️⃣ CI Workflow (ci.yml)
+Zweck
+
+Sichert die Codequalität und Funktionsfähigkeit bei jedem Push / PR.
+
+Was passiert technisch?
+
+✅ Python 3.12 Setup
+
+✅ pip Caching (schnellere Runs)
+
+✅ Abhängigkeitsinstallation
+
+✅ Ruff Lint (Code-Style + statische Fehler)
+
+✅ Ruff Format Check (kein falsch formatierter Code)
+
+✅ Bytecode Compile-Check (compileall)
+
+✅ pytest + Coverage (falls Tests vorhanden)
+
+✅ PostgreSQL Service für DB-Tests
+
+Ergebnis
+
+PR wird blockiert, wenn:
+
+Lint-Fehler
+
+Format-Fehler
+
+Tests fehlschlagen
+
+Imports kaputt sind
+
+➡️ Qualitäts-Gate für Funktionalität
+
+2️⃣ SAST Workflow (sast.yml)
+Zweck
+
+Findet Security-Probleme im Code (statische Analyse).
+
+Tools
+🔍 Semgrep
+
+Scannt auf:
+
+unsichere Patterns
+
+bekannte Anti-Patterns
+
+Python-Security-Probleme
+
+ERROR-Level Findings blockieren PR
+
+🛡 CodeQL (GitHub Advanced SAST)
+
+Tiefere Analyse (Dataflow, Injection, etc.)
+
+Ergebnisse im GitHub Security Tab (SARIF Upload)
+
+Zusätzlich
+
+Weekly Schedule
+
+Concurrency Control
+
+➡️ Security-Gate für Code-Level Schwachstellen
+
+3️⃣ SCA Workflow (sca-trivy.yml)
+Zweck
+
+Findet verwundbare Dependencies, Secrets & Fehlkonfigurationen
+
+Tool: Trivy
+
+Scans:
+
+🔎 vuln → bekannte CVEs in Python Dependencies
+
+🔑 secret → API Keys / Hardcoded Secrets
+
+⚙ config → Dockerfile / Compose / Config-Misconfigs
+
+Features
+
+Nur HIGH + CRITICAL
+
+ignore-unfixed
+
+SARIF Upload → GitHub Security Tab
+
+Trivy Cache
+
+Weekly Schedule
+
+➡️ Dependency- und Config-Security-Gate
+
+4️⃣ Dead Code Workflow (deadcode.yml)
+Zweck
+
+Findet ungenutzten Code (technische Schulden vermeiden).
+
+Tool: Vulture
+
+Scannt src, gui, main.py
+
+--min-confidence 80
+
+Strict Mode → Pipeline FAIL bei Findings
+
+Optional: vulture_whitelist.py für dynamische Nutzung
+
+Warum wichtig?
+
+Reduziert Angriffsfläche
+
+Verhindert Wartungsleichen
+
+Erhöht Code-Klarheit
+
+➡️ Maintainability-Gate
+
+5️⃣ SBOM Workflow (sbom.yml)
+Zweck
+
+Erzeugt eine Software Bill of Materials (SBOM)
+
+Tool: syft
+
+Generiert sbom.spdx.json
+
+Läuft bei jedem Push
+
+Upload als Artifact
+
+Warum wichtig?
+
+Transparenz über verwendete Pakete
+
+Compliance / Dokumentation
+
+Grundlage für Supply-Chain-Security
+
+Studienarbeit-Mehrwert
+
+➡️ Supply-Chain-Transparenz
+
+6️⃣ Dependabot (.github/dependabot.yml)
+Zweck
+
+Automatische Update-PRs für:
+
+Python Dependencies (pip)
+
+GitHub Actions
+
+Intervall
+
+Daily oder Weekly
+
+Vorteil
+
+Schnelle Security-Patches
+
+Kein manuelles Dependency-Tracking
+
+➡️ Automatisierte Wartung
