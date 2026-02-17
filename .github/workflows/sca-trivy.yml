@@ -1,19 +1,46 @@
 name: SCA (Trivy - Dependencies)
 
 on:
-  pull_request:
-    branches: ["main"]
+  push:
+    branches:
+      - "**"
     paths:
-      - "apps/backend/**"
-      - "apps/frontend/**"
-      - "infra/**"
+      - "src/**"
+      - "gui/**"
+      - "tests/**"
+      - "requirements*.txt"
+      - "pyproject.toml"
+      - "poetry.lock"
+      - "Pipfile"
+      - "Pipfile.lock"
+      - "docker-compose.yml"
+      - "Dockerfile"
+      - "docker/**"
+      - ".github/workflows/sca-trivy.yml"
+  pull_request:
+    branches:
+      - "**"
+    paths:
+      - "src/**"
+      - "gui/**"
+      - "tests/**"
+      - "requirements*.txt"
+      - "pyproject.toml"
+      - "poetry.lock"
+      - "Pipfile"
+      - "Pipfile.lock"
+      - "docker-compose.yml"
+      - "Dockerfile"
+      - "docker/**"
+      - ".github/workflows/sca-trivy.yml"
+  workflow_dispatch: {}
 
 permissions:
   contents: read
 
 jobs:
   trivy:
-    name: Trivy Dependency Scan
+    name: Trivy Dependency Scan (FS)
     runs-on: ubuntu-latest
 
     steps:
@@ -23,6 +50,7 @@ jobs:
         uses: aquasecurity/trivy-action@0.24.0
         with:
           scan-type: fs
+          scan-ref: .
           severity: HIGH,CRITICAL
           ignore-unfixed: true
           exit-code: 1
