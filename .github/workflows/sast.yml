@@ -1,11 +1,25 @@
 name: SAST (Semgrep)
 
 on:
-  pull_request:
-    branches: ["main"]
+  push:
+    branches:
+      - "**"
     paths:
-      - "apps/backend/**"
-      - "apps/frontend/**"
+      - "src/**"
+      - "gui/**"
+      - "tests/**"
+      - "main.py"
+      - "requirements*.txt"
+      - ".github/workflows/sast.yml"
+  pull_request:
+    branches:
+      - "**"
+    paths:
+      - "src/**"
+      - "gui/**"
+      - "tests/**"
+      - "main.py"
+      - "requirements*.txt"
       - ".github/workflows/sast.yml"
   workflow_dispatch: {}
 
@@ -31,25 +45,11 @@ jobs:
           python -m pip install --upgrade pip
           pip install semgrep
 
-      # 1) Backend scan
-      - name: Semgrep backend (High/Critical)
+      - name: Semgrep scan (High/Critical)
         run: |
           semgrep \
             --config p/ci \
             --config p/python \
-            --config p/django \
             --severity ERROR \
             --error \
-            apps/backend
-
-      # 2) Frontend scan
-      - name: Semgrep frontend (High/Critical)
-        run: |
-          semgrep \
-            --config p/ci \
-            --config p/javascript \
-            --config p/typescript \
-            --config p/react \
-            --severity ERROR \
-            --error \
-            apps/frontend
+            src gui tests main.py
