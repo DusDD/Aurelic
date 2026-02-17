@@ -1,0 +1,28 @@
+name: SCA (Trivy - Dependencies)
+
+on:
+  pull_request:
+    branches: ["main"]
+    paths:
+      - "apps/backend/**"
+      - "apps/frontend/**"
+      - "infra/**"
+
+permissions:
+  contents: read
+
+jobs:
+  trivy:
+    name: Trivy Dependency Scan
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run Trivy (filesystem scan)
+        uses: aquasecurity/trivy-action@0.24.0
+        with:
+          scan-type: fs
+          severity: HIGH,CRITICAL
+          ignore-unfixed: true
+          exit-code: 1

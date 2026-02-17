@@ -1,0 +1,55 @@
+name: SAST (Semgrep)
+
+on:
+  pull_request:
+    branches: ["main"]
+    paths:
+      - "apps/backend/**"
+      - "apps/frontend/**"
+      - ".github/workflows/sast.yml"
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+jobs:
+  semgrep:
+    name: Semgrep SAST (block High/Critical)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install Semgrep
+        run: |
+          python -m pip install --upgrade pip
+          pip install semgrep
+
+      # 1) Backend scan
+      - name: Semgrep backend (High/Critical)
+        run: |
+          semgrep \
+            --config p/ci \
+            --config p/python \
+            --config p/django \
+            --severity ERROR \
+            --error \
+            apps/backend
+
+      # 2) Frontend scan
+      - name: Semgrep frontend (High/Critical)
+        run: |
+          semgrep \
+            --config p/ci \
+            --config p/javascript \
+            --config p/typescript \
+            --config p/react \
+            --severity ERROR \
+            --error \
+            apps/frontend
