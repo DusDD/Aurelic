@@ -58,13 +58,14 @@ jobs:
       - name: Run vulture (strict)
         run: |
           set -euo pipefail
-
           TARGETS="src gui tests main.py"
           WHITELIST=""
           if [ -f vulture_whitelist.py ]; then
             WHITELIST="vulture_whitelist.py"
           fi
 
-          # Strenger: Findings -> Exit-Code != 0 -> Workflow FAIL
-          # Weniger Noise: nur ab 80% Confidence
-          vulture $TARGETS $WHITELIST --min-confidence 80
+          # alle Findings ausgeben
+          vulture $TARGETS $WHITELIST --min-confidence 80 || EXIT=$?
+
+          # strict: wenn Findings vorhanden -> Job fail (Exit-Code von vulture übernehmen)
+          exit ${EXIT:-0}
