@@ -1,4 +1,4 @@
-CREATE SCHEMA IF NOT EXISTS stocks;
+docker exec -it stock_postgres bashCREATE SCHEMA IF NOT EXISTS stocks;
 
 -- =================================
 -- ASSETS (kanonisch)

@@ -1,4 +1,3 @@
-# controller logic for stock calc to frontend
 # controller/favorites.py
 from __future__ import annotations
 
@@ -41,15 +40,16 @@ class FavoritesController(QObject):
         return int(user["id"])
 
     def _fetch_favorites(self, user_id: int) -> List[Dict[str, Any]]:
+        # stocks.assets hat canonical_symbol, nicht symbol
         sql = """
             SELECT
                 a.asset_id,
-                a.symbol,
-                COALESCE(a.name, a.symbol) AS name
+                a.canonical_symbol AS symbol,
+                COALESCE(a.name, a.canonical_symbol) AS name
             FROM stocks.favorites f
             JOIN stocks.assets a ON a.asset_id = f.asset_id
             WHERE f.user_id = %s
-            ORDER BY a.symbol ASC
+            ORDER BY a.canonical_symbol ASC
             LIMIT 6
         """
         with self._db.cursor() as cur:
@@ -72,10 +72,14 @@ class FavoritesController(QObject):
         if not sym:
             return None
 
+        # canonical_symbol ist das "Symbol" in stocks.assets
         sql = """
-            SELECT asset_id, symbol, COALESCE(name, symbol) AS name
+            SELECT
+                asset_id,
+                canonical_symbol AS symbol,
+                COALESCE(name, canonical_symbol) AS name
             FROM stocks.assets
-            WHERE UPPER(symbol) = %s
+            WHERE UPPER(canonical_symbol) = %s
             LIMIT 1
         """
         with self._db.cursor() as cur:
