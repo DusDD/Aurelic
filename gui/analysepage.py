@@ -1,7 +1,10 @@
 # gui/analysepage.py
 from __future__ import annotations
 
-from PySide6.QtCore import Qt, Signal
+import os
+
+from PySide6.QtCore import Qt, Signal, QTimer, QSize
+from PySide6.QtGui import QIcon
 from PySide6.QtWidgets import (
     QWidget, QFrame, QLabel, QPushButton,
     QHBoxLayout, QVBoxLayout, QSizePolicy
@@ -27,6 +30,18 @@ class AnalysePage(QWidget):
         self._palette = Palette()
         self.setStyleSheet(build_qss(self._palette))
         self.setAttribute(Qt.WA_StyledBackground, True)
+
+        # ---- Resize debounce (prevents UI lag on resize) ----
+        self._resize_debounce = QTimer(self)
+        self._resize_debounce.setSingleShot(True)
+        self._resize_debounce.setInterval(60)  # 16–80 ms, adjust if needed
+        self._resize_debounce.timeout.connect(self._on_resized_debounced)
+        self._last_shell_size: tuple[int, int] | None = None
+        # -----------------------------------------------------
+
+        # Avatar state
+        self._avatar_letter: str = "N"
+        self._avatar_btn: QPushButton | None = None  # assigned in _build_topbar()
 
         root = QVBoxLayout(self)
         root.setContentsMargins(40, 40, 40, 40)
@@ -54,6 +69,67 @@ class AnalysePage(QWidget):
         # Default tab state (keine Emission beim Init)
         self._seg_tabs.set_active("analyse", animate=False, emit=False)
 
+        # Initial geometry adjustments after widget is shown
+        QTimer.singleShot(0, self._apply_initial_shell_size)
+
+    # --------------------------
+    # Public API: Avatar Letter
+    # --------------------------
+    def set_avatar_letter(self, letter: str) -> None:
+        """
+        Setzt den Buchstaben im Avatar-Button (z.B. erster Buchstabe vom Vornamen).
+        """
+        letter = (letter or "").strip()
+        if not letter:
+            letter = "N"
+        self._avatar_letter = letter[:1].upper()
+
+        if self._avatar_btn is not None:
+            self._avatar_btn.setText(self._avatar_letter)
+
+    def set_avatar_from_user(self, user: dict | None) -> None:
+        """
+        Erwartet user dict mit z.B. first_name / email.
+        """
+        if not user:
+            self.set_avatar_letter("N")
+            return
+
+        first = (user.get("first_name") or "").strip()
+        if first:
+            self.set_avatar_letter(first[0])
+            return
+
+        # fallback: email
+        email = (user.get("email") or "").strip()
+        if email:
+            self.set_avatar_letter(email[0])
+            return
+
+        self.set_avatar_letter("N")
+
+    def _apply_initial_shell_size(self) -> None:
+        # Ensure shell gets a sensible size at startup (mirrors resizeEvent logic)
+        margin = 40
+        avail_w = max(300, self.width() - 2 * margin)
+        avail_h = max(300, self.height() - 2 * margin)
+
+        ratio = 1.568  # width / height
+        w = min(avail_w, int(avail_h * ratio))
+        h = min(avail_h, int(w / ratio))
+
+        new_size = (w, h)
+        if new_size != self._last_shell_size:
+            self._shell.setFixedSize(w, h)
+            self._last_shell_size = new_size
+
+    def _on_resized_debounced(self) -> None:
+        """
+        Place for heavier recalculations that should only run after resizing settles,
+        e.g., re-layout of expensive chart widgets or data-driven redraws.
+        """
+        pass
+
     def resizeEvent(self, event) -> None:
         super().resizeEvent(event)
 
@@ -64,7 +140,15 @@ class AnalysePage(QWidget):
         ratio = 1.568  # width / height
         w = min(avail_w, int(avail_h * ratio))
         h = min(avail_h, int(w / ratio))
-        self._shell.setFixedSize(w, h)
+
+        new_size = (w, h)
+        # Avoid repeated setFixedSize calls if nothing changed
+        if new_size != self._last_shell_size:
+            self._shell.setFixedSize(w, h)
+            self._last_shell_size = new_size
+
+        # Debounce potential expensive work while the user is dragging/resizing
+        self._resize_debounce.start()
 
     def _build_topbar(self) -> QWidget:
         bar = QWidget()
@@ -78,22 +162,30 @@ class AnalysePage(QWidget):
         self._seg_tabs.setObjectName("SegmentedTabs")
         self._seg_tabs.changed.connect(self._set_active_tab)
 
-        cal_btn = QPushButton("◯")
+        # Kalender-Button mit Icon (statt "◯")
+        cal_btn = QPushButton()
         cal_btn.setObjectName("CalendarBtn")
         cal_btn.setFixedSize(44, 44)
         cal_btn.setCursor(Qt.PointingHandCursor)
         cal_btn.clicked.connect(self.calendar_clicked.emit)
 
-        avatar = QPushButton("N")
-        avatar.setObjectName("Avatar")
-        avatar.setFixedSize(44, 44)
-        avatar.setCursor(Qt.PointingHandCursor)
-        avatar.clicked.connect(self.avatar_clicked.emit)
+        # Robust: Icon-Pfad relativ zu dieser Datei (/gui -> ../images/...)
+        base_dir = os.path.dirname(os.path.abspath(__file__))  # .../gui
+        icon_path = os.path.abspath(os.path.join(base_dir, "..", "images", "icons8-kalender-30.png"))
+        cal_btn.setIcon(QIcon(icon_path))
+        cal_btn.setIconSize(QSize(24, 24))
+
+        # Avatar Button (dynamischer Buchstabe)
+        self._avatar_btn = QPushButton(self._avatar_letter)
+        self._avatar_btn.setObjectName("Avatar")
+        self._avatar_btn.setFixedSize(44, 44)
+        self._avatar_btn.setCursor(Qt.PointingHandCursor)
+        self._avatar_btn.clicked.connect(self.avatar_clicked.emit)
 
         h.addWidget(self._seg_tabs, 0, Qt.AlignLeft)
         h.addStretch(1)
         h.addWidget(cal_btn, 0, Qt.AlignRight)
-        h.addWidget(avatar, 0, Qt.AlignRight)
+        h.addWidget(self._avatar_btn, 0, Qt.AlignRight)
         return bar
 
     def _set_active_tab(self, which: str) -> None:
@@ -110,16 +202,17 @@ class AnalysePage(QWidget):
         h.setContentsMargins(0, 0, 0, 0)
         h.setSpacing(14)
 
-        # LEFT: World Bank feed widget (etwas breiter)
+        # LEFT: World Bank feed widget
         left = WorldBankFeedWidget()
-        left.setMinimumWidth(420)
+        # reduce strict minimum to allow the center to remain flexible on small screens
+        left.setMinimumWidth(320)
         left.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Expanding)
 
-        # CENTER: minimal schmaler
+        # CENTER: make responsive (do NOT force a large minimum width)
         center = self._panel(
             title="",
             placeholder="Analyse-Chart / Indikatoren\n(Placeholder)",
-            min_w=820
+            min_w=0  # was 820 — lowered so the center can shrink/grow smoothly
         )
         center.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
 
@@ -148,8 +241,9 @@ class AnalysePage(QWidget):
         rv.addWidget(right_top, 1)
         rv.addWidget(right_bottom, 1)
 
+        # Add to layout: center gets the stretch so it receives remaining space
         h.addWidget(left, 0)
-        h.addWidget(center, 4)
+        h.addWidget(center, 1)
         h.addWidget(right, 0)
         return w
 

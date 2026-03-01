@@ -2,17 +2,16 @@
 from __future__ import annotations
 
 import os
-import json
 from dataclasses import dataclass
 from typing import Optional, List
 
-from PySide6.QtCore import Qt, Signal, QSize
+from PySide6.QtCore import Qt, Signal, QSize, QTimer
 from PySide6.QtGui import QIcon
 from PySide6.QtWidgets import (
     QWidget, QFrame, QLabel, QPushButton,
     QHBoxLayout, QVBoxLayout, QSizePolicy,
-    QLineEdit, QSpinBox, QTableWidget, QTableWidgetItem,
-    QMessageBox, QHeaderView
+    QLineEdit, QDoubleSpinBox, QTableWidget, QTableWidgetItem,
+    QMessageBox, QHeaderView, QComboBox
 )
 
 
@@ -128,7 +127,7 @@ def build_qss(p: Palette, background_image_path: str = "images/Backgroundimage.p
     }}
 
     /* Inputs */
-    QLineEdit, QSpinBox {{
+    QLineEdit, QDoubleSpinBox, QComboBox {{
         background: rgba(255,255,255,6);
         border: 1px solid rgba(39,48,59,170);
         border-radius: 14px;
@@ -136,8 +135,20 @@ def build_qss(p: Palette, background_image_path: str = "images/Backgroundimage.p
         color: rgba(230,234,240,220);
         font-size: 12px;
     }}
-    QLineEdit:focus, QSpinBox:focus {{
+    QLineEdit:focus, QDoubleSpinBox:focus, QComboBox:focus {{
         border: 1px solid rgba(109,146,155,140);
+    }}
+    QComboBox::drop-down {{
+        border: 0px;
+        width: 22px;
+    }}
+    QComboBox::down-arrow {{
+        width: 0px;
+        height: 0px;
+        border-left: 5px solid transparent;
+        border-right: 5px solid transparent;
+        border-top: 6px solid rgba(230,234,240,160);
+        margin-right: 8px;
     }}
 
     /* Table */
@@ -165,29 +176,31 @@ def build_qss(p: Palette, background_image_path: str = "images/Backgroundimage.p
 
 
 # --------------------------
-# Model
-# --------------------------
-@dataclass
-class InvestmentRow:
-    name: str
-    amount: int
-
-
-# --------------------------
 # Investment Page
 # --------------------------
 class InvestmentPage(QWidget):
     """
-    Investments im gleichen Design wie MainPage.
-    - Hinzufügen: Name + Anzahl
-    - Entfernen: ausgewählte Zeile
-    - Speichern: data/investments.json (relativ zum Projekt)
+    DB-basierte Investments:
+      - stocks.assets: canonical_symbol, name, category
+      - stocks.investments: (user_id, asset_id, quantity)
+
+    Erwartet einen InvestmentsController mit:
+      - upsert_user_investment(symbol, name, category, quantity)
+      - list_user_investments()
+      - delete_user_investment(symbol)
     """
 
-    back_clicked = Signal()  # optional: MainWindow kann zurück zur MainPage wechseln
+    back_clicked = Signal()
 
-    def __init__(self, background_path: str = "images/Backgroundimage.png", parent: QWidget | None = None):
+    def __init__(
+        self,
+        investments_ctrl,
+        background_path: str = "images/Backgroundimage.png",
+        parent: QWidget | None = None
+    ):
         super().__init__(parent)
+
+        self._ctrl = investments_ctrl
 
         self.setObjectName("Root")
         self.setAttribute(Qt.WA_StyledBackground, True)
@@ -196,9 +209,6 @@ class InvestmentPage(QWidget):
         self._palette = Palette()
         self._background_path = background_path
         self.setStyleSheet(build_qss(self._palette, self._background_path))
-
-        self._rows: List[InvestmentRow] = []
-        self._data_path = self._resolve_data_path()
 
         # Root layout (centered shell like MainPage)
         root = QVBoxLayout(self)
@@ -219,11 +229,21 @@ class InvestmentPage(QWidget):
 
         root.addWidget(self._shell, 0, Qt.AlignCenter)
 
-        # Initial sizing like MainPage feel
         self._shell.setFixedSize(980, 625)
 
-        self._load()
-        self._refresh_table()
+        # auto initial load (defer to allow stack/layout)
+        QTimer.singleShot(0, self.reload)
+
+    # --------------------------
+    # Public API
+    # --------------------------
+    def reload(self) -> None:
+        try:
+            items = self._ctrl.list_user_investments()
+        except Exception as e:
+            QMessageBox.critical(self, "Investments", f"Konnte Investments nicht laden:\n{e}")
+            items = []
+        self._render_table(items)
 
     # --------------------------
     # Layout: Topbar
@@ -236,14 +256,12 @@ class InvestmentPage(QWidget):
         h.setContentsMargins(0, 0, 0, 0)
         h.setSpacing(12)
 
-        # Back button (circle)
         back_btn = QPushButton()
         back_btn.setObjectName("IconCircle")
         back_btn.setFixedSize(44, 44)
         back_btn.setToolTip("Zurück")
         back_btn.clicked.connect(self.back_clicked.emit)
 
-        # Try to use an optional back icon if present; else show "<"
         base_dir = os.path.dirname(os.path.abspath(__file__))
         back_icon_path = os.path.abspath(os.path.join(base_dir, "..", "images", "back.png"))
         if os.path.exists(back_icon_path):
@@ -251,12 +269,10 @@ class InvestmentPage(QWidget):
             back_btn.setIconSize(QSize(22, 22))
         else:
             back_btn.setText("‹")
-            back_btn.setStyleSheet(back_btn.styleSheet() + "font-size:18px; font-weight:900;")
 
         title = QLabel("Investments")
         title.setObjectName("PanelTitle")
 
-        # Right circle icon (invest.png)
         invest_btn = QPushButton()
         invest_btn.setObjectName("IconCircle")
         invest_btn.setFixedSize(44, 44)
@@ -285,7 +301,6 @@ class InvestmentPage(QWidget):
         v.setContentsMargins(0, 0, 0, 0)
         v.setSpacing(14)
 
-        # Card container
         card = QFrame()
         card.setObjectName("Card")
         card.setAttribute(Qt.WA_StyledBackground, True)
@@ -294,40 +309,48 @@ class InvestmentPage(QWidget):
         cv.setContentsMargins(18, 14, 18, 14)
         cv.setSpacing(12)
 
-        hint = QLabel("Füge deine Investments hinzu und speichere sie lokal. (Name + Anzahl)")
+        hint = QLabel("Füge ein Asset hinzu (Symbol + optional Name/Kategorie) und setze deine Stückzahl.")
         hint.setObjectName("FinePrint")
         hint.setWordWrap(True)
         cv.addWidget(hint)
 
-        # Form row
         form = QWidget()
         form.setAttribute(Qt.WA_StyledBackground, True)
         fh = QHBoxLayout(form)
         fh.setContentsMargins(0, 0, 0, 0)
         fh.setSpacing(10)
 
+        self._symbol = QLineEdit()
+        self._symbol.setPlaceholderText("Symbol (z. B. AAPL, MSFT, BTC)")
+        self._symbol.setClearButtonEnabled(True)
+
         self._name = QLineEdit()
-        self._name.setPlaceholderText("Investment (z. B. AAPL, BTC, ETF-Name)")
+        self._name.setPlaceholderText("Name (optional)")
         self._name.setClearButtonEnabled(True)
 
-        self._amount = QSpinBox()
-        self._amount.setMinimum(1)
-        self._amount.setMaximum(1_000_000)
-        self._amount.setValue(1)
-        self._amount.setButtonSymbols(QSpinBox.ButtonSymbols.PlusMinus)
+        self._category = QComboBox()
+        self._category.addItems(["stock", "etf", "crypto", "commodity", "index"])
+        self._category.setCurrentText("stock")
 
-        add_btn = QPushButton("Hinzufügen")
+        self._qty = QDoubleSpinBox()
+        self._qty.setMinimum(0.0)
+        self._qty.setMaximum(1_000_000_000.0)
+        self._qty.setDecimals(8)
+        self._qty.setValue(1.0)
+
+        add_btn = QPushButton("Speichern")
         add_btn.setObjectName("Primary")
-        add_btn.clicked.connect(self._add_row)
+        add_btn.clicked.connect(self._upsert_clicked)
 
+        fh.addWidget(self._symbol, 1)
         fh.addWidget(self._name, 1)
+        fh.addWidget(self._category, 0)
         fh.addWidget(QLabel("Anzahl:"), 0)
-        fh.addWidget(self._amount, 0)
+        fh.addWidget(self._qty, 0)
         fh.addWidget(add_btn, 0)
 
         cv.addWidget(form)
 
-        # Table panel
         panel = QFrame()
         panel.setObjectName("Panel")
         panel.setAttribute(Qt.WA_StyledBackground, True)
@@ -335,25 +358,28 @@ class InvestmentPage(QWidget):
         panel_v.setContentsMargins(14, 12, 14, 12)
         panel_v.setSpacing(10)
 
-        panel_title = QLabel("Deine Liste")
+        panel_title = QLabel("Dein Portfolio")
         panel_title.setObjectName("PanelTitle")
         panel_v.addWidget(panel_title, 0, Qt.AlignLeft)
 
-        self._table = QTableWidget(0, 2)
-        self._table.setHorizontalHeaderLabels(["Investment", "Anzahl"])
+        self._table = QTableWidget(0, 5)
+        self._table.setHorizontalHeaderLabels(["Symbol", "Name", "Kategorie", "Anzahl", "Updated"])
         self._table.verticalHeader().setVisible(False)
         self._table.setSelectionBehavior(QTableWidget.SelectionBehavior.SelectRows)
         self._table.setSelectionMode(QTableWidget.SelectionMode.SingleSelection)
         self._table.setEditTriggers(QTableWidget.EditTrigger.NoEditTriggers)
         self._table.setAlternatingRowColors(False)
         self._table.setShowGrid(False)
-        self._table.horizontalHeader().setSectionResizeMode(0, QHeaderView.ResizeMode.Stretch)
-        self._table.horizontalHeader().setSectionResizeMode(1, QHeaderView.ResizeMode.ResizeToContents)
+
+        self._table.horizontalHeader().setSectionResizeMode(0, QHeaderView.ResizeMode.ResizeToContents)
+        self._table.horizontalHeader().setSectionResizeMode(1, QHeaderView.ResizeMode.Stretch)
+        self._table.horizontalHeader().setSectionResizeMode(2, QHeaderView.ResizeMode.ResizeToContents)
+        self._table.horizontalHeader().setSectionResizeMode(3, QHeaderView.ResizeMode.ResizeToContents)
+        self._table.horizontalHeader().setSectionResizeMode(4, QHeaderView.ResizeMode.ResizeToContents)
         self._table.setMinimumHeight(320)
 
         panel_v.addWidget(self._table, 1)
 
-        # Footer row (actions)
         footer = QWidget()
         footer.setAttribute(Qt.WA_StyledBackground, True)
         fh2 = QHBoxLayout(footer)
@@ -367,119 +393,112 @@ class InvestmentPage(QWidget):
         del_btn.setObjectName("Ghost")
         del_btn.clicked.connect(self._delete_selected)
 
-        save_btn = QPushButton("Speichern")
-        save_btn.setObjectName("Primary")
-        save_btn.clicked.connect(self._save)
+        refresh_btn = QPushButton("Neu laden")
+        refresh_btn.setObjectName("Ghost")
+        refresh_btn.clicked.connect(self.reload)
 
         fh2.addWidget(self._count_label, 1, Qt.AlignLeft)
+        fh2.addWidget(refresh_btn, 0, Qt.AlignRight)
         fh2.addWidget(del_btn, 0, Qt.AlignRight)
-        fh2.addWidget(save_btn, 0, Qt.AlignRight)
 
         panel_v.addWidget(footer, 0)
 
         cv.addWidget(panel)
-
         v.addWidget(card, 1)
         return body
 
     # --------------------------
-    # Data persistence
-    # --------------------------
-    def _resolve_data_path(self) -> str:
-        # gui/ -> ../data/investments.json
-        base_dir = os.path.dirname(os.path.abspath(__file__))
-        data_dir = os.path.abspath(os.path.join(base_dir, "..", "data"))
-        os.makedirs(data_dir, exist_ok=True)
-        return os.path.join(data_dir, "investments.json")
-
-    def _load(self) -> None:
-        self._rows = []
-        if not os.path.exists(self._data_path):
-            return
-        try:
-            with open(self._data_path, "r", encoding="utf-8") as f:
-                raw = json.load(f)
-            if isinstance(raw, list):
-                for r in raw:
-                    if not isinstance(r, dict):
-                        continue
-                    name = str(r.get("name", "")).strip()
-                    try:
-                        amount = int(r.get("amount", 0))
-                    except Exception:
-                        amount = 0
-                    if name and amount > 0:
-                        self._rows.append(InvestmentRow(name=name, amount=amount))
-        except Exception:
-            self._rows = []
-
-    def _save(self) -> None:
-        try:
-            payload = [{"name": r.name, "amount": int(r.amount)} for r in self._rows]
-            with open(self._data_path, "w", encoding="utf-8") as f:
-                json.dump(payload, f, ensure_ascii=False, indent=2)
-            QMessageBox.information(self, "Gespeichert", "Investments wurden gespeichert.")
-        except Exception as e:
-            QMessageBox.critical(self, "Fehler", f"Konnte nicht speichern:\n{e}")
-
-    # --------------------------
-    # Table helpers
-    # --------------------------
-    def _refresh_table(self) -> None:
-        self._table.setRowCount(0)
-
-        for r in self._rows:
-            row_i = self._table.rowCount()
-            self._table.insertRow(row_i)
-
-            name_item = QTableWidgetItem(r.name)
-            amt_item = QTableWidgetItem(str(r.amount))
-            amt_item.setTextAlignment(Qt.AlignRight | Qt.AlignVCenter)
-
-            self._table.setItem(row_i, 0, name_item)
-            self._table.setItem(row_i, 1, amt_item)
-
-        self._count_label.setText(f"{len(self._rows)} Einträge")
-
-    # --------------------------
     # Actions
     # --------------------------
-    def _add_row(self) -> None:
-        name = (self._name.text() or "").strip()
-        amount = int(self._amount.value())
+    def _upsert_clicked(self) -> None:
+        sym = (self._symbol.text() or "").strip().upper()
+        nm = (self._name.text() or "").strip()
+        cat = (self._category.currentText() or "stock").strip()
+        qty = float(self._qty.value())
 
-        if not name:
-            QMessageBox.warning(self, "Fehlt", "Bitte einen Investment-Namen eingeben.")
+        if not sym:
+            QMessageBox.warning(self, "Fehlt", "Bitte ein Symbol eingeben (z. B. AAPL).")
             return
 
-        # merge if exists (case-insensitive)
-        for r in self._rows:
-            if r.name.lower() == name.lower():
-                r.amount += amount
-                self._name.clear()
-                self._amount.setValue(1)
-                self._refresh_table()
-                return
+        try:
+            self._ctrl.upsert_user_investment(sym, nm or None, cat, qty)
+        except Exception as e:
+            QMessageBox.critical(self, "Investments", f"Konnte nicht speichern:\n{e}")
+            return
 
-        self._rows.append(InvestmentRow(name=name, amount=amount))
+        self._symbol.clear()
         self._name.clear()
-        self._amount.setValue(1)
-        self._refresh_table()
+        self._category.setCurrentText("stock")
+        self._qty.setValue(1.0)
+
+        self.reload()
 
     def _delete_selected(self) -> None:
         idx = self._table.currentRow()
-        if idx < 0 or idx >= len(self._rows):
+        if idx < 0:
             return
 
-        name = self._rows[idx].name
+        sym_item = self._table.item(idx, 0)
+        sym = (sym_item.text() if sym_item else "").strip().upper()
+        if not sym:
+            return
+
         ok = QMessageBox.question(
             self,
             "Entfernen",
-            f"'{name}' wirklich entfernen?",
+            f"'{sym}' wirklich entfernen?",
             QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No
         )
         if ok != QMessageBox.StandardButton.Yes:
             return
 
-        self._rows.pop(idx)
-        self._refresh_table()
+        try:
+            self._ctrl.delete_user_investment(sym)
+        except Exception as e:
+            QMessageBox.critical(self, "Investments", f"Konnte nicht entfernen:\n{e}")
+            return
+
+        self.reload()
+
+    # --------------------------
+    # Table rendering
+    # --------------------------
+    def _render_table(self, items: list[dict]) -> None:
+        self._table.setRowCount(0)
+
+        for it in (items or []):
+            row_i = self._table.rowCount()
+            self._table.insertRow(row_i)
+
+            sym = str(it.get("symbol") or "")
+            name = str(it.get("name") or "")
+            cat = str(it.get("category") or "")
+            qty = float(it.get("quantity") or 0.0)
+            upd = it.get("updated_at")
+
+            sym_item = QTableWidgetItem(sym)
+            sym_item.setTextAlignment(Qt.AlignLeft | Qt.AlignVCenter)
+
+            name_item = QTableWidgetItem(name)
+
+            cat_item = QTableWidgetItem(cat)
+            cat_item.setTextAlignment(Qt.AlignLeft | Qt.AlignVCenter)
+
+            qty_item = QTableWidgetItem(f"{qty:.8f}".rstrip("0").rstrip("."))
+            qty_item.setTextAlignment(Qt.AlignRight | Qt.AlignVCenter)
+
+            upd_txt = ""
+            try:
+                upd_txt = upd.strftime("%Y-%m-%d %H:%M") if upd else ""
+            except Exception:
+                upd_txt = str(upd or "")
+            upd_item = QTableWidgetItem(upd_txt)
+            upd_item.setTextAlignment(Qt.AlignRight | Qt.AlignVCenter)
+
+            self._table.setItem(row_i, 0, sym_item)
+            self._table.setItem(row_i, 1, name_item)
+            self._table.setItem(row_i, 2, cat_item)
+            self._table.setItem(row_i, 3, qty_item)
+            self._table.setItem(row_i, 4, upd_item)
+
+        self._count_label.setText(f"{len(items or [])} Einträge")
