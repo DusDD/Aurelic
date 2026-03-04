@@ -144,13 +144,20 @@ if __name__ == "__main__":
             except Exception:
                 pass
 
+        # ✅ Optional: Analyse auch leeren, wenn kein User
+        if user is None and hasattr(analyse, "set_favorite_symbols"):
+            try:
+                analyse.set_favorite_symbols([])
+            except Exception:
+                pass
+
         return user
 
     # -----------------------------
     # Favorites wiring (Top 6)
     # -----------------------------
     def _wire_favorites_ui():
-        # Controller -> UI (UserPage + MainPage) aus EINEM Event
+        # Controller -> UI (UserPage + MainPage + AnalysePage) aus EINEM Event
         def _on_favorites_loaded(items: list[dict] | None):
             # UserPage füttern
             if hasattr(user_page, "set_favorites"):
@@ -159,10 +166,19 @@ if __name__ == "__main__":
                 except Exception:
                     pass
 
+            symbols = _favorites_to_symbols(items)
+
             # MainPage füttern (nur Symbole)
             if hasattr(main, "set_favorite_symbols"):
                 try:
-                    main.set_favorite_symbols(_favorites_to_symbols(items))
+                    main.set_favorite_symbols(symbols)
+                except Exception:
+                    pass
+
+            # ✅ AnalysePage füttern (Quantitative Analyse)
+            if hasattr(analyse, "set_favorite_symbols"):
+                try:
+                    analyse.set_favorite_symbols(symbols)
                 except Exception:
                     pass
 
@@ -289,6 +305,11 @@ if __name__ == "__main__":
             stack.setCurrentWidget(main)
         elif which == "analyse":
             stack.setCurrentWidget(analyse)
+            # ✅ ensure analysis gets fresh favorites (if not loaded yet)
+            try:
+                favorites_ctrl.load_favorites()
+            except Exception:
+                pass
 
     main.tab_changed.connect(on_tab)
     analyse.tab_changed.connect(on_tab)

@@ -4,13 +4,12 @@ from __future__ import annotations
 import os
 import json
 import urllib.parse
+import re
 from dataclasses import dataclass
 from datetime import datetime, date, timedelta
 from typing import Optional, Any
 
-from PySide6.QtCore import (
-    Qt, Signal, QTimer, QThread, QObject, QUrl, QSize, QDateTime, QMargins, QPointF
-)
+from PySide6.QtCore import Qt, Signal, QTimer, QThread, QObject, QUrl, QSize, QDateTime, QMargins
 from PySide6.QtGui import QDesktopServices, QIcon, QPainter, QColor, QPen
 
 from PySide6.QtWidgets import (
@@ -404,6 +403,44 @@ def _norm_category(cat: str) -> str:
 
 
 # --------------------------
+# Robust parsing helpers (FIX für FMP changesPercentage)
+# --------------------------
+_PCT_RE = re.compile(r"[-+]?\d+(?:[.,]\d+)?")
+
+def _parse_change_pct(v: Any) -> float:
+    """
+    FMP liefert changesPercentage teils als String "(+1.23%)" oder "-0.45%".
+    Das hier extrahiert zuverlässig die Zahl und gibt sie als float (Prozentpunkte) zurück.
+    """
+    if v is None:
+        return 0.0
+
+    # already numeric
+    if isinstance(v, (int, float)):
+        try:
+            return float(v)
+        except Exception:
+            return 0.0
+
+    s = str(v).strip()
+    if not s:
+        return 0.0
+
+    # remove parentheses and percent sign
+    s = s.replace("(", "").replace(")", "").replace("%", "").strip()
+
+    m = _PCT_RE.search(s)
+    if not m:
+        return 0.0
+
+    num = m.group(0).replace(",", ".")
+    try:
+        return float(num)
+    except Exception:
+        return 0.0
+
+
+# --------------------------
 # External link dialog
 # --------------------------
 class ExternalLinkDialog(QDialog):
@@ -757,6 +794,14 @@ class FavoritesMoversWorker(QObject):
             raise RuntimeError(f"FMP JSON parse error: {e}. Body head: {raw[:200]}")
 
     def _fetch_quotes_single(self, symbols: list[str]) -> list[FavQuoteItem]:
+        """
+        FIX:
+        - changesPercentage ist häufig String "(+1.23%)" -> früher float() => Exception => 0.0
+        - fallback: wenn changesPercentage fehlt/0 ist, aus change + previousClose berechnen
+
+        Anzeige-Änderung:
+        - Sortierung der Favoriten Top Mover: absteigend nach change_pct (nicht nach abs)
+        """
         base = "https://financialmodelingprep.com/stable/quote"
 
         out: list[FavQuoteItem] = []
@@ -770,21 +815,38 @@ class FavoritesMoversWorker(QObject):
             row = j[0] if isinstance(j[0], dict) else {}
             rsym = (row.get("symbol") or sym).strip().upper()
             name = (row.get("name") or row.get("companyName") or "").strip() or rsym
-            price = float(row.get("price") or 0.0)
 
+            # price robust
+            try:
+                price = float(row.get("price") or 0.0)
+            except Exception:
+                price = 0.0
+
+            # primary: changesPercentage / changePercent
             cp = row.get("changesPercentage", None)
             if cp is None:
                 cp = row.get("changePercent", None)
             if cp is None:
-                cp = 0.0
-            try:
-                cp_f = float(cp)
-            except Exception:
-                cp_f = 0.0
+                cp = row.get("changePercentage", None)
 
-            out.append(FavQuoteItem(symbol=rsym, name=name, change_pct=cp_f, price=price))
+            cp_f = _parse_change_pct(cp)
 
-        out.sort(key=lambda x: abs(x.change_pct), reverse=True)
+            # fallback: compute pct from change + previousClose if cp looks missing/zero but we have numbers
+            if abs(cp_f) < 1e-12:
+                chg = row.get("change", None)
+                prev = row.get("previousClose", None)
+                try:
+                    chg_f = float(chg) if chg is not None else 0.0
+                    prev_f = float(prev) if prev is not None else 0.0
+                    if prev_f and abs(chg_f) > 0:
+                        cp_f = (chg_f / prev_f) * 100.0
+                except Exception:
+                    pass
+
+            out.append(FavQuoteItem(symbol=rsym, name=name, change_pct=float(cp_f or 0.0), price=price))
+
+        # Sortierung: absteigend nach change_pct
+        out.sort(key=lambda x: x.change_pct, reverse=True)
         return out
 
 
@@ -913,6 +975,10 @@ class PortfolioHistoryWorker(QObject):
     - Preise aus stocks.prices
     - Forward-Fill: je Tag wird pro Asset der letzte bekannte Close <= Datum genutzt
     - Portfolio-Value = SUM(qty * close)
+
+    FIX:
+    - Für "MAX" / generell: wir begrenzen den Verlauf auf die letzten 20 Jahre, damit
+      es nicht hängt (riesige generate_series & CROSS JOIN).
     """
     finished = Signal(list)  # list[PortfolioPoint]
     failed = Signal(str)
@@ -934,6 +1000,7 @@ class PortfolioHistoryWorker(QObject):
         user = os.getenv("POSTGRES_USER", "stock_user")
         pw = os.getenv("POSTGRES_PASSWORD", "stock_pass")
 
+        # FIX: start date = max(mind, maxd - 20 years)
         sql = """
         WITH inv AS (
             SELECT i.asset_id, i.quantity::float8 AS qty
@@ -948,14 +1015,23 @@ class PortfolioHistoryWorker(QObject):
             JOIN inv i ON i.asset_id = p.asset_id
             WHERE p.date IS NOT NULL
         ),
+        clipped AS (
+            SELECT
+                CASE
+                    WHEN mind IS NULL OR maxd IS NULL THEN NULL::date
+                    ELSE GREATEST(mind, (maxd - interval '20 years')::date)
+                END AS startd,
+                maxd
+            FROM bounds
+        ),
         dates AS (
             SELECT generate_series(
-                (SELECT mind FROM bounds),
-                (SELECT maxd FROM bounds),
+                (SELECT startd FROM clipped),
+                (SELECT maxd FROM clipped),
                 interval '1 day'
             )::date AS d
-            WHERE (SELECT mind FROM bounds) IS NOT NULL
-              AND (SELECT maxd FROM bounds) IS NOT NULL
+            WHERE (SELECT startd FROM clipped) IS NOT NULL
+              AND (SELECT maxd FROM clipped) IS NOT NULL
         ),
         last_price AS (
             SELECT
@@ -1045,6 +1121,18 @@ class MainPage(QWidget):
         self._fav_movers_label: QLabel | None = None
         self._fav_thread: QThread | None = None
         self._fav_worker: FavoritesMoversWorker | None = None
+
+        # Favorites cache (stale-while-revalidate)
+        base_dir = os.path.dirname(os.path.abspath(__file__))
+        cache_dir = os.path.abspath(os.path.join(base_dir, "..", "cache"))
+        os.makedirs(cache_dir, exist_ok=True)
+        self._fav_cache_path = os.path.join(cache_dir, "favorite_movers_cache.json")
+        self._fav_cached_items: list[FavQuoteItem] = []
+        self._fav_cache_ts: int = 0
+
+        # Favorites refresh throttle (FIX: nicht dauernd neu laden)
+        self._fav_last_fetch_ts: int = 0
+        self._fav_min_fetch_interval_s: int = 90  # 60–120s ist ein guter Sweetspot
 
         # NEWS state
         self._news_items: list[NewsItem] = []
@@ -1160,6 +1248,10 @@ class MainPage(QWidget):
 
         self._set_active_tab("brokerage", sync_tabs=True)
 
+        # ---- Cache sofort laden & anzeigen (auch ohne Favoriten-Set, falls vorhanden)
+        self._load_fav_cache()
+        self._show_cached_favs_if_any()
+
         self._refresh_news()
         self._news_refresh_timer.start()
         self._news_rotate_timer.start()
@@ -1174,6 +1266,77 @@ class MainPage(QWidget):
         QTimer.singleShot(0, self._update_news_capacity)
         QTimer.singleShot(0, self._refresh_investments_summary)
         QTimer.singleShot(0, self._refresh_portfolio_history)
+
+    # --------------------------
+    # Favorites Cache helpers
+    # --------------------------
+    def _fav_cache_key(self) -> str:
+        return ",".join(sorted(self._favorite_symbols))
+
+    def _load_fav_cache(self) -> None:
+        """
+        FIX: Cache NICHT an den exakten key binden.
+        Sonst sieht man beim Start / Reihenfolge-Wechsel / kurz leerer Favoritenliste gar nichts.
+        """
+        self._fav_cached_items = []
+        self._fav_cache_ts = 0
+        try:
+            if not os.path.exists(self._fav_cache_path):
+                return
+            with open(self._fav_cache_path, "r", encoding="utf-8") as f:
+                j = json.load(f)
+            if not isinstance(j, dict):
+                return
+
+            ts = int(j.get("ts") or 0)
+            items = j.get("items") or []
+            if not isinstance(items, list):
+                return
+
+            out: list[FavQuoteItem] = []
+            for it in items:
+                if not isinstance(it, dict):
+                    continue
+                sym = str(it.get("symbol") or "").strip().upper()
+                if not sym:
+                    continue
+                out.append(
+                    FavQuoteItem(
+                        symbol=sym,
+                        name=str(it.get("name") or "").strip() or sym,
+                        change_pct=float(it.get("change_pct") or 0.0),
+                        price=float(it.get("price") or 0.0),
+                    )
+                )
+
+            self._fav_cached_items = out
+            self._fav_cache_ts = ts
+        except Exception:
+            self._fav_cached_items = []
+            self._fav_cache_ts = 0
+
+    def _save_fav_cache(self, items: list[FavQuoteItem]) -> None:
+        try:
+            payload = {
+                "key": self._fav_cache_key(),  # nur informativ
+                "ts": int(datetime.now().timestamp()),
+                "items": [
+                    {"symbol": x.symbol, "name": x.name, "change_pct": x.change_pct, "price": x.price}
+                    for x in items
+                ],
+            }
+            tmp = self._fav_cache_path + ".tmp"
+            with open(tmp, "w", encoding="utf-8") as f:
+                json.dump(payload, f, ensure_ascii=False)
+            os.replace(tmp, self._fav_cache_path)
+        except Exception:
+            pass
+
+    def _show_cached_favs_if_any(self) -> None:
+        if self._fav_movers_label is None:
+            return
+        if self._fav_cached_items:
+            self._fav_movers_label.setText(self._format_favorites_movers_block(self._fav_cached_items, n=6))
 
     # --------------------------
     # Public API
@@ -1203,8 +1366,14 @@ class MainPage(QWidget):
 
         if self._fav_movers_label is not None and not self._favorite_symbols:
             self._fav_movers_label.setText("Keine Favoriten")
+            return
 
-        self._refresh_favorite_movers()
+        # Cache sofort anzeigen (stale-while-revalidate)
+        self._load_fav_cache()
+        self._show_cached_favs_if_any()
+
+        # danach “revalidate”, aber throttled
+        self._refresh_favorite_movers(force=False)
 
     # --------------------------
     # Avatar helpers
@@ -1292,7 +1461,7 @@ class MainPage(QWidget):
         self.tab_changed.emit(which)
 
     # --------------------------
-    # Main Area (Investments oben links, Chart rechts davon, News unten)
+    # Main Area
     # --------------------------
     def _build_main_area(self) -> QWidget:
         root = QWidget()
@@ -1334,7 +1503,7 @@ class MainPage(QWidget):
         lv.addWidget(upper, 1)
         lv.addWidget(news, 0)
 
-        # RIGHT COLUMN (fixed width)
+        # RIGHT COLUMN
         right_col = QWidget()
         right_col.setAttribute(Qt.WA_StyledBackground, True)
         rv = QVBoxLayout(right_col)
@@ -1410,7 +1579,6 @@ class MainPage(QWidget):
 
         hh.addWidget(left, 0, Qt.AlignLeft)
 
-        # Range chips (like screenshot)
         chips = QWidget()
         chips.setAttribute(Qt.WA_StyledBackground, True)
         ch = QHBoxLayout(chips)
@@ -1440,7 +1608,6 @@ class MainPage(QWidget):
 
         v.addWidget(header, 0)
 
-        # Chart area
         if not _HAS_QTCHARTS:
             self._chart_error_label = QLabel("QtCharts nicht verfügbar. Installiere PySide6-Addons/QtCharts.")
             self._chart_error_label.setObjectName("Placeholder")
@@ -1458,11 +1625,6 @@ class MainPage(QWidget):
         self._chart.setMargins(QMargins(0, 0, 0, 0))
 
         self._chart_series = QLineSeries()
-        # Performance boost (wenn verfügbar)
-        try:
-            self._chart_series.setUseOpenGL(True)
-        except Exception:
-            pass
         self._chart.addSeries(self._chart_series)
 
         self._chart_axis_x = QDateTimeAxis()
@@ -1564,7 +1726,6 @@ class MainPage(QWidget):
         end = pts[-1].d
         k = (self._pf_range_key or "1M").upper()
 
-        # MAX = immer 20 Jahre
         if k == "MAX":
             start = end - timedelta(days=365 * 20)
             return [p for p in pts if p.d >= start]
@@ -1574,43 +1735,14 @@ class MainPage(QWidget):
         start = end - timedelta(days=days)
         return [p for p in pts if p.d >= start]
 
-    def _downsample_series(self, xs_ms: list[int], ys: list[float], max_points: int = 1400) -> tuple[list[int], list[float]]:
-        """
-        Downsample (min/max pro Bucket), damit MAX/20J nicht die UI killt.
-        Bewahrt Peaks/Täler besser als "jeden n-ten Punkt".
-        """
-        n = len(ys)
-        if n <= max_points or n < 4:
-            return xs_ms, ys
-
-        buckets = max(1, (max_points - 2) // 2)  # weil min+max pro bucket
-        step = (n - 2) / buckets  # ohne first/last
-
-        out_x = [xs_ms[0]]
-        out_y = [ys[0]]
-
-        for b in range(buckets):
-            start = 1 + int(b * step)
-            end = 1 + int((b + 1) * step)
-            if end <= start:
-                continue
-            if end >= n - 1:
-                end = n - 1
-
-            seg_y = ys[start:end]
-            if not seg_y:
-                continue
-
-            min_i = min(range(len(seg_y)), key=lambda i: seg_y[i])
-            max_i = max(range(len(seg_y)), key=lambda i: seg_y[i])
-
-            for ci in sorted({min_i, max_i}):
-                out_x.append(xs_ms[start + ci])
-                out_y.append(ys[start + ci])
-
-        out_x.append(xs_ms[-1])
-        out_y.append(ys[-1])
-        return out_x, out_y
+    def _downsample_points(self, pts: list[PortfolioPoint], max_points: int = 1800) -> list[PortfolioPoint]:
+        if not pts or len(pts) <= max_points:
+            return pts
+        step = max(1, len(pts) // max_points)
+        sampled = pts[::step]
+        if sampled[-1].d != pts[-1].d:
+            sampled.append(pts[-1])
+        return sampled
 
     def _render_portfolio_chart(self) -> None:
         if not _HAS_QTCHARTS:
@@ -1619,8 +1751,8 @@ class MainPage(QWidget):
             return
 
         pts = self._slice_points_by_range(self._pf_points)
+        pts = self._downsample_points(pts, max_points=1800)
 
-        # Clear series
         try:
             self._chart_series.clear()
         except Exception:
@@ -1640,7 +1772,6 @@ class MainPage(QWidget):
                 self._chart_pct_label.setText("Keine Verlaufdaten")
             return
 
-        # Runden auf 2 Dezimalstellen (Cent), damit "0.00%" nicht als schräger Trend aussieht
         rounded_vals: list[float] = []
         for p in pts:
             try:
@@ -1648,7 +1779,24 @@ class MainPage(QWidget):
             except Exception:
                 rounded_vals.append(0.0)
 
-        # pct aus gerundeten Werten bestimmen (Anzeige-konsistent)
+        for p, v in zip(pts, rounded_vals):
+            dt = datetime.combine(p.d, datetime.min.time())
+            qdt = QDateTime(dt)
+            self._chart_series.append(qdt.toMSecsSinceEpoch(), float(v))
+
+        min_dt = datetime.combine(pts[0].d, datetime.min.time())
+        max_dt = datetime.combine(pts[-1].d, datetime.min.time())
+        self._chart_axis_x.setRange(QDateTime(min_dt), QDateTime(max_dt))
+
+        vmin = min(rounded_vals)
+        vmax = max(rounded_vals)
+        if vmin == vmax:
+            eps = max(1.0, abs(vmin) * 0.001)
+            vmin -= eps
+            vmax += eps
+        pad = (vmax - vmin) * 0.08
+        self._chart_axis_y.setRange(vmin - pad, vmax + pad)
+
         first = float(rounded_vals[0])
         last = float(rounded_vals[-1])
 
@@ -1660,42 +1808,6 @@ class MainPage(QWidget):
             pct_raw = ((last - first) / first) * 100.0
         pct_disp = round(pct_raw, 2)
 
-        # WICHTIG: wenn Anzeige 0.00% -> Linie flach zeichnen
-        if pct_disp == 0.0:
-            flat = last
-            rounded_vals = [flat for _ in rounded_vals]
-            first = last = flat
-
-        # x/y Arrays bauen
-        xs_ms: list[int] = []
-        ys: list[float] = []
-        for p, v in zip(pts, rounded_vals):
-            dt = datetime.combine(p.d, datetime.min.time())
-            qdt = QDateTime(dt)
-            xs_ms.append(int(qdt.toMSecsSinceEpoch()))
-            ys.append(float(v))
-
-        # Downsample für MAX (20 Jahre)
-        if self._pf_range_key == "MAX":
-            xs_ms, ys = self._downsample_series(xs_ms, ys, max_points=1400)
-
-        # schneller als append() in loop
-        self._chart_series.replace([QPointF(x, y) for x, y in zip(xs_ms, ys)])
-
-        # Axes range
-        min_dt = datetime.combine(pts[0].d, datetime.min.time())
-        max_dt = datetime.combine(pts[-1].d, datetime.min.time())
-        self._chart_axis_x.setRange(QDateTime(min_dt), QDateTime(max_dt))
-
-        vmin = min(ys)
-        vmax = max(ys)
-        if vmin == vmax:
-            vmin *= 0.999
-            vmax *= 1.001
-        pad = (vmax - vmin) * 0.08
-        self._chart_axis_y.setRange(vmin - pad, vmax + pad)
-
-        # Farbe nach Zeitraum-Performance
         green = QColor("#4ADE80")
         red = QColor("#FB7185")
         neutral = QColor("#AEB7C2")
@@ -1717,16 +1829,6 @@ class MainPage(QWidget):
                 self._chart_pct_label.setStyleSheet("color: rgba(251,113,133,235); font-weight: 900;")
             else:
                 self._chart_pct_label.setStyleSheet("color: rgba(174,183,194,210); font-weight: 900;")
-
-        # Antialiasing dynamisch (MAX ggf. aus bei vielen Punkten)
-        if self._chart_view is not None:
-            try:
-                if self._pf_range_key == "MAX" and len(ys) > 1200:
-                    self._chart_view.setRenderHint(QPainter.Antialiasing, False)
-                else:
-                    self._chart_view.setRenderHint(QPainter.Antialiasing, True)
-            except Exception:
-                pass
 
     # --------------------------
     # News Panel
@@ -1860,7 +1962,6 @@ class MainPage(QWidget):
         v.setContentsMargins(18, 12, 18, 12)
         v.setSpacing(8)
 
-        # Header row
         header = QWidget()
         header.setAttribute(Qt.WA_StyledBackground, True)
         hh = QHBoxLayout(header)
@@ -1889,7 +1990,6 @@ class MainPage(QWidget):
         hh.addWidget(invest_btn, 0, Qt.AlignRight)
         v.addWidget(header)
 
-        # Filter chips row
         chips = QWidget()
         chips.setAttribute(Qt.WA_StyledBackground, True)
         ch = QHBoxLayout(chips)
@@ -1917,7 +2017,6 @@ class MainPage(QWidget):
         ch.addStretch(1)
         v.addWidget(chips)
 
-        # Panel
         panel = QFrame()
         panel.setObjectName("InvPanel")
         panel.setAttribute(Qt.WA_StyledBackground, True)
@@ -1928,7 +2027,6 @@ class MainPage(QWidget):
         pv.setContentsMargins(14, 12, 14, 12)
         pv.setSpacing(10)
 
-        # status + total
         topmeta = QWidget()
         topmeta.setAttribute(Qt.WA_StyledBackground, True)
         tmh = QHBoxLayout(topmeta)
@@ -1946,7 +2044,6 @@ class MainPage(QWidget):
         tmh.addWidget(self._inv_total_label, 0, Qt.AlignRight)
         pv.addWidget(topmeta)
 
-        # SCROLL area
         self._inv_scroll = QScrollArea()
         self._inv_scroll.setWidgetResizable(True)
         self._inv_scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
@@ -2052,7 +2149,6 @@ class MainPage(QWidget):
             rh.setContentsMargins(14, 10, 14, 10)
             rh.setSpacing(10)
 
-            # LEFT
             left = QWidget()
             left.setAttribute(Qt.WA_StyledBackground, True)
             lv = QVBoxLayout(left)
@@ -2072,7 +2168,6 @@ class MainPage(QWidget):
             lv.addWidget(title)
             lv.addWidget(meta)
 
-            # RIGHT
             right = QWidget()
             right.setAttribute(Qt.WA_StyledBackground, True)
             rv = QVBoxLayout(right)
@@ -2248,21 +2343,33 @@ class MainPage(QWidget):
             )
 
     # --------------------------
-    # Favorites movers
+    # Favorites movers (cached + throttled)
     # --------------------------
-    def _refresh_favorite_movers(self) -> None:
+    def _refresh_favorite_movers(self, force: bool = False) -> None:
         if self._fav_movers_label is None:
             return
         if not self._favorite_symbols:
             self._fav_movers_label.setText("Keine Favoriten")
             return
 
-        self._fav_movers_label.setText("Lade Favoriten Movers …")
+        now_ts = int(datetime.now().timestamp())
 
-        fmp_key = os.getenv("FMP_API_KEY", "").strip()
+        # FIX: Throttle (sonst "lädt immer noch sehr oft")
+        if not force and self._fav_last_fetch_ts and (now_ts - self._fav_last_fetch_ts) < self._fav_min_fetch_interval_s:
+            if not self._fav_cached_items:
+                self._fav_movers_label.setText("Lade Favoriten Movers …")
+            return
+
+        # Nur "Lade..." wenn nix angezeigt werden kann
+        if not self._fav_cached_items:
+            self._fav_movers_label.setText("Lade Favoriten Movers …")
 
         if self._fav_thread is not None and self._fav_thread.isRunning():
             return
+
+        self._fav_last_fetch_ts = now_ts
+
+        fmp_key = os.getenv("FMP_API_KEY", "").strip()
 
         self._fav_thread = QThread(self)
         self._fav_worker = FavoritesMoversWorker(fmp_key=fmp_key, symbols=self._favorite_symbols)
@@ -2282,6 +2389,11 @@ class MainPage(QWidget):
     def _on_fav_movers_failed(self, msg: str) -> None:
         if self._fav_movers_label is None:
             return
+
+        # Wenn Cache da ist: NICHT überschreiben -> stale bleibt sichtbar
+        if self._fav_cached_items:
+            return
+
         safe = (msg or "").replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;").replace("\n", "<br>")
         self._fav_movers_label.setText(f"Favoriten Movers konnten nicht geladen werden:<br>{safe}")
 
@@ -2291,8 +2403,13 @@ class MainPage(QWidget):
 
         favs: list[FavQuoteItem] = [x for x in items if isinstance(x, FavQuoteItem)]
         if not favs:
+            if self._fav_cached_items:
+                return
             self._fav_movers_label.setText("Keine Favoriten-Daten gefunden.")
             return
+
+        self._fav_cached_items = favs[:]
+        self._save_fav_cache(self._fav_cached_items)
 
         self._fav_movers_label.setText(self._format_favorites_movers_block(favs, n=6))
 
