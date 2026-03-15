@@ -411,7 +411,7 @@ if __name__ == "__main__":
             stack.setCurrentWidget(analyse)
             return
         if event.key() == Qt.Key_F4:
-            stack.setCurrentWidget(investment_page)  # ✅ NEW
+            stack.setCurrentWidget(investment_page)
             return
         if event.key() == Qt.Key_Escape:
             app.quit()

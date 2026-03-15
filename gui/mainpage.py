@@ -2561,7 +2561,7 @@ class MainPage(QWidget):
 
         if self._news_footer_label is not None:
             if total > 0:
-                self._news_footer_label.setText(f"Seite {self._news_page + 1}/{pages} · {total} Artikel")
+                self._news_footer_label.setText("")
             else:
                 self._news_footer_label.setText("")
 

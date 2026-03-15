@@ -15,18 +15,11 @@ from gui.widgets.segmentedtabs import SegmentedTabs
 from gui.widgets.worldbank_feed import WorldBankFeedWidget
 from gui.widgets.quant_analysis import QuantAnalysisWidget
 
-# ✅ NEW: compact notes
-from gui.widgets.notes_compact import NotesCompactWidget
-
 
 class AnalysePage(QWidget):
     tab_changed = Signal(str)    # "brokerage" | "analyse"
     avatar_clicked = Signal()
     calendar_clicked = Signal()
-
-    # ✅ Notes signals outward (controller wiring)
-    notes_refresh_requested = Signal(object)     # scope: None or "AAPL"
-    note_quick_save_requested = Signal(object, str)  # scope, text
 
     def __init__(self, parent: QWidget | None = None):
         super().__init__(parent)
@@ -46,7 +39,6 @@ class AnalysePage(QWidget):
         self._avatar_btn: QPushButton | None = None
 
         self._quant: QuantAnalysisWidget | None = None
-        self._notes: NotesCompactWidget | None = None
 
         root = QVBoxLayout(self)
         root.setContentsMargins(40, 40, 40, 40)
@@ -63,11 +55,9 @@ class AnalysePage(QWidget):
 
         self._topbar = self._build_topbar()
         self._middle = self._build_middle_area()
-        self._bottom = self._build_bottom_area()
 
         shell_v.addWidget(self._topbar, 0)
         shell_v.addWidget(self._middle, 1)
-        shell_v.addWidget(self._bottom, 0)
 
         root.addWidget(self._shell, 0, Qt.AlignCenter)
 
@@ -98,30 +88,12 @@ class AnalysePage(QWidget):
         self.set_avatar_letter("N")
 
     # --------------------------
-    # Public API: Favorites -> Quant + Notes scope
+    # Public API: Favorites -> Quant
     # --------------------------
     def set_favorite_symbols(self, symbols: list[str] | None) -> None:
         syms = [(s or "").strip().upper() for s in (symbols or []) if (s or "").strip()]
         if self._quant is not None:
             self._quant.set_symbols(syms)
-        # Notes: default scope to first symbol if exists, else global
-        if self._notes is not None:
-            self._notes.set_scope(syms[0] if syms else None)
-            self.notes_refresh_requested.emit(syms[0] if syms else None)
-
-    # --------------------------
-    # Public API: Notes status/preview hook
-    # --------------------------
-    def notes_set_status(self, text: str) -> None:
-        if self._notes is not None:
-            self._notes.set_status(text)
-
-    def notes_set_latest_text(self, text: str | None) -> None:
-        """
-        Optional: controller can push the latest note text into the input (preview/edit).
-        """
-        if self._notes is not None and text:
-            self._notes.input.setText((text or "").strip())
 
     # --------------------------
     # Shell sizing
@@ -244,20 +216,6 @@ class AnalysePage(QWidget):
         h.addWidget(center, 1)
         h.addWidget(right, 0)
         return w
-
-    # --------------------------
-    # Bottom: compact notes (small height again)
-    # --------------------------
-    def _build_bottom_area(self) -> QFrame:
-        notes = NotesCompactWidget()
-        notes.setFixedHeight(96)  # small like before (tweak 78..110)
-        self._notes = notes
-
-        # wire signals outward
-        notes.refresh_requested.connect(self.notes_refresh_requested.emit)
-        notes.save_requested.connect(self.note_quick_save_requested.emit)
-
-        return notes
 
     # --------------------------
     # Generic panel helper
