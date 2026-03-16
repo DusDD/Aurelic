@@ -1,9 +1,8 @@
-# gui/analysepage.py
 from __future__ import annotations
 
 import os
 
-from PySide6.QtCore import Qt, Signal, QTimer, QSize
+from PySide6.QtCore import Qt, Signal, QTimer, QSize, QSettings
 from PySide6.QtGui import QIcon
 from PySide6.QtWidgets import (
     QWidget, QFrame, QLabel, QPushButton,
@@ -11,9 +10,12 @@ from PySide6.QtWidgets import (
 )
 
 from gui.mainpage import Palette, build_qss
+from gui.utils.guided_tour import GuidedTourOverlay, TourStep
 from gui.widgets.segmentedtabs import SegmentedTabs
 from gui.widgets.worldbank_feed import WorldBankFeedWidget
 from gui.widgets.quant_analysis import QuantAnalysisWidget
+from gui.widgets.portfolio_risk_heatmap import PortfolioRiskHeatmapWidget
+from gui.widgets.watchlist_insights import WatchlistInsightsWidget
 
 
 class AnalysePage(QWidget):
@@ -39,6 +41,19 @@ class AnalysePage(QWidget):
         self._avatar_btn: QPushButton | None = None
 
         self._quant: QuantAnalysisWidget | None = None
+        self._risk_heatmap: PortfolioRiskHeatmapWidget | None = None
+        self._watchlist_insights: WatchlistInsightsWidget | None = None
+        self._current_user_id: int | None = None
+
+        # Onboarding / Product Tour
+        self._tour_overlay: GuidedTourOverlay | None = None
+        self._onboarding_pending: bool = False
+        self._onboarding_scheduled: bool = False
+
+        self._tour_target_worldbank: QWidget | None = None
+        self._tour_target_quant: QWidget | None = None
+        self._tour_target_risk: QWidget | None = None
+        self._tour_target_watchlist: QWidget | None = None
 
         root = QVBoxLayout(self)
         root.setContentsMargins(40, 40, 40, 40)
@@ -76,24 +91,166 @@ class AnalysePage(QWidget):
     def set_avatar_from_user(self, user: dict | None) -> None:
         if not user:
             self.set_avatar_letter("N")
+            self.set_current_user(None)
             return
+
         first = (user.get("first_name") or "").strip()
         if first:
             self.set_avatar_letter(first[0])
-            return
-        email = (user.get("email") or "").strip()
-        if email:
-            self.set_avatar_letter(email[0])
-            return
-        self.set_avatar_letter("N")
+        else:
+            email = (user.get("email") or "").strip()
+            if email:
+                self.set_avatar_letter(email[0])
+            else:
+                self.set_avatar_letter("N")
+
+        self.set_current_user(user)
 
     # --------------------------
-    # Public API: Favorites -> Quant
+    # Public API: Current User
+    # --------------------------
+    def set_current_user(self, user: dict | None) -> None:
+        uid = None
+        if isinstance(user, dict):
+            try:
+                uid = int(user.get("id")) if user.get("id") is not None else None
+            except Exception:
+                uid = None
+
+        self._current_user_id = uid
+
+        if self._risk_heatmap is not None:
+            self._risk_heatmap.set_user_id(uid)
+
+        self.maybe_start_onboarding()
+
+    # --------------------------
+    # Public API: Favorites -> Quant / Watchlist Insights
     # --------------------------
     def set_favorite_symbols(self, symbols: list[str] | None) -> None:
         syms = [(s or "").strip().upper() for s in (symbols or []) if (s or "").strip()]
+
         if self._quant is not None:
             self._quant.set_symbols(syms)
+
+        if self._watchlist_insights is not None:
+            self._watchlist_insights.set_symbols(syms)
+
+    # --------------------------
+    # Onboarding / Product Tour
+    # --------------------------
+    def _tour_settings_key(self) -> str:
+        uid = self._current_user_id if self._current_user_id is not None else "guest"
+        return f"onboarding/analysepage/v3/user/{uid}"
+
+    def _schedule_onboarding_start(self, delay_ms: int = 450) -> None:
+        if self._onboarding_scheduled:
+            return
+
+        self._onboarding_scheduled = True
+
+        def _run() -> None:
+            self._onboarding_scheduled = False
+            self._start_onboarding()
+
+        QTimer.singleShot(delay_ms, _run)
+
+    def maybe_start_onboarding(self) -> None:
+        if self._current_user_id is None:
+            return
+
+        settings = QSettings("Aurelic", "DesktopApp")
+        done = settings.value(self._tour_settings_key(), False, bool)
+        if done:
+            return
+
+        if self._tour_overlay is not None:
+            return
+
+        if not self.isVisible():
+            self._onboarding_pending = True
+            return
+
+        self._schedule_onboarding_start(450)
+
+    def _build_ui_tour_steps(self) -> list[TourStep]:
+        steps: list[TourStep] = []
+
+        if hasattr(self, "_seg_tabs") and self._seg_tabs is not None:
+            steps.append(TourStep(
+                target=self._seg_tabs,
+                title="Analyse-Navigation",
+                text="Hier wechselst du zwischen Brokerage und Analyse. So erreichst du jederzeit wieder deine Portfolio-Ansicht oder die Analyse-Module.",
+                placement="bottom",
+            ))
+
+        if self._tour_target_worldbank is not None:
+            steps.append(TourStep(
+                target=self._tour_target_worldbank,
+                title="World Bank Feed",
+                text="Hier findest du makroökonomische Daten und globale Marktinformationen. Sie helfen dir, Marktbewegungen besser im gesamtwirtschaftlichen Kontext zu lesen.",
+                placement="right",
+            ))
+
+        if self._tour_target_quant is not None:
+            steps.append(TourStep(
+                target=self._tour_target_quant,
+                title="Quant Analyse",
+                text="Hier werden quantitative Auswertungen für deine ausgewählten Assets dargestellt. Das Modul unterstützt dich dabei, Marktverhalten datenbasiert zu bewerten.",
+                placement="left",
+            ))
+
+        if self._tour_target_risk is not None:
+            steps.append(TourStep(
+                target=self._tour_target_risk,
+                title="Portfolio Risiko",
+                text="Diese Heatmap visualisiert die historische Schwankungsintensität deiner Positionen. Je stärker die Ausprägung, desto höher war zuletzt die Volatilität.",
+                placement="left",
+            ))
+
+        if self._tour_target_watchlist is not None:
+            steps.append(TourStep(
+                target=self._tour_target_watchlist,
+                title="Watchlist Insights",
+                text="Hier erkennst du Konzentrationen, Sektor-Schwerpunkte und mögliche Abhängigkeiten innerhalb deiner Watchlist. So werden Klumpenrisiken schneller sichtbar.",
+                placement="left",
+            ))
+
+        return steps
+
+    def _start_onboarding(self) -> None:
+        if self._current_user_id is None:
+            return
+
+        if not self.isVisible():
+            self._onboarding_pending = True
+            return
+
+        settings = QSettings("Aurelic", "DesktopApp")
+        done = settings.value(self._tour_settings_key(), False, bool)
+        if done:
+            return
+
+        if self._tour_overlay is not None:
+            return
+
+        steps = self._build_ui_tour_steps()
+
+        if not steps:
+            settings.setValue(self._tour_settings_key(), True)
+            return
+
+        def _mark_done() -> None:
+            settings.setValue(self._tour_settings_key(), True)
+            self._tour_overlay = None
+
+        self._tour_overlay = GuidedTourOverlay(
+            host=self,
+            steps=steps,
+            on_finished=_mark_done,
+            parent=self,
+        )
+        self._tour_overlay.start()
 
     # --------------------------
     # Shell sizing
@@ -132,6 +289,19 @@ class AnalysePage(QWidget):
             self._last_shell_size = new_size
 
         self._resize_debounce.start()
+
+    def showEvent(self, event) -> None:
+        super().showEvent(event)
+
+        if self._onboarding_pending:
+            self._onboarding_pending = False
+            self.maybe_start_onboarding()
+            return
+
+        # zusätzlicher Fix:
+        # auch beim ersten echten Anzeigen der AnalysePage immer nochmal prüfen,
+        # falls set_current_user vorher nicht sauber durchgelaufen ist
+        self.maybe_start_onboarding()
 
     # --------------------------
     # Topbar
@@ -190,12 +360,14 @@ class AnalysePage(QWidget):
         left = WorldBankFeedWidget()
         left.setMinimumWidth(320)
         left.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Expanding)
+        self._tour_target_worldbank = left
 
         center = QuantAnalysisWidget()
         center.setMinimumWidth(0)
         center.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
         center.error.connect(lambda msg: print("[QuantAnalysis]", msg))
         self._quant = center
+        self._tour_target_quant = center
 
         right = QWidget()
         right.setAttribute(Qt.WA_StyledBackground, True)
@@ -204,10 +376,18 @@ class AnalysePage(QWidget):
         rv.setContentsMargins(0, 0, 0, 0)
         rv.setSpacing(14)
 
-        right_top = self._panel("Portfolio\nRisiko", "Heatmap / Risiko\n(Placeholder)", 320)
-        right_bottom = self._panel("Watchlist\nInsights", "Alerts / Insights\n(Placeholder)", 320)
+        right_top = PortfolioRiskHeatmapWidget()
+        right_top.setMinimumWidth(320)
+        right_top.setMaximumWidth(360)
         right_top.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Expanding)
+        right_top.error.connect(lambda msg: print("[PortfolioRiskHeatmap]", msg))
+        self._risk_heatmap = right_top
+        self._tour_target_risk = right_top
+
+        right_bottom = WatchlistInsightsWidget()
         right_bottom.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Expanding)
+        self._watchlist_insights = right_bottom
+        self._tour_target_watchlist = right_bottom
 
         rv.addWidget(right_top, 1)
         rv.addWidget(right_bottom, 1)
