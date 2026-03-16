@@ -1,4 +1,3 @@
-# gui/mainpage.py
 from __future__ import annotations
 
 import os
@@ -9,7 +8,7 @@ from dataclasses import dataclass
 from datetime import datetime, date, timedelta
 from typing import Optional, Any
 
-from PySide6.QtCore import Qt, Signal, QTimer, QThread, QObject, QUrl, QSize, QDateTime, QMargins
+from PySide6.QtCore import Qt, Signal, QTimer, QThread, QObject, QUrl, QSize, QDateTime, QMargins, QSettings
 from PySide6.QtGui import QDesktopServices, QIcon, QPainter, QColor, QPen
 
 from PySide6.QtWidgets import (
@@ -19,6 +18,7 @@ from PySide6.QtWidgets import (
 )
 
 from gui.widgets.segmentedtabs import SegmentedTabs
+from gui.utils.guided_tour import GuidedTourOverlay, TourStep
 
 # Optional: QtCharts (Portfolio-Chart)
 try:
@@ -359,7 +359,6 @@ def _fmt_num(x: float, decimals: int = 2) -> str:
 
 
 def _fmt_eur(x: float, decimals: int = 2) -> str:
-    # 12.548,61 €
     try:
         v = float(x)
     except Exception:
@@ -382,10 +381,6 @@ def _fmt_qty(x: float) -> str:
 
 
 def _norm_category(cat: str) -> str:
-    """
-    Normalisiert Kategorien robust (DB kann 'ETF', 'Etf', 'stocks', etc. liefern).
-    Zielwerte: stock | etf | crypto | commodity | index
-    """
     c = (cat or "").strip().lower()
     if not c:
         return "stock"
@@ -402,20 +397,13 @@ def _norm_category(cat: str) -> str:
     return c
 
 
-# --------------------------
-# Robust parsing helpers (FIX für FMP changesPercentage)
-# --------------------------
 _PCT_RE = re.compile(r"[-+]?\d+(?:[.,]\d+)?")
 
+
 def _parse_change_pct(v: Any) -> float:
-    """
-    FMP liefert changesPercentage teils als String "(+1.23%)" oder "-0.45%".
-    Das hier extrahiert zuverlässig die Zahl und gibt sie als float (Prozentpunkte) zurück.
-    """
     if v is None:
         return 0.0
 
-    # already numeric
     if isinstance(v, (int, float)):
         try:
             return float(v)
@@ -426,7 +414,6 @@ def _parse_change_pct(v: Any) -> float:
     if not s:
         return 0.0
 
-    # remove parentheses and percent sign
     s = s.replace("(", "").replace(")", "").replace("%", "").strip()
 
     m = _PCT_RE.search(s)
@@ -740,7 +727,7 @@ class MoversFetcherWorker(QObject):
 
 
 class FavoritesMoversWorker(QObject):
-    finished = Signal(list)  # list[FavQuoteItem]
+    finished = Signal(list)
     failed = Signal(str)
 
     def __init__(self, fmp_key: str, symbols: list[str], parent: QObject | None = None):
@@ -794,14 +781,6 @@ class FavoritesMoversWorker(QObject):
             raise RuntimeError(f"FMP JSON parse error: {e}. Body head: {raw[:200]}")
 
     def _fetch_quotes_single(self, symbols: list[str]) -> list[FavQuoteItem]:
-        """
-        FIX:
-        - changesPercentage ist häufig String "(+1.23%)" -> früher float() => Exception => 0.0
-        - fallback: wenn changesPercentage fehlt/0 ist, aus change + previousClose berechnen
-
-        Anzeige-Änderung:
-        - Sortierung der Favoriten Top Mover: absteigend nach change_pct (nicht nach abs)
-        """
         base = "https://financialmodelingprep.com/stable/quote"
 
         out: list[FavQuoteItem] = []
@@ -816,13 +795,11 @@ class FavoritesMoversWorker(QObject):
             rsym = (row.get("symbol") or sym).strip().upper()
             name = (row.get("name") or row.get("companyName") or "").strip() or rsym
 
-            # price robust
             try:
                 price = float(row.get("price") or 0.0)
             except Exception:
                 price = 0.0
 
-            # primary: changesPercentage / changePercent
             cp = row.get("changesPercentage", None)
             if cp is None:
                 cp = row.get("changePercent", None)
@@ -831,7 +808,6 @@ class FavoritesMoversWorker(QObject):
 
             cp_f = _parse_change_pct(cp)
 
-            # fallback: compute pct from change + previousClose if cp looks missing/zero but we have numbers
             if abs(cp_f) < 1e-12:
                 chg = row.get("change", None)
                 prev = row.get("previousClose", None)
@@ -845,13 +821,12 @@ class FavoritesMoversWorker(QObject):
 
             out.append(FavQuoteItem(symbol=rsym, name=name, change_pct=float(cp_f or 0.0), price=price))
 
-        # Sortierung: absteigend nach change_pct
         out.sort(key=lambda x: x.change_pct, reverse=True)
         return out
 
 
 class InvestmentsSummaryWorker(QObject):
-    finished = Signal(list)  # list[InvestmentSummaryItem]
+    finished = Signal(list)
     failed = Signal(str)
 
     def __init__(self, user_id: int, category: str = "all", parent: QObject | None = None):
@@ -969,18 +944,7 @@ class InvestmentsSummaryWorker(QObject):
 
 
 class PortfolioHistoryWorker(QObject):
-    """
-    Baut den Portfolio-Verlauf des Users:
-    - Investments (asset_id, qty) aus stocks.investments
-    - Preise aus stocks.prices
-    - Forward-Fill: je Tag wird pro Asset der letzte bekannte Close <= Datum genutzt
-    - Portfolio-Value = SUM(qty * close)
-
-    FIX:
-    - Für "MAX" / generell: wir begrenzen den Verlauf auf die letzten 20 Jahre, damit
-      es nicht hängt (riesige generate_series & CROSS JOIN).
-    """
-    finished = Signal(list)  # list[PortfolioPoint]
+    finished = Signal(list)
     failed = Signal(str)
 
     def __init__(self, user_id: int, parent: QObject | None = None):
@@ -1000,7 +964,6 @@ class PortfolioHistoryWorker(QObject):
         user = os.getenv("POSTGRES_USER", "stock_user")
         pw = os.getenv("POSTGRES_PASSWORD", "stock_pass")
 
-        # FIX: start date = max(mind, maxd - 20 years)
         sql = """
         WITH inv AS (
             SELECT i.asset_id, i.quantity::float8 AS qty
@@ -1097,10 +1060,10 @@ class PortfolioHistoryWorker(QObject):
 # Main Page
 # --------------------------
 class MainPage(QWidget):
-    tab_changed = Signal(str)   # "brokerage" | "analyse"
+    tab_changed = Signal(str)
     avatar_clicked = Signal()
     calendar_clicked = Signal()
-    investments_clicked = Signal()  # zur investment.py Seite wechseln
+    investments_clicked = Signal()
 
     def __init__(self, background_path: str = "images/Backgroundimage.png", parent: QWidget | None = None):
         super().__init__(parent)
@@ -1116,13 +1079,23 @@ class MainPage(QWidget):
         self._avatar_btn: QPushButton | None = None
         self._current_user_id: int | None = None
 
+        # Onboarding / Product Tour
+        self._tour_overlay: GuidedTourOverlay | None = None
+        self._onboarding_pending: bool = False
+
+        self._tour_target_investments: QWidget | None = None
+        self._tour_target_chart: QWidget | None = None
+        self._tour_target_news: QWidget | None = None
+        self._tour_target_movers: QWidget | None = None
+        self._tour_target_favorites: QWidget | None = None
+
         # Favorites movers state
         self._favorite_symbols: list[str] = []
         self._fav_movers_label: QLabel | None = None
         self._fav_thread: QThread | None = None
         self._fav_worker: FavoritesMoversWorker | None = None
 
-        # Favorites cache (stale-while-revalidate)
+        # Favorites cache
         base_dir = os.path.dirname(os.path.abspath(__file__))
         cache_dir = os.path.abspath(os.path.join(base_dir, "..", "cache"))
         os.makedirs(cache_dir, exist_ok=True)
@@ -1130,9 +1103,9 @@ class MainPage(QWidget):
         self._fav_cached_items: list[FavQuoteItem] = []
         self._fav_cache_ts: int = 0
 
-        # Favorites refresh throttle (FIX: nicht dauernd neu laden)
+        # Favorites refresh throttle
         self._fav_last_fetch_ts: int = 0
-        self._fav_min_fetch_interval_s: int = 90  # 60–120s ist ein guter Sweetspot
+        self._fav_min_fetch_interval_s: int = 90
 
         # NEWS state
         self._news_items: list[NewsItem] = []
@@ -1156,7 +1129,7 @@ class MainPage(QWidget):
         self._overall_losers: list[MoverItem] = []
         self._overall_movers_label: QLabel | None = None
 
-        # Investments summary (DB)
+        # Investments summary
         self._inv_thread: QThread | None = None
         self._inv_worker: InvestmentsSummaryWorker | None = None
         self._inv_items: list[InvestmentSummaryItem] = []
@@ -1173,7 +1146,7 @@ class MainPage(QWidget):
         self._pf_thread: QThread | None = None
         self._pf_worker: PortfolioHistoryWorker | None = None
         self._pf_points: list[PortfolioPoint] = []
-        self._pf_range_key: str = "1M"  # default
+        self._pf_range_key: str = "1M"
         self._chart_value_label: QLabel | None = None
         self._chart_pct_label: QLabel | None = None
         self._chart_error_label: QLabel | None = None
@@ -1248,7 +1221,6 @@ class MainPage(QWidget):
 
         self._set_active_tab("brokerage", sync_tabs=True)
 
-        # ---- Cache sofort laden & anzeigen (auch ohne Favoriten-Set, falls vorhanden)
         self._load_fav_cache()
         self._show_cached_favs_if_any()
 
@@ -1274,10 +1246,6 @@ class MainPage(QWidget):
         return ",".join(sorted(self._favorite_symbols))
 
     def _load_fav_cache(self) -> None:
-        """
-        FIX: Cache NICHT an den exakten key binden.
-        Sonst sieht man beim Start / Reihenfolge-Wechsel / kurz leerer Favoritenliste gar nichts.
-        """
         self._fav_cached_items = []
         self._fav_cache_ts = 0
         try:
@@ -1318,7 +1286,7 @@ class MainPage(QWidget):
     def _save_fav_cache(self, items: list[FavQuoteItem]) -> None:
         try:
             payload = {
-                "key": self._fav_cache_key(),  # nur informativ
+                "key": self._fav_cache_key(),
                 "ts": int(datetime.now().timestamp()),
                 "items": [
                     {"symbol": x.symbol, "name": x.name, "change_pct": x.change_pct, "price": x.price}
@@ -1351,6 +1319,173 @@ class MainPage(QWidget):
         self._current_user_id = uid
         self._refresh_investments_summary()
         self._refresh_portfolio_history()
+        self.maybe_start_onboarding()
+
+    def _tour_settings_key(self) -> str:
+        uid = self._current_user_id if self._current_user_id is not None else "guest"
+        return f"onboarding/mainpage/v3/user/{uid}"
+
+    def maybe_start_onboarding(self) -> None:
+        if self._current_user_id is None:
+            return
+
+        settings = QSettings("Aurelic", "DesktopApp")
+        done = settings.value(self._tour_settings_key(), False, bool)
+        if done:
+            return
+
+        if self._tour_overlay is not None:
+            return
+
+        QTimer.singleShot(450, self._start_onboarding)
+
+    def _build_intro_tour_steps(self) -> list[TourStep]:
+        return [
+            TourStep(
+                target=None,
+                title="Willkommen",
+                text="Bevor wir die Oberfläche ansehen, bekommst du eine kurze Einführung in die wichtigsten Grundlagen rund um Markt, Risiko und Analyse.",
+                placement="center",
+            ),
+            TourStep(
+                target=None,
+                title="Was ist ein Markt?",
+                text="Ein Markt ist der Ort, an dem Käufer und Verkäufer aufeinandertreffen. Dort entstehen Preise für Aktien, ETFs, Rohstoffe, Kryptowährungen und andere Anlageklassen.",
+                placement="center",
+            ),
+            TourStep(
+                target=None,
+                title="Was ist ein Asset?",
+                text="Ein Asset ist ein handelbarer Vermögenswert. Dazu zählen zum Beispiel Aktien, ETFs, Indizes, Rohstoffe oder Kryptowährungen.",
+                placement="center",
+            ),
+            TourStep(
+                target=None,
+                title="Rendite und Risiko",
+                text="Höhere Gewinnchancen gehen oft mit höheren Schwankungen einher. Gute Anlageentscheidungen betrachten deshalb nie nur mögliche Rendite, sondern immer auch das Risiko.",
+                placement="center",
+            ),
+            TourStep(
+                target=None,
+                title="Volatilität",
+                text="Volatilität beschreibt, wie stark ein Preis schwankt. Hohe Volatilität bedeutet meist mehr Unsicherheit, aber oft auch größere Chancen und Risiken.",
+                placement="center",
+            ),
+            TourStep(
+                target=None,
+                title="Diversifikation",
+                text="Diversifikation bedeutet, Kapital auf verschiedene Assets, Sektoren oder Regionen zu verteilen. Das kann helfen, Klumpenrisiken zu reduzieren.",
+                placement="center",
+            ),
+            TourStep(
+                target=None,
+                title="Korrelation",
+                text="Korrelation beschreibt, wie ähnlich sich zwei Assets bewegen. Wenn viele Positionen stark miteinander korrelieren, ist ein Portfolio oft weniger breit gestreut, als es auf den ersten Blick wirkt.",
+                placement="center",
+            ),
+            TourStep(
+                target=None,
+                title="Zeithorizont",
+                text="Kurzfristiges Trading und langfristiges Investieren folgen unterschiedlichen Logiken. Analysen sollten deshalb immer im Kontext des eigenen Zeithorizonts gelesen werden.",
+                placement="center",
+            ),
+            TourStep(
+                target=None,
+                title="Makrodaten und News",
+                text="Zinsen, Inflation, Konjunkturdaten und Unternehmensnachrichten können Märkte stark beeinflussen. Kurse reagieren nicht nur auf Fakten, sondern oft auch auf Erwartungen.",
+                placement="center",
+            ),
+            TourStep(
+                target=None,
+                title="Was dir diese App zeigt",
+                text="Diese Anwendung hilft dir, Märkte strukturierter zu beobachten: mit Portfolio-Ansichten, Preisverläufen, Movers, News und späteren Analyse-Tools.",
+                placement="center",
+            ),
+        ]
+
+    def _build_ui_tour_steps(self) -> list[TourStep]:
+        steps: list[TourStep] = []
+
+        if hasattr(self, "_seg_tabs") and self._seg_tabs is not None:
+            steps.append(TourStep(
+                target=self._seg_tabs,
+                title="Navigation",
+                text="Hier wechselst du zwischen Brokerage und Analyse. So springst du schnell zwischen Portfolio-Ansicht und Analyse-Tools.",
+                placement="bottom",
+            ))
+
+        if self._tour_target_investments is not None:
+            steps.append(TourStep(
+                target=self._tour_target_investments,
+                title="Investments",
+                text="Hier siehst du deine gehaltenen Positionen, den aktuellen Wert und die Portfolio-Gewichtung. Über den Button oben rechts kommst du in die Detailansicht.",
+                placement="right",
+            ))
+
+        if self._tour_target_chart is not None:
+            steps.append(TourStep(
+                target=self._tour_target_chart,
+                title="Portfolio-Chart",
+                text="Dieser Chart zeigt die historische Entwicklung deines Portfolios. Über die Chips oben wechselst du den Betrachtungszeitraum.",
+                placement="left",
+            ))
+
+        if self._tour_target_news is not None:
+            steps.append(TourStep(
+                target=self._tour_target_news,
+                title="News",
+                text="Hier erscheinen relevante Markt- und Politik-News. Ein Klick auf einen Eintrag öffnet die Quelle im Browser.",
+                placement="top",
+            ))
+
+        if self._tour_target_movers is not None:
+            steps.append(TourStep(
+                target=self._tour_target_movers,
+                title="Top Mover",
+                text="Hier siehst du die stärksten Gewinner und Verlierer im Markt. So erkennst du aktuelle Bewegungen sofort.",
+                placement="left",
+            ))
+
+        if self._tour_target_favorites is not None:
+            steps.append(TourStep(
+                target=self._tour_target_favorites,
+                title="Favoriten",
+                text="Hier werden deine Favoriten mit ihren aktuellen Bewegungen angezeigt. So hast du deine wichtigsten Assets direkt im Blick.",
+                placement="left",
+            ))
+
+        return steps
+
+    def _start_onboarding(self) -> None:
+        if self._current_user_id is None:
+            return
+
+        if not self.isVisible():
+            self._onboarding_pending = True
+            return
+
+        settings = QSettings("Aurelic", "DesktopApp")
+        done = settings.value(self._tour_settings_key(), False, bool)
+        if done:
+            return
+
+        steps = self._build_intro_tour_steps() + self._build_ui_tour_steps()
+
+        if not steps:
+            settings.setValue(self._tour_settings_key(), True)
+            return
+
+        def _mark_done() -> None:
+            settings.setValue(self._tour_settings_key(), True)
+            self._tour_overlay = None
+
+        self._tour_overlay = GuidedTourOverlay(
+            host=self,
+            steps=steps,
+            on_finished=_mark_done,
+            parent=self,
+        )
+        self._tour_overlay.start()
 
     def set_favorite_symbols(self, symbols: list[str] | None) -> None:
         uniq: list[str] = []
@@ -1368,11 +1503,9 @@ class MainPage(QWidget):
             self._fav_movers_label.setText("Keine Favoriten")
             return
 
-        # Cache sofort anzeigen (stale-while-revalidate)
         self._load_fav_cache()
         self._show_cached_favs_if_any()
 
-        # danach “revalidate”, aber throttled
         self._refresh_favorite_movers(force=False)
 
     # --------------------------
@@ -1478,7 +1611,6 @@ class MainPage(QWidget):
         lv.setContentsMargins(0, 0, 0, 0)
         lv.setSpacing(14)
 
-        # Top row inside left: Investments | Chart
         upper = QWidget()
         upper.setAttribute(Qt.WA_StyledBackground, True)
         uh = QHBoxLayout(upper)
@@ -1488,17 +1620,19 @@ class MainPage(QWidget):
         investments = self._build_investments_area()
         investments.setMinimumWidth(360)
         investments.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Expanding)
+        self._tour_target_investments = investments
 
         chart = self._build_portfolio_chart_panel()
         chart.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
+        self._tour_target_chart = chart
 
         uh.addWidget(investments, 0)
         uh.addWidget(chart, 1)
 
-        # Bottom: News
         news = self._build_news_panel(min_w=0)
         news.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
         news.setFixedHeight(270)
+        self._tour_target_news = news
 
         lv.addWidget(upper, 1)
         lv.addWidget(news, 0)
@@ -1515,6 +1649,7 @@ class MainPage(QWidget):
             placeholder="Lade Movers …",
             min_w=320
         )
+        self._tour_target_movers = right_top
         if self._overall_movers_label is not None:
             self._overall_movers_label.setTextFormat(Qt.RichText)
             self._overall_movers_label.setTextInteractionFlags(Qt.NoTextInteraction)
@@ -1525,6 +1660,7 @@ class MainPage(QWidget):
             placeholder="Keine Favoriten",
             min_w=320
         )
+        self._tour_target_favorites = right_bottom
         if self._fav_movers_label is not None:
             self._fav_movers_label.setTextFormat(Qt.RichText)
             self._fav_movers_label.setTextInteractionFlags(Qt.NoTextInteraction)
@@ -1553,7 +1689,6 @@ class MainPage(QWidget):
         v.setContentsMargins(16, 14, 16, 14)
         v.setSpacing(10)
 
-        # Header: value + pct (left) | range chips (right)
         header = QWidget()
         header.setAttribute(Qt.WA_StyledBackground, True)
         hh = QHBoxLayout(header)
@@ -1951,7 +2086,7 @@ class MainPage(QWidget):
             QDesktopServices.openUrl(QUrl(dlg.url))
 
     # --------------------------
-    # Investments (scrolls only if >4)
+    # Investments
     # --------------------------
     def _build_investments_area(self) -> QFrame:
         card = QFrame()
@@ -2343,7 +2478,7 @@ class MainPage(QWidget):
             )
 
     # --------------------------
-    # Favorites movers (cached + throttled)
+    # Favorites movers
     # --------------------------
     def _refresh_favorite_movers(self, force: bool = False) -> None:
         if self._fav_movers_label is None:
@@ -2354,13 +2489,11 @@ class MainPage(QWidget):
 
         now_ts = int(datetime.now().timestamp())
 
-        # FIX: Throttle (sonst "lädt immer noch sehr oft")
         if not force and self._fav_last_fetch_ts and (now_ts - self._fav_last_fetch_ts) < self._fav_min_fetch_interval_s:
             if not self._fav_cached_items:
                 self._fav_movers_label.setText("Lade Favoriten Movers …")
             return
 
-        # Nur "Lade..." wenn nix angezeigt werden kann
         if not self._fav_cached_items:
             self._fav_movers_label.setText("Lade Favoriten Movers …")
 
@@ -2390,7 +2523,6 @@ class MainPage(QWidget):
         if self._fav_movers_label is None:
             return
 
-        # Wenn Cache da ist: NICHT überschreiben -> stale bleibt sichtbar
         if self._fav_cached_items:
             return
 
@@ -2581,3 +2713,9 @@ class MainPage(QWidget):
                 card.setVisible(False)
                 title.setText("")
                 meta.setText("")
+
+    def showEvent(self, event) -> None:
+        super().showEvent(event)
+        if self._onboarding_pending:
+            self._onboarding_pending = False
+            self.maybe_start_onboarding()
