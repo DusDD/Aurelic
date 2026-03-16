@@ -1,1 +1,0 @@
-# controller logic for stock calc to frontend
