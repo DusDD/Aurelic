@@ -52,26 +52,21 @@ jobs:
           --health-retries=10
 
     env:
-      # App DB envs (genau wie in eurem config.py)
       POSTGRES_HOST: 127.0.0.1
       POSTGRES_PORT: "5432"
       POSTGRES_DB: app_test
       POSTGRES_USER: app_user
       POSTGRES_PASSWORD: app_pass
-
-      # Damit euer Import nicht crasht:
       POLYGON_API_KEY: "ci-dummy-key"
       ALPHAVANTAGE_API_KEY: "ci-dummy-key"
-
-      # Für saubere Imports (falls ihr relativ importiert)
       PYTHONPATH: ${{ github.workspace }}
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: "3.12"
           cache: "pip"
@@ -92,7 +87,6 @@ jobs:
             exit 1
           fi
 
-          # CI Tools (installiert ihr ggf. schon in requirements-dev.txt – doppelt ist ok)
           python -m pip install -U ruff pytest pytest-cov
 
       - name: Ruff lint (PR annotations)
@@ -110,7 +104,6 @@ jobs:
       - name: Run tests (pytest + coverage if possible)
         run: |
           set -euo pipefail
-          # Falls keine Tests vorhanden sind, soll’s nicht rot werden:
           if [ -d tests ] && ls -1 tests 1>/dev/null 2>&1; then
             pytest -q --maxfail=1 --disable-warnings --cov=. --cov-report=term-missing
           else
