@@ -1,0 +1,96 @@
+name: SAST (Semgrep + CodeQL)
+
+on:
+  push:
+    branches:
+      - "**"
+    paths:
+      - "src/**"
+      - "gui/**"
+      - "tests/**"
+      - "main.py"
+      - "requirements*.txt"
+      - "pyproject.toml"
+      - ".github/workflows/sast.yml"
+  pull_request:
+    branches:
+      - "**"
+    paths:
+      - "src/**"
+      - "gui/**"
+      - "tests/**"
+      - "main.py"
+      - "requirements*.txt"
+      - "pyproject.toml"
+      - ".github/workflows/sast.yml"
+  schedule:
+    - cron: "0 6 * * 1" # montags 06:00 UTC
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+  security-events: write
+
+concurrency:
+  group: sast-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  semgrep:
+    name: Semgrep SAST (block ERROR + SARIF Upload)
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: "pip"
+
+      - name: Install Semgrep
+        run: |
+          python -m pip install --upgrade pip
+          pip install semgrep
+
+      - name: Semgrep scan (ERROR -> fail) + SARIF
+        id: semgrep
+        run: |
+          set -euo pipefail
+          semgrep \
+            --config p/ci \
+            --config p/python \
+            --severity ERROR \
+            --sarif \
+            --output semgrep.sarif \
+            --error \
+            src gui tests main.py
+
+      - name: Upload Semgrep SARIF
+        if: always()
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: semgrep.sarif
+
+  codeql:
+    name: CodeQL (Python)
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: python
+
+      - name: Autobuild
+        uses: github/codeql-action/autobuild@v3
+
+      - name: Analyze
+        uses: github/codeql-action/analyze@v3
