@@ -1,0 +1,71 @@
+name: Dead Code (vulture - strict)
+
+on:
+  push:
+    branches: ["**"]
+    paths:
+      - "src/**"
+      - "gui/**"
+      - "tests/**"
+      - "main.py"
+      - "pyproject.toml"
+      - "requirements*.txt"
+      - ".github/workflows/deadcode.yml"
+      - "vulture_whitelist.py"
+  pull_request:
+    branches: ["**"]
+    paths:
+      - "src/**"
+      - "gui/**"
+      - "tests/**"
+      - "main.py"
+      - "pyproject.toml"
+      - "requirements*.txt"
+      - ".github/workflows/deadcode.yml"
+      - "vulture_whitelist.py"
+  schedule:
+    - cron: "0 6 * * 1" # weekly
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+concurrency:
+  group: deadcode-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  vulture:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: "pip"
+
+      - name: Install vulture
+        run: |
+          set -euo pipefail
+          python -m pip install --upgrade pip
+          pip install vulture
+
+      - name: Run vulture (strict)
+        run: |
+          set -euo pipefail
+          TARGETS="src gui tests main.py"
+          WHITELIST=""
+          if [ -f vulture_whitelist.py ]; then
+            WHITELIST="vulture_whitelist.py"
+          fi
+
+          # alle Findings ausgeben
+          vulture $TARGETS $WHITELIST --min-confidence 80 || EXIT=$?
+
+          # strict: wenn Findings vorhanden -> Job fail (Exit-Code von vulture übernehmen)
+          exit ${EXIT:-0}
