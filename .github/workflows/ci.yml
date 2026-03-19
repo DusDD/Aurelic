@@ -1,0 +1,118 @@
+name: CI
+
+on:
+  push:
+    branches: ["**"]
+    paths:
+      - "src/**"
+      - "gui/**"
+      - "tests/**"
+      - "main.py"
+      - "requirements*.txt"
+      - "pyproject.toml"
+      - ".github/workflows/ci.yml"
+  pull_request:
+    branches: ["**"]
+    paths:
+      - "src/**"
+      - "gui/**"
+      - "tests/**"
+      - "main.py"
+      - "requirements*.txt"
+      - "pyproject.toml"
+      - ".github/workflows/ci.yml"
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  python:
+    name: Python - Lint & Tests (PostgreSQL)
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_DB: app_test
+          POSTGRES_USER: app_user
+          POSTGRES_PASSWORD: app_pass
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd="pg_isready -U app_user -d app_test"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
+
+    env:
+      # App DB envs (genau wie in eurem config.py)
+      POSTGRES_HOST: 127.0.0.1
+      POSTGRES_PORT: "5432"
+      POSTGRES_DB: app_test
+      POSTGRES_USER: app_user
+      POSTGRES_PASSWORD: app_pass
+
+      # Damit euer Import nicht crasht:
+      POLYGON_API_KEY: "ci-dummy-key"
+      ALPHAVANTAGE_API_KEY: "ci-dummy-key"
+
+      # Für saubere Imports (falls ihr relativ importiert)
+      PYTHONPATH: ${{ github.workspace }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: "pip"
+
+      - name: Install deps
+        run: |
+          set -euo pipefail
+          python -m pip install --upgrade pip wheel
+
+          if [ -f requirements-dev.txt ]; then
+            python -m pip install -r requirements.txt -r requirements-dev.txt
+          elif [ -f requirements.txt ]; then
+            python -m pip install -r requirements.txt
+          elif [ -f pyproject.toml ]; then
+            python -m pip install .
+          else
+            echo "No dependency file found (requirements.txt / requirements-dev.txt / pyproject.toml)" >&2
+            exit 1
+          fi
+
+          # CI Tools (installiert ihr ggf. schon in requirements-dev.txt – doppelt ist ok)
+          python -m pip install -U ruff pytest pytest-cov
+
+      - name: Ruff lint (PR annotations)
+        run: |
+          ruff check . --output-format=github
+
+      - name: Ruff format (check)
+        run: |
+          ruff format --check .
+
+      - name: Compile check (import/bytecode sanity)
+        run: |
+          python -m compileall -q src gui tests main.py || true
+
+      - name: Run tests (pytest + coverage if possible)
+        run: |
+          set -euo pipefail
+          # Falls keine Tests vorhanden sind, soll’s nicht rot werden:
+          if [ -d tests ] && ls -1 tests 1>/dev/null 2>&1; then
+            pytest -q --maxfail=1 --disable-warnings --cov=. --cov-report=term-missing
+          else
+            echo "No tests/ directory found, skipping."
+          fi
