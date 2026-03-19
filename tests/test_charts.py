@@ -1,4 +1,3 @@
-import pytest
 from src.stocks import charts
 
 # USAGE

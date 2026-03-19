@@ -397,9 +397,6 @@ if __name__ == "__main__":
     if hasattr(calendar, "back_clicked"):
         calendar.back_clicked.connect(lambda: stack.setCurrentWidget(_last_page["w"]))
 
-    # -----------------------------
-    # Hotkeys
-    # -----------------------------
     def on_key(event):
         if event.key() == Qt.Key_F1:
             stack.setCurrentWidget(start)
@@ -420,9 +417,7 @@ if __name__ == "__main__":
 
     stack.keyPressEvent = on_key
 
-    # -----------------------------
-    # Initial: UI vorbereiten (Avatar, ggf. Favoriten leeren)
-    # -----------------------------
+
     apply_user_to_ui()
 
     stack.showMaximized()
